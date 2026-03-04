@@ -51,10 +51,10 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Link href="/targets" className="group relative h-[400px] overflow-hidden rounded-lg border border-white/10 shadow-2xl">
             <Image
-              src="https://images.unsplash.com/photo-1511316695145-4992006ffddb?q=80&w=2071&auto=format&fit=crop"
+              src="/images/targets/IMG_7100.JPG"
               alt="Shop Targets"
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-50"
+              className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-70"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
             <div className="absolute bottom-0 left-0 p-8">
@@ -68,10 +68,10 @@ export default async function Home() {
           </Link>
           <Link href="/branded" className="group relative h-[400px] overflow-hidden rounded-lg border border-white/10 shadow-2xl">
             <Image
-              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop"
+              src="/images/apparel/IMG_9326.JPG"
               alt="Shop Gear"
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-50"
+              className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-70"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
             <div className="absolute bottom-0 left-0 p-8">
@@ -147,6 +147,24 @@ export default async function Home() {
             <p className="text-white/40">No products found. Please configure your Shopify connection.</p>
           </div>
         )}
+
+        <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+          {['elk-hero.png', 'sasquatch-hero.png', 'buck-hero.png', 'boar-hero.png'].map((image) => (
+            <Link
+              key={image}
+              href="/targets"
+              className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-colors"
+            >
+              <Image
+                src={`/images/hero/${image}`}
+                alt="Featured target"
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+            </Link>
+          ))}
+        </div>
         
         <div className="mt-12 text-center md:hidden">
           <Link href="/targets" className="inline-flex items-center gap-2 text-brand-primary font-bold uppercase tracking-wider hover:text-white transition-colors">
@@ -175,6 +193,24 @@ export default async function Home() {
           </div>
         )}
 
+        <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+          {['IMG_9326.JPG', 'IMG_9321.JPG', 'IMG_9317.JPG', 'IMG_9319.JPG'].map((image) => (
+            <Link
+              key={image}
+              href="/branded"
+              className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-all hover:-translate-y-0.5"
+            >
+              <Image
+                src={`/images/apparel/${image}`}
+                alt="Featured branded gear"
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
+            </Link>
+          ))}
+        </div>
+
         <div className="mt-12 text-center md:hidden">
           <Link href="/branded" className="inline-flex items-center gap-2 text-brand-primary font-bold uppercase tracking-wider hover:text-white transition-colors">
             View All <ArrowRight className="w-4 h-4" />
@@ -186,7 +222,7 @@ export default async function Home() {
       <section className="relative py-32 bg-white/5 border-y border-white/10 overflow-hidden">
         <div className="absolute inset-0 z-0">
            <Image 
-              src="https://images.unsplash.com/photo-1516934024742-b461fba47600?q=80&w=2070&auto=format&fit=crop"
+              src="/images/targets/tmpralfzf0k.webp"
               alt="Background"
               fill
               className="object-cover opacity-20"
@@ -208,7 +244,7 @@ export default async function Home() {
               </div>
             </div>
             <Image 
-              src="https://images.unsplash.com/photo-1516934024742-b461fba47600?q=80&w=2070&auto=format&fit=crop"
+              src="/images/gallery/About-Us.webp"
               alt="Video Thumbnail"
               fill
               className="object-cover opacity-60 group-hover:opacity-80 transition-opacity"
@@ -262,13 +298,13 @@ export default async function Home() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-96 md:h-80">
           <div className="relative rounded-lg overflow-hidden col-span-2 row-span-2 md:col-span-2 md:row-span-1 h-full">
-             <Image src="https://images.unsplash.com/photo-1533577116850-9cc66cad8a9b?q=80&w=2070&auto=format&fit=crop" alt="Gallery 1" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+             <Image src="/images/gallery/DSC09031 (1).jpg" alt="Gallery 1" fill className="object-cover hover:scale-105 transition-transform duration-500" />
           </div>
           <div className="relative rounded-lg overflow-hidden h-full">
-             <Image src="https://images.unsplash.com/photo-1476984256599-e8c5da225aa0?q=80&w=2070&auto=format&fit=crop" alt="Gallery 2" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+             <Image src="/images/gallery/IMG_6631.JPG" alt="Gallery 2" fill className="object-cover hover:scale-105 transition-transform duration-500" />
           </div>
           <div className="relative rounded-lg overflow-hidden h-full">
-             <Image src="https://images.unsplash.com/photo-1558565804-4118cc3d2224?q=80&w=2070&auto=format&fit=crop" alt="Gallery 3" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+             <Image src="/images/gallery/IMG_9319.JPG" alt="Gallery 3" fill className="object-cover hover:scale-105 transition-transform duration-500" />
           </div>
         </div>
         <div className="mt-8 text-center md:hidden">

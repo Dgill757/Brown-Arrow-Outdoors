@@ -31,9 +31,9 @@ export default function PartnershipsPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { name: 'Total Archery Challenge - Texas', date: 'April 12-14, 2026', location: 'San Antonio, TX', image: 'https://images.unsplash.com/photo-1511316695145-4992006ffddb?q=80&w=2071&auto=format&fit=crop' },
-              { name: 'Western Hunt Expo', date: 'Feb 10-13, 2026', location: 'Salt Lake City, UT', image: 'https://images.unsplash.com/photo-1533577116850-9cc66cad8a9b?q=80&w=2070&auto=format&fit=crop' },
-              { name: 'Local 3D Shoot', date: 'May 05, 2026', location: 'Austin, TX', image: 'https://images.unsplash.com/photo-1476984256599-e8c5da225aa0?q=80&w=2070&auto=format&fit=crop' },
+              { name: 'Total Archery Challenge - Texas', date: 'April 12-14, 2026', location: 'San Antonio, TX', image: '/images/gallery/DSC06842.JPG' },
+              { name: 'Western Hunt Expo', date: 'Feb 10-13, 2026', location: 'Salt Lake City, UT', image: '/images/gallery/IMG_7652.JPG' },
+              { name: 'Local 3D Shoot', date: 'May 05, 2026', location: 'Austin, TX', image: '/images/gallery/IMG_6631.JPG' },
             ].map((event, i) => (
               <div key={i} className="bg-white/5 border border-white/10 rounded-xl overflow-hidden group hover:border-brand-primary/50 transition-colors">
                 <div className="relative h-48">

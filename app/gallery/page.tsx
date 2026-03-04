@@ -12,18 +12,18 @@ export const metadata: Metadata = buildMetadata({
 
 // Placeholder data for gallery images
 const galleryImages = [
-  { id: 1, src: 'https://images.unsplash.com/photo-1533577116850-9cc66cad8a9b?q=80&w=2070&auto=format&fit=crop', category: 'Range' },
-  { id: 2, src: 'https://images.unsplash.com/photo-1511316695145-4992006ffddb?q=80&w=2071&auto=format&fit=crop', category: 'Events' },
-  { id: 3, src: 'https://images.unsplash.com/photo-1476984256599-e8c5da225aa0?q=80&w=2070&auto=format&fit=crop', category: 'Customer Setups' },
-  { id: 4, src: 'https://images.unsplash.com/photo-1558565804-4118cc3d2224?q=80&w=2070&auto=format&fit=crop', category: 'Behind The Scenes' },
-  { id: 5, src: 'https://images.unsplash.com/photo-1516934024742-b461fba47600?q=80&w=2070&auto=format&fit=crop', category: 'Range' },
-  { id: 6, src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop', category: 'Events' },
-  { id: 7, src: 'https://images.unsplash.com/photo-1533577116850-9cc66cad8a9b?q=80&w=2070&auto=format&fit=crop', category: 'Customer Setups' },
-  { id: 8, src: 'https://images.unsplash.com/photo-1511316695145-4992006ffddb?q=80&w=2071&auto=format&fit=crop', category: 'Behind The Scenes' },
-  { id: 9, src: 'https://images.unsplash.com/photo-1476984256599-e8c5da225aa0?q=80&w=2070&auto=format&fit=crop', category: 'Range' },
-  { id: 10, src: 'https://images.unsplash.com/photo-1558565804-4118cc3d2224?q=80&w=2070&auto=format&fit=crop', category: 'Events' },
-  { id: 11, src: 'https://images.unsplash.com/photo-1516934024742-b461fba47600?q=80&w=2070&auto=format&fit=crop', category: 'Customer Setups' },
-  { id: 12, src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop', category: 'Behind The Scenes' },
+  { id: 1, src: '/images/gallery/DSC06839.JPG', category: 'Range' },
+  { id: 2, src: '/images/gallery/DSC06842.JPG', category: 'Events' },
+  { id: 3, src: '/images/gallery/IMG_6631.JPG', category: 'Customer Setups' },
+  { id: 4, src: '/images/gallery/IMG_8117.JPG', category: 'Behind The Scenes' },
+  { id: 5, src: '/images/gallery/eZy Watermark_11-10-2023_21-16-38.JPG', category: 'Range' },
+  { id: 6, src: '/images/gallery/IMG_8229.JPG', category: 'Events' },
+  { id: 7, src: '/images/gallery/DSC08963.jpg', category: 'Customer Setups' },
+  { id: 8, src: '/images/gallery/IMG_9319.JPG', category: 'Behind The Scenes' },
+  { id: 9, src: '/images/gallery/DSC09031 (1).jpg', category: 'Range' },
+  { id: 10, src: '/images/gallery/IMG_7652.JPG', category: 'Events' },
+  { id: 11, src: '/images/gallery/IMG_9827 (1).JPG', category: 'Customer Setups' },
+  { id: 12, src: '/images/gallery/About-Us.webp', category: 'Behind The Scenes' },
 ];
 
 const categories = ['All', 'Events', 'Customer Setups', 'Range', 'Behind The Scenes'];
