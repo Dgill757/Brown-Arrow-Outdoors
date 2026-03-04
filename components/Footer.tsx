@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="space-y-6">
           <Link href="/" className="relative w-48 h-16 block transition-opacity hover:opacity-80">
             <Image
-              src="/images/logos/Full BAO Logo.png"
+              src="/images/logos/full-bao-logo.png"
               alt="Broken Arrow Outdoors"
               fill
               className="object-contain object-left"

@@ -45,10 +45,10 @@ export default function Header() {
       <header
         className={cn(
           'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent',
-          isScrolled ? 'bg-brand-dark/95 backdrop-blur-md border-white/10 py-3 shadow-xl' : 'bg-transparent py-6'
+          isScrolled ? 'bg-brand-dark/95 backdrop-blur-md border-white/10 py-2 shadow-xl' : 'bg-transparent py-4'
         )}
       >
-        <div className="container mx-auto px-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 flex items-center min-h-[72px] justify-between">
           {/* Mobile Menu Toggle */}
           <button
             className="lg:hidden text-white hover:text-brand-primary transition-colors"
@@ -59,9 +59,9 @@ export default function Header() {
           </button>
 
           {/* Logo */}
-          <Link href="/" className="relative w-48 h-16 lg:w-64 lg:h-20 transition-transform hover:scale-105">
+          <Link href="/" className="relative w-48 h-14 lg:w-64 lg:h-16 transition-transform hover:scale-105 flex items-center">
             <Image
-              src="/images/logos/Full BAO Logo.png"
+              src="/images/logos/full-bao-logo.png"
               alt="Broken Arrow Outdoors"
               fill
               className="object-contain"
@@ -135,7 +135,7 @@ export default function Header() {
             <div className="flex justify-between items-center p-6 border-b border-white/10">
               <div className="relative w-40 h-12">
                  <Image
-                  src="/images/logos/Full BAO Logo.png"
+                  src="/images/logos/full-bao-logo.png"
                   alt="Broken Arrow Outdoors"
                   fill
                   className="object-contain"

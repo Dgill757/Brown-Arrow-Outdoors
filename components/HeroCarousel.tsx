@@ -1,19 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const images = [
-  '/images/hero/hero-1.png',
-  '/images/hero/hero-2.png',
-  '/images/hero/hero-3.png',
-  '/images/hero/hero-4.png',
-  '/images/hero/hero-5.png',
-  '/images/hero/hero-6.png',
+const slides = [
+  { src: '/images/hero/buck-hero.png', objectPosition: 'center 42%' },
+  { src: '/images/hero/elk-hero.png', objectPosition: 'center 46%' },
+  { src: '/images/hero/sasquatch-hero.png', objectPosition: 'center 48%' },
+  { src: '/images/hero/boar-hero.png', objectPosition: 'center 45%' },
+  { src: '/images/hero/hat-hero.png', objectPosition: 'center 44%' },
+  { src: '/images/hero/sweatshirt-hero.png', objectPosition: 'center 47%' },
 ];
+
+const AUTO_ADVANCE_MS = 4500;
 
 export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,136 +24,107 @@ export default function HeroCarousel() {
 
   useEffect(() => {
     if (isPaused || prefersReducedMotion) return;
-
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 4000);
-
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+    }, AUTO_ADVANCE_MS);
     return () => clearInterval(interval);
   }, [isPaused, prefersReducedMotion]);
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-  };
-
   return (
-    <div 
-      className="relative h-screen w-full overflow-hidden bg-black"
+    <section
+      className="relative h-[92vh] min-h-[680px] w-full overflow-hidden bg-black"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      aria-label="Broken Arrow hero carousel"
     >
-      <AnimatePresence mode="popLayout">
+      <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1, ease: "easeInOut" }}
-          className="absolute inset-0 z-0"
+          initial={{ opacity: 0, scale: 1.025 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.015 }}
+          transition={{ duration: prefersReducedMotion ? 0.2 : 0.9, ease: 'easeOut' }}
+          className="absolute inset-0"
         >
           <Image
-            src={images[currentIndex]}
-            alt="Broken Arrow Outdoors Hero"
+            src={slides[currentIndex].src}
+            alt="Broken Arrow Outdoors featured hero slide"
             fill
             priority
-            className="object-cover opacity-60"
             sizes="100vw"
+            className="object-cover"
+            style={{ objectPosition: slides[currentIndex].objectPosition }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-brand-dark z-10" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Content Overlay */}
-      <div className="absolute inset-0 z-20 flex items-center justify-center text-center px-4">
-        <div className="max-w-5xl space-y-8">
-          <motion.h1 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-6xl md:text-8xl lg:text-9xl font-black uppercase italic tracking-tighter leading-[0.85] text-white drop-shadow-2xl"
-          >
-            Train Like The <br/>
-            <span className="text-brand-primary">Moment Matters</span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-xl md:text-3xl text-white/90 font-medium max-w-3xl mx-auto drop-shadow-lg"
-          >
-            Steel archery targets built to simulate real hunting pressure.
-          </motion.p>
-          
-          <motion.p 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="text-sm md:text-base text-brand-primary font-bold tracking-widest uppercase"
-          >
-            Firefighter Owned. Texas Made. Built for Bowhunters.
-          </motion.p>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
 
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center pt-8"
-          >
-            <Link 
-              href="/targets" 
-              className="bg-brand-primary text-white px-10 py-5 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-all hover:scale-105 shadow-lg shadow-brand-primary/20 text-lg clip-path-slant"
+      <div className="absolute left-[5%] right-[5%] md:right-auto md:max-w-3xl z-20 top-[62%] md:top-[66%] -translate-y-1/2">
+        <div className="rounded-xl border border-white/10 bg-black/45 backdrop-blur-md p-6 md:p-8 shadow-2xl">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase italic tracking-tighter leading-[0.88] text-white">
+            Train Like The <br />
+            <span className="text-brand-primary">Moment Matters</span>
+          </h1>
+
+          <p className="mt-4 text-base md:text-xl text-white/90 max-w-2xl">
+            Steel archery targets built to simulate real hunting pressure.
+          </p>
+
+          <p className="mt-4 text-[11px] md:text-xs text-brand-primary font-bold tracking-[0.22em] uppercase">
+            Firefighter Owned. Texas Made. Built for Bowhunters.
+          </p>
+
+          <div className="mt-7 flex flex-wrap items-center gap-3 md:gap-4">
+            <Link
+              href="/targets"
+              className="bg-brand-primary text-white px-6 md:px-8 py-3 md:py-4 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-all hover:-translate-y-0.5"
             >
               Shop Targets
             </Link>
-            <Link 
-              href="/branded" 
-              className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 py-5 font-black uppercase italic tracking-wider hover:bg-white/20 transition-all hover:scale-105 text-lg"
+            <Link
+              href="/branded"
+              className="bg-white/10 border border-white/30 text-white px-6 md:px-8 py-3 md:py-4 font-black uppercase italic tracking-wider hover:bg-white/20 transition-all"
             >
               Shop Gear
             </Link>
             <Link
               href="/our-story"
-              className="text-white/90 hover:text-brand-primary transition-colors font-bold uppercase tracking-widest text-sm self-center"
+              className="text-white/85 hover:text-brand-primary transition-colors font-bold uppercase tracking-widest text-xs md:text-sm"
             >
               Our Story
             </Link>
-          </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Controls */}
-      <div className="absolute bottom-12 left-0 right-0 z-30 flex justify-center gap-4">
-        {images.map((_, idx) => (
+      <div className="absolute bottom-6 left-0 right-0 z-30 flex justify-center gap-2">
+        {slides.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
-            className={`w-12 h-1 rounded-full transition-all duration-300 ${
-              idx === currentIndex ? 'bg-brand-primary' : 'bg-white/30 hover:bg-white/50'
+            className={`h-1.5 rounded-full transition-all ${
+              idx === currentIndex ? 'w-10 bg-brand-primary' : 'w-5 bg-white/40 hover:bg-white/65'
             }`}
             aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
       </div>
 
-      <button 
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 text-white/50 hover:text-white transition-colors hidden md:block"
+      <button
+        onClick={() => setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length)}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/35 border border-white/25 text-white/80 hover:text-brand-primary hover:border-brand-primary/60 transition-colors hidden md:block"
         aria-label="Previous slide"
       >
-        <ChevronLeft size={48} />
+        <ChevronLeft size={26} />
       </button>
-      <button 
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 text-white/50 hover:text-white transition-colors hidden md:block"
+      <button
+        onClick={() => setCurrentIndex((prev) => (prev + 1) % slides.length)}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/35 border border-white/25 text-white/80 hover:text-brand-primary hover:border-brand-primary/60 transition-colors hidden md:block"
         aria-label="Next slide"
       >
-        <ChevronRight size={48} />
+        <ChevronRight size={26} />
       </button>
-    </div>
+    </section>
   );
 }
