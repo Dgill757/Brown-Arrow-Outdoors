@@ -18,16 +18,22 @@ export default async function BrandedPage() {
   let products = [];
   let hasNextPage = false;
   let endCursor: string | null = null;
+  let initialError: string | null = null;
   try {
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
       variables: { handle: 'branded', first: 12 },
     });
-    products = data?.collection?.products?.edges?.map((edge: any) => edge.node) || [];
-    hasNextPage = Boolean(data?.collection?.products?.pageInfo?.hasNextPage);
-    endCursor = data?.collection?.products?.pageInfo?.endCursor || null;
+    if (!data?.collection) {
+      initialError = 'Shopify collection not found: branded';
+    } else {
+      products = data.collection.products?.edges?.map((edge: any) => edge.node) || [];
+      hasNextPage = Boolean(data.collection.products?.pageInfo?.hasNextPage);
+      endCursor = data.collection.products?.pageInfo?.endCursor || null;
+    }
   } catch (error) {
     console.error('Error fetching branded gear:', error);
+    initialError = 'Unable to load branded gear from Shopify right now.';
   }
 
   return (
@@ -38,6 +44,7 @@ export default async function BrandedPage() {
       initialProducts={products}
       initialHasNextPage={hasNextPage}
       initialEndCursor={endCursor}
+      initialError={initialError}
     />
   );
 }

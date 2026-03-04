@@ -21,6 +21,7 @@ type CollectionViewProps = {
   initialProducts: Product[];
   initialHasNextPage: boolean;
   initialEndCursor: string | null;
+  initialError?: string | null;
 };
 
 export default function CollectionView({
@@ -30,12 +31,13 @@ export default function CollectionView({
   initialProducts,
   initialHasNextPage,
   initialEndCursor,
+  initialError = null,
 }: CollectionViewProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
   const [endCursor, setEndCursor] = useState<string | null>(initialEndCursor);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(initialError);
   const [hideSoldOut, setHideSoldOut] = useState(false);
 
   const visibleProducts = useMemo(
@@ -87,7 +89,11 @@ export default function CollectionView({
           <p className="text-xs uppercase tracking-wider text-white/45">{visibleProducts.length} products</p>
         </div>
 
-        {visibleProducts.length > 0 ? (
+        {error && visibleProducts.length === 0 ? (
+          <div className="text-center py-20 bg-red-500/10 rounded-xl border border-red-400/25">
+            <p className="text-red-300 font-medium">{error}</p>
+          </div>
+        ) : visibleProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
             {visibleProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
