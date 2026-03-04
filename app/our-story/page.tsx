@@ -19,7 +19,7 @@ export default function OurStoryPage() {
       <section className="relative py-32 md:py-48 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1533577116850-9cc66cad8a9b?q=80&w=2070&auto=format&fit=crop"
+            src="/images/targets/tmpralfzf0k.webp"
             alt="Bowhunter silhouette"
             fill
             className="object-cover opacity-40"
@@ -58,7 +58,7 @@ export default function OurStoryPage() {
           </div>
           <div className="relative h-[500px] rounded-xl overflow-hidden border border-white/10 shadow-2xl">
             <Image
-              src="https://images.unsplash.com/photo-1511316695145-4992006ffddb?q=80&w=2071&auto=format&fit=crop"
+              src="/images/gallery/About-Us.webp"
               alt="Archery practice"
               fill
               className="object-cover"
@@ -189,7 +189,7 @@ export default function OurStoryPage() {
             </div>
             <div className="relative h-[400px] rounded-xl overflow-hidden shadow-2xl border-4 border-black/10">
                <Image
-                src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop"
+                src="/images/apparel/IMG_9321.JPG"
                 alt="Community"
                 fill
                 className="object-cover"
