@@ -1,0 +1,56 @@
+'use client';
+
+import { useMemo, useState } from 'react';
+import Image from 'next/image';
+
+type ImageNode = {
+  url: string;
+  altText?: string | null;
+};
+
+type ImageGalleryProps = {
+  featuredImage?: ImageNode | null;
+  imageEdges: Array<{ node: ImageNode }>;
+  title: string;
+};
+
+export default function ImageGallery({ featuredImage, imageEdges, title }: ImageGalleryProps) {
+  const gallery = useMemo(() => {
+    const imageList = imageEdges.map((edge) => edge.node).filter((img) => img?.url);
+    if (featuredImage?.url && !imageList.some((img) => img.url === featuredImage.url)) {
+      return [featuredImage, ...imageList];
+    }
+    return imageList.length > 0 ? imageList : featuredImage ? [featuredImage] : [];
+  }, [featuredImage, imageEdges]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const active = gallery[activeIndex];
+
+  if (!active) {
+    return <div className="aspect-square bg-white/5 rounded-lg border border-white/10" />;
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="relative aspect-square bg-white/5 rounded-lg overflow-hidden border border-white/10">
+        <Image src={active.url} alt={active.altText || title} fill className="object-cover" priority />
+      </div>
+
+      <div className="grid grid-cols-4 gap-3">
+        {gallery.slice(0, 12).map((image, idx) => (
+          <button
+            type="button"
+            key={`${image.url}-${idx}`}
+            onClick={() => setActiveIndex(idx)}
+            className={`relative aspect-square rounded-sm overflow-hidden border ${
+              idx === activeIndex ? 'border-brand-primary' : 'border-white/10 hover:border-white/30'
+            } transition-colors`}
+            aria-label={`View image ${idx + 1}`}
+          >
+            <Image src={image.url} alt={image.altText || title} fill className="object-cover" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
