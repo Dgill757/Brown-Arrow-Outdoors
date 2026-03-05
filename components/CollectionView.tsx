@@ -65,6 +65,9 @@ export default function CollectionView({
       if (!response.ok) {
         throw new Error(payload?.error || 'Failed to load more products.');
       }
+      if (!payload?.data?.collection) {
+        throw new Error(`Shopify collection not found: ${handle}`);
+      }
 
       const nextProducts = payload?.data?.collection?.products?.edges?.map((edge: any) => edge.node) || [];
       const nextPageInfo = payload?.data?.collection?.products?.pageInfo;

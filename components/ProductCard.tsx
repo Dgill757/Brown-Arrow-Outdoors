@@ -8,8 +8,10 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({ product, priority = false }: ProductCardProps) {
-  const { handle, title, priceRange, featuredImage, availableForSale } = product;
+  const { handle, title, priceRange, featuredImage, availableForSale, images } = product;
   const price = priceRange.minVariantPrice;
+  const resolvedImage =
+    featuredImage || images?.edges?.[0]?.node || null;
 
   return (
     <Link href={`/products/${handle}`} className="group block relative">
@@ -19,10 +21,10 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
             Sold Out
           </div>
         )}
-        {featuredImage ? (
+        {resolvedImage ? (
           <Image
-            src={featuredImage.url}
-            alt={featuredImage.altText || title}
+            src={resolvedImage.url}
+            alt={resolvedImage.altText || title}
             fill
             priority={priority}
             className="object-cover transition-transform duration-500 group-hover:scale-105"

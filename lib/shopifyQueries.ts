@@ -1,5 +1,5 @@
 export const COLLECTION_PRODUCTS_QUERY = `
-  query CollectionProducts($handle: String!, $first: Int!, $after: String) {
+  query getCollectionProducts($handle: String!, $first: Int!, $after: String) {
     collection(handle: $handle) {
       id
       title
@@ -15,9 +15,13 @@ export const COLLECTION_PRODUCTS_QUERY = `
             title
             handle
             availableForSale
-            featuredImage {
-              url
-              altText
+            images(first: 1) {
+              edges {
+                node {
+                  url
+                  altText
+                }
+              }
             }
             priceRange {
               minVariantPrice {

@@ -14,11 +14,10 @@ export async function shopifyFetch<T>({
   const handle = typeof variables?.handle === 'string' ? variables.handle : undefined;
 
   if (debug) {
-    console.info(
-      `[Shopify Debug] endpoint=${endpoint} handle=${handle || 'n/a'} queryType=${
-        query.includes('collection(') ? 'collection' : query.includes('product(') ? 'product' : 'other'
-      }`
-    );
+    console.log('Shopify endpoint:', endpoint);
+    if (handle) {
+      console.log('Collection handle:', handle);
+    }
   }
 
   const result = await fetch(endpoint, {
@@ -41,10 +40,13 @@ export async function shopifyFetch<T>({
   }
 
   if (debug && body?.data?.collection !== undefined) {
-    const firstProductTitle = body?.data?.collection?.products?.edges?.[0]?.node?.title || 'none';
-    console.info(
-      `[Shopify Debug] handle=${handle || 'n/a'} collectionNull=${body.data.collection === null} firstProduct="${firstProductTitle}"`
-    );
+    const products = body?.data?.collection?.products?.edges ?? [];
+    console.log('Products returned:', products.length);
+    if (body?.data?.collection === null) {
+      console.log('Shopify collection not found.');
+    } else if (products.length > 0) {
+      console.log('First product title:', products[0]?.node?.title ?? 'unknown');
+    }
   }
 
   return body.data as T;
