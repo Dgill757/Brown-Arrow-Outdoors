@@ -3,8 +3,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import UGCStrip from '@/components/UGCStrip';
 
 export default function FieldTestGallerySection() {
+  const images = [
+    { src: '/images/gallery/DSC09031 (1).jpg', alt: 'Field gallery hero' },
+    { src: '/images/gallery/IMG_6631.JPG', alt: 'Field gallery 2' },
+    { src: '/images/gallery/IMG_9319.JPG', alt: 'Field gallery 3' },
+    { src: '/images/gallery/IMG_7652.JPG', alt: 'Field gallery 4' },
+    { src: '/images/targets/IMG_7546.jpg', alt: 'Field gallery 5' },
+  ];
+
   return (
     <section className="container mx-auto px-4">
       <div className="flex justify-between items-end mb-12">
@@ -37,6 +46,9 @@ export default function FieldTestGallerySection() {
         >
           View Gallery <ArrowRight className="w-4 h-4" />
         </Link>
+      </div>
+      <div className="mt-10">
+        <UGCStrip title="In The Field" images={images} />
       </div>
     </section>
   );

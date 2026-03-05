@@ -2,7 +2,6 @@ import { fetchShopifyRecommendations, shopifyFetch } from '@/lib/shopify';
 import { PRODUCT_BY_HANDLE_QUERY, COLLECTION_PRODUCT_HANDLES_QUERY, COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
 import { notFound } from 'next/navigation';
 import { formatMoney } from '@/lib/money';
-import AddToCartButton from '@/components/AddToCartButton';
 import ProductGrid from '@/components/ProductGrid';
 import { Truck, RotateCcw, ShieldCheck } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -10,6 +9,10 @@ import ImageGallery from '@/components/ImageGallery';
 import ProductInfoAccordion from '@/components/ProductInfoAccordion';
 import ProductViewTracker from '@/components/ProductViewTracker';
 import Image from 'next/image';
+import PDPPurchasePanel from '@/components/PDPPurchasePanel';
+import PDPBundleModule from '@/components/PDPBundleModule';
+import UGCStrip from '@/components/UGCStrip';
+import { CURATED_BUNDLE_HANDLES } from '@/lib/commerceConfig';
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -87,6 +90,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   let product;
   let relatedProducts = [];
   let recommendationProducts = [];
+  let bundleProducts: any[] = [];
   let hasFetchError = false;
 
   try {
@@ -134,6 +138,24 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
           ?.filter((p: any) => p.handle !== handle)
           ?.slice(0, 4) || [];
     }
+
+    bundleProducts = (
+      await Promise.all(
+        CURATED_BUNDLE_HANDLES.filter((bundleHandle) => bundleHandle !== handle).map(async (bundleHandle) => {
+          try {
+            const bundleData = await shopifyFetch<any>({
+              query: PRODUCT_BY_HANDLE_QUERY,
+              variables: { handle: bundleHandle },
+              cacheSeconds: 60,
+              tags: [`bundle-${bundleHandle}`],
+            });
+            return bundleData?.product || null;
+          } catch {
+            return null;
+          }
+        })
+      )
+    ).filter(Boolean);
 
   } catch (error) {
     console.error('Error fetching product:', error);
@@ -216,7 +238,39 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               <div dangerouslySetInnerHTML={{ __html: sanitizeDescriptionHtml(descriptionHtml) }} />
             </div>
 
-            <AddToCartButton product={product} />
+            <PDPPurchasePanel product={product} title={title} />
+
+            <PDPBundleModule
+              baseProduct={{
+                id: product.id,
+                title: product.title,
+                handle: product.handle,
+                image: featuredImage?.url,
+                price: firstVariant?.price?.amount,
+                currencyCode: firstVariant?.price?.currencyCode,
+                variantId: firstVariant?.id,
+              }}
+              accessories={
+                bundleProducts.length
+                  ? bundleProducts.map((bundleProduct) => ({
+                      id: bundleProduct.id,
+                      title: bundleProduct.title,
+                      handle: bundleProduct.handle,
+                      image: bundleProduct.featuredImage?.url || bundleProduct.images?.edges?.[0]?.node?.url,
+                      price: bundleProduct.variants?.edges?.[0]?.node?.price?.amount,
+                      currencyCode: bundleProduct.variants?.edges?.[0]?.node?.price?.currencyCode || 'USD',
+                      variantId: bundleProduct.variants?.edges?.[0]?.node?.id,
+                    }))
+                  : recommendationProducts.slice(0, 2).map((item: any) => ({
+                      id: item.id,
+                      title: item.title,
+                      handle: item.handle,
+                      image: item.images?.edges?.[0]?.node?.url,
+                      price: item.priceRange?.minVariantPrice?.amount,
+                      currencyCode: item.priceRange?.minVariantPrice?.currencyCode || 'USD',
+                    }))
+              }
+            />
 
             {/* Value Props / Shipping */}
             <div className="grid grid-cols-1 gap-4 pt-8">
@@ -324,6 +378,16 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
             ))}
           </div>
         </section>
+
+        <UGCStrip
+          title="In The Field"
+          images={[
+            { src: '/images/gallery/IMG_6631.JPG', alt: 'Customer field setup 1' },
+            { src: '/images/gallery/DSC09031 (1).jpg', alt: 'Customer field setup 2' },
+            { src: '/images/gallery/IMG_9319.JPG', alt: 'Customer field setup 3' },
+            { src: '/images/targets/IMG_7546.jpg', alt: 'Customer field setup 4' },
+          ]}
+        />
 
         {/* Related Products */}
         {recommendationsToRender.length > 0 && (

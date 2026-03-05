@@ -18,6 +18,7 @@ type CartContextType = {
   openCart: () => void;
   closeCart: () => void;
   addToCart: (variantId: string, quantity?: number) => Promise<void>;
+  addBundleToCart: (lines: Array<{ variantId: string; quantity?: number }>) => Promise<void>;
   removeFromCart: (lineId: string) => Promise<void>;
   updateQuantity: (lineId: string, quantity: number) => Promise<void>;
   isLoading: boolean;
@@ -137,6 +138,56 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const addBundleToCart = async (lines: Array<{ variantId: string; quantity?: number }>) => {
+    const normalizedLines = lines
+      .filter((line) => Boolean(line.variantId))
+      .map((line) => ({ merchandiseId: line.variantId, quantity: line.quantity ?? 1 }));
+    if (!normalizedLines.length) return;
+
+    setIsLoading(true);
+    try {
+      let newCart;
+      if (!cart) {
+        const data = await shopifyClientFetch<any>({
+          query: CART_CREATE_MUTATION,
+          variables: {
+            lines: normalizedLines,
+          },
+        });
+        if (data?.cartCreate?.userErrors?.length) {
+          throw new Error(data.cartCreate.userErrors[0].message || 'Could not create cart.');
+        }
+        newCart = data.cartCreate.cart;
+        localStorage.setItem('broken_arrow_cart_id', newCart.id);
+      } else {
+        const data = await shopifyClientFetch<any>({
+          query: CART_LINES_ADD_MUTATION,
+          variables: {
+            cartId: cart.id,
+            lines: normalizedLines,
+          },
+        });
+        if (data?.cartLinesAdd?.userErrors?.length) {
+          throw new Error(data.cartLinesAdd.userErrors[0].message || 'Could not add bundle.');
+        }
+        newCart = data.cartLinesAdd.cart;
+      }
+      setCart(newCart);
+      const latestLine = newCart?.lines?.edges?.[newCart?.lines?.edges?.length - 1]?.node;
+      if (latestLine?.merchandise?.product?.id) {
+        setLastAddedProductId(latestLine.merchandise.product.id);
+        setLastAddedProductHandle(latestLine.merchandise.product.handle || null);
+      }
+      openCart();
+      showToast('Bundle added to cart');
+    } catch (error) {
+      console.error('Error adding bundle:', error);
+      showToast(error instanceof Error ? error.message : 'Unable to add bundle');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const removeFromCart = async (lineId: string) => {
     if (!cart) return;
     setIsLoading(true);
@@ -194,6 +245,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         openCart,
         closeCart,
         addToCart,
+        addBundleToCart,
         removeFromCart,
         updateQuantity,
         isLoading,

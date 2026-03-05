@@ -1,7 +1,9 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { FREE_SHIPPING_THRESHOLD } from '@/lib/commerceConfig';
 import { formatMoney } from '@/lib/money';
+import { trackEvent } from '@/lib/analytics';
 
 export default function FreeShippingProgress({
   subtotalAmount,
@@ -14,6 +16,18 @@ export default function FreeShippingProgress({
   const progress = Math.max(0, Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100));
   const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
   const qualified = remaining <= 0;
+  const didTrack = useRef(false);
+
+  useEffect(() => {
+    if (qualified && !didTrack.current) {
+      trackEvent('free_shipping_threshold_reached', {
+        threshold: FREE_SHIPPING_THRESHOLD,
+        subtotal,
+        currency: currencyCode,
+      });
+      didTrack.current = true;
+    }
+  }, [qualified, subtotal, currencyCode]);
 
   return (
     <div className="mb-5 rounded-lg border border-white/10 bg-white/[0.04] p-3">
