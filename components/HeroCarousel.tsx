@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -51,36 +50,45 @@ const AUTO_ADVANCE_MS = 6000;
 export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [isShortViewport, setIsShortViewport] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
-    if (isPaused || prefersReducedMotion) return;
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated || isPaused || prefersReducedMotion) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % slides.length);
     }, AUTO_ADVANCE_MS);
     return () => clearInterval(interval);
-  }, [isPaused, prefersReducedMotion]);
+  }, [isHydrated, isPaused, prefersReducedMotion]);
 
   useEffect(() => {
     const mobileMedia = window.matchMedia('(max-width: 767px)');
     const tabletMedia = window.matchMedia('(min-width: 768px) and (max-width: 1199px)');
     const shortMedia = window.matchMedia('(max-height: 880px)');
+    const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => {
       setIsMobile(mobileMedia.matches);
       setIsTablet(tabletMedia.matches);
       setIsShortViewport(shortMedia.matches);
+      setPrefersReducedMotion(reducedMotionMedia.matches);
     };
     update();
     mobileMedia.addEventListener('change', update);
     tabletMedia.addEventListener('change', update);
     shortMedia.addEventListener('change', update);
+    reducedMotionMedia.addEventListener('change', update);
     return () => {
       mobileMedia.removeEventListener('change', update);
       tabletMedia.removeEventListener('change', update);
       shortMedia.removeEventListener('change', update);
+      reducedMotionMedia.removeEventListener('change', update);
     };
   }, []);
 
@@ -98,15 +106,8 @@ export default function HeroCarousel() {
       onMouseLeave={() => setIsPaused(false)}
       aria-label="Broken Arrow hero carousel"
     >
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentIndex}
-          initial={{ opacity: 0, scale: 1.025 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.015 }}
-          transition={{ duration: prefersReducedMotion ? 0.2 : 0.9, ease: 'easeOut' }}
-          className="absolute inset-0"
-        >
+      {isHydrated ? (
+        <div key={currentIndex} className="absolute inset-0 transition-opacity duration-700 ease-out">
           <Image
             src={slides[currentIndex].src}
             alt="Broken Arrow Outdoors featured hero slide"
@@ -120,8 +121,22 @@ export default function HeroCarousel() {
               objectPosition: isMobile ? activeSlide.mobileObjectPosition : activeSlide.objectPosition,
             }}
           />
-        </motion.div>
-      </AnimatePresence>
+        </div>
+      ) : (
+        <div className="absolute inset-0">
+          <Image
+            src={slides[0].src}
+            alt="Broken Arrow Outdoors featured hero slide"
+            fill
+            priority
+            fetchPriority="high"
+            quality={82}
+            sizes="100vw"
+            className="object-cover"
+            style={{ objectPosition: slides[0].objectPosition }}
+          />
+        </div>
+      )}
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
 

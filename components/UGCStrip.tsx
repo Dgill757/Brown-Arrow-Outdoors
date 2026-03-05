@@ -36,7 +36,14 @@ export default function UGCStrip({
             onClick={() => open(index)}
             className="relative h-40 w-40 md:h-48 md:w-48 flex-shrink-0 overflow-hidden rounded-xl border border-white/10"
           >
-            <Image src={image.src} alt={image.alt} fill className="object-cover hover:scale-105 transition-transform duration-500" sizes="192px" />
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              className="object-cover hover:scale-105 transition-transform duration-500"
+              sizes="(max-width: 768px) 160px, 192px"
+              loading="lazy"
+            />
           </button>
         ))}
       </div>

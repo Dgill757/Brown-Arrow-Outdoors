@@ -47,7 +47,6 @@ export default function ImageGallery({ featuredImage, imageEdges, title }: Image
           alt={active.altText || title}
           fill
           className="object-cover"
-          priority
           quality={85}
           placeholder="blur"
           blurDataURL={IMAGE_BLUR_PLACEHOLDER}

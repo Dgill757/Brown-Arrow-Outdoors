@@ -37,12 +37,13 @@ export default function ChallengeVideo() {
         muted
         loop
         playsInline
-        preload={shouldLoadVideo ? 'metadata' : 'none'}
-        poster="/images/targets/IMG_7546.jpg"
+        preload="none"
+        poster="/images/video-poster.webp"
       >
         {shouldLoadVideo ? (
           <>
-            <source src="/images/videos/BearTargetVibes.MOV" type="video/quicktime" />
+            <source src="/videos/BearTargetVibes.webm" type="video/webm" />
+            <source src="/videos/BearTargetVibes.mp4" type="video/mp4" />
           </>
         ) : null}
       </video>

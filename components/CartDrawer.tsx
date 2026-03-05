@@ -2,7 +2,6 @@
 
 import { useCart } from '@/store/cartStore';
 import { X } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
 import { formatMoney } from '@/lib/money';
 import { useEffect, useRef } from 'react';
 import CartLineItem from '@/components/CartLineItem';
@@ -31,27 +30,16 @@ export default function CartDrawer() {
   return (
     <>
       <CartToast message={toastMessage} />
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={closeCart}
-              className="fixed inset-0 bg-black/60 z-[60] backdrop-blur-sm"
-            />
+      {isOpen && (
+        <>
+          <div onClick={closeCart} className="fixed inset-0 bg-black/60 z-[60] backdrop-blur-sm" />
 
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full w-full max-w-md bg-brand-dark border-l border-white/10 z-[70] shadow-2xl flex flex-col"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Shopping cart"
-            >
+          <div
+            className="fixed top-0 right-0 h-full w-full max-w-md bg-brand-dark border-l border-white/10 z-[70] shadow-2xl flex flex-col"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Shopping cart"
+          >
               <div className="p-6 border-b border-white/10 flex items-center justify-between">
                 <h2 className="text-xl font-black uppercase italic tracking-wider">Your Cart</h2>
                 <button
@@ -115,10 +103,9 @@ export default function CartDrawer() {
                   </a>
                 </div>
               )}
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+          </div>
+        </>
+      )}
     </>
   );
 }

@@ -48,7 +48,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <div className="bg-brand-dark text-white min-h-screen pb-24">
       <div className="relative h-[45vh] w-full">
-        <Image src={post.image} alt={post.title} fill className="object-cover opacity-50" priority />
+        <Image src={post.image} alt={post.title} fill className="object-cover opacity-50" />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-black/20" />
         <div className="absolute bottom-0 left-0 w-full p-4">
           <div className="container mx-auto">

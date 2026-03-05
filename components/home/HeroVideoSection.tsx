@@ -1,5 +1,3 @@
-'use client';
-
 import ChallengeVideo from '@/components/ChallengeVideo';
 
 export default function HeroVideoSection() {

@@ -179,7 +179,7 @@ export default async function Home() {
         </div>
         
         {uniqueFeaturedTargetProducts.length > 0 ? (
-          <ProductGrid products={uniqueFeaturedTargetProducts} priorityCount={2} />
+          <ProductGrid products={uniqueFeaturedTargetProducts} />
         ) : (
           <div className="text-center py-20 bg-white/5 rounded-lg border border-white/10">
             <p className="text-white/40">No products found. Please configure your Shopify connection.</p>

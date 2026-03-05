@@ -5,7 +5,6 @@ import { ShoppingBag, Menu, X, Search, Facebook, Instagram } from 'lucide-react'
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 
@@ -66,7 +65,6 @@ export default function Header() {
               alt="Broken Arrow Outdoors"
               fill
               className="object-contain"
-              priority
             />
           </Link>
 
@@ -132,15 +130,8 @@ export default function Header() {
       </header>
 
       {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: '-100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '-100%' }}
-            transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-0 z-[60] bg-brand-dark/98 backdrop-blur-xl flex flex-col"
-          >
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] bg-brand-dark/98 backdrop-blur-xl flex flex-col">
             <div className="flex justify-between items-center p-6 border-b border-white/10">
               <div className="relative w-40 h-12">
                  <Image
@@ -156,13 +147,8 @@ export default function Header() {
             </div>
             
             <nav className="flex-1 overflow-y-auto py-8 px-6 flex flex-col gap-6">
-              {navLinks.map((link, idx) => (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                >
+              {navLinks.map((link) => (
+                <div key={link.href}>
                   <Link 
                     href={link.href} 
                     className={cn(
@@ -172,7 +158,7 @@ export default function Header() {
                   >
                     {link.label}
                   </Link>
-                </motion.div>
+                </div>
               ))}
             </nav>
             
@@ -187,9 +173,8 @@ export default function Header() {
                 </a>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
     </>
   );
 }

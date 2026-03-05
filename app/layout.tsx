@@ -3,9 +3,9 @@ import { Inter, JetBrains_Mono, Assistant } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/store/cartStore';
 import Header from '@/components/Header';
-import CartDrawer from '@/components/CartDrawer';
 import Footer from '@/components/Footer';
 import AnalyticsScripts from '@/components/AnalyticsScripts';
+import LazyCartDrawerMount from '@/components/LazyCartDrawerMount';
 
 const assistant = Assistant({
   subsets: ['latin'],
@@ -50,7 +50,7 @@ export default function RootLayout({
         <AnalyticsScripts />
         <CartProvider>
           <Header />
-          <CartDrawer />
+          <LazyCartDrawerMount />
           <main className="min-h-screen pt-[80px]">
             {children}
           </main>

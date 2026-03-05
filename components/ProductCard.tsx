@@ -6,10 +6,9 @@ import { normalizeShopifyImage } from '@/lib/normalizeShopifyImage';
 
 type ProductCardProps = {
   product: any;
-  priority?: boolean;
 };
 
-export default function ProductCard({ product, priority = false }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
   const { handle, title, priceRange, featuredImage, availableForSale, images } = product;
   const price = priceRange?.minVariantPrice;
   const resolvedImage =
@@ -31,10 +30,9 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
             src={imageUrl}
             alt={resolvedImage.altText || title}
             fill
-            priority={priority}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            loading={priority ? 'eager' : 'lazy'}
+            loading="lazy"
             quality={76}
             placeholder="blur"
             blurDataURL={IMAGE_BLUR_PLACEHOLDER}

@@ -23,7 +23,6 @@ export default function OurStoryPage() {
             alt="Bowhunter silhouette"
             fill
             className="object-cover opacity-40"
-            priority
           />
           <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/80 via-brand-dark/50 to-brand-dark z-10" />
         </div>

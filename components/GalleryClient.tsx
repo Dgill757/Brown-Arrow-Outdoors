@@ -188,7 +188,7 @@ export default function GalleryClient() {
             <ChevronLeft size={24} />
           </button>
           <div className="relative w-full max-w-6xl h-[76vh]">
-            <Image src={activeImage.src} alt={activeImage.alt} fill className="object-contain" sizes="100vw" priority />
+            <Image src={activeImage.src} alt={activeImage.alt} fill className="object-contain" sizes="100vw" />
           </div>
           <button
             type="button"
