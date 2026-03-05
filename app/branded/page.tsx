@@ -4,7 +4,7 @@ import { COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
 import CollectionView from '@/components/CollectionView';
 import { buildMetadata } from '@/lib/seo';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export const metadata: Metadata = buildMetadata({
   title: 'Broken Arrow Branded Gear | Broken Arrow Outdoors',
@@ -23,6 +23,8 @@ export default async function BrandedPage() {
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
       variables: { handle: 'branded', first: 12 },
+      cacheSeconds: 60,
+      tags: ['collection-branded'],
     });
     if (!data?.collection) {
       initialError = 'Shopify collection not found: branded';

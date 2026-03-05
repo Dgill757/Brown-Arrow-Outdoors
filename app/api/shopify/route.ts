@@ -16,6 +16,8 @@ export async function POST(request: Request) {
     const data = await shopifyFetch<Record<string, unknown>>({
       query,
       variables,
+      cacheSeconds: query.includes('mutation') || query.includes('cart(') ? 0 : 60,
+      tags: ['shopify-api'],
     });
 
     return NextResponse.json({ data });

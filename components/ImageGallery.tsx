@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
+import { IMAGE_BLUR_PLACEHOLDER } from '@/lib/image';
 
 type ImageNode = {
   url: string;
@@ -33,7 +34,17 @@ export default function ImageGallery({ featuredImage, imageEdges, title }: Image
   return (
     <div className="space-y-4">
       <div className="relative aspect-square bg-white/5 rounded-lg overflow-hidden border border-white/10">
-        <Image src={active.url} alt={active.altText || title} fill className="object-cover" priority />
+        <Image
+          src={active.url}
+          alt={active.altText || title}
+          fill
+          className="object-cover"
+          priority
+          quality={85}
+          placeholder="blur"
+          blurDataURL={IMAGE_BLUR_PLACEHOLDER}
+          sizes="(max-width: 1024px) 100vw, 50vw"
+        />
       </div>
 
       <div className="grid grid-cols-4 gap-3">
@@ -47,7 +58,17 @@ export default function ImageGallery({ featuredImage, imageEdges, title }: Image
             } transition-colors`}
             aria-label={`View image ${idx + 1}`}
           >
-            <Image src={image.url} alt={image.altText || title} fill className="object-cover" />
+            <Image
+              src={image.url}
+              alt={image.altText || title}
+              fill
+              className="object-cover"
+              quality={75}
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL={IMAGE_BLUR_PLACEHOLDER}
+              sizes="(max-width: 768px) 25vw, 8vw"
+            />
           </button>
         ))}
       </div>

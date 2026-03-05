@@ -5,6 +5,7 @@ import { CartProvider } from '@/store/cartStore';
 import Header from '@/components/Header';
 import CartDrawer from '@/components/CartDrawer';
 import Footer from '@/components/Footer';
+import AnalyticsScripts from '@/components/AnalyticsScripts';
 
 const assistant = Assistant({
   subsets: ['latin'],
@@ -46,6 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${assistant.variable} ${jetbrainsMono.variable}`}>
       <body className="bg-brand-dark text-white antialiased selection:bg-brand-primary selection:text-white">
+        <AnalyticsScripts />
         <CartProvider>
           <Header />
           <CartDrawer />

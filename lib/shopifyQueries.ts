@@ -314,3 +314,17 @@ export const GET_CART_QUERY = `
     }
   }
 `;
+
+export const COLLECTION_PRODUCT_HANDLES_QUERY = `
+  query CollectionProductHandles($handle: String!, $first: Int!) {
+    collection(handle: $handle) {
+      products(first: $first) {
+        edges {
+          node {
+            handle
+          }
+        }
+      }
+    }
+  }
+`;

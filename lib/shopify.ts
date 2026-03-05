@@ -3,9 +3,13 @@ import { getShopifyEnv } from '@/lib/env';
 export async function shopifyFetch<T>({
   query,
   variables,
+  cacheSeconds = 60,
+  tags = ['shopify'],
 }: {
   query: string;
   variables?: Record<string, unknown>;
+  cacheSeconds?: number;
+  tags?: string[];
 }): Promise<T> {
   const { domain, apiVersion, storefrontPublicToken } = getShopifyEnv();
   const debug = process.env.SHOPIFY_DEBUG === 'true';
@@ -27,7 +31,9 @@ export async function shopifyFetch<T>({
       'X-Shopify-Storefront-Access-Token': storefrontPublicToken,
     },
     body: JSON.stringify({ query, variables }),
-    cache: 'no-store',
+    ...(cacheSeconds > 0
+      ? { next: { revalidate: cacheSeconds, tags } }
+      : { cache: 'no-store' as const }),
   });
 
   if (!result.ok) {
@@ -50,4 +56,29 @@ export async function shopifyFetch<T>({
   }
 
   return body.data as T;
+}
+
+export async function fetchShopifyRecommendations(productGid: string, limit: number = 4) {
+  const { domain } = getShopifyEnv();
+  const numericProductId = productGid.split('/').pop();
+  if (!numericProductId) return [];
+
+  const url = `https://${domain}/recommendations/products.json?product_id=${numericProductId}&limit=${limit}&intent=related`;
+  const result = await fetch(url, {
+    next: { revalidate: 60, tags: [`shopify-reco-${numericProductId}`] },
+  });
+
+  if (!result.ok) {
+    throw new Error(`Shopify recommendations request failed with status ${result.status}`);
+  }
+
+  const body = await result.json();
+  return (body?.products ?? []) as Array<{
+    id: number;
+    title: string;
+    handle: string;
+    featured_image?: string;
+    images?: Array<{ src: string; alt?: string }>;
+    variants?: Array<{ price: string }>;
+  }>;
 }

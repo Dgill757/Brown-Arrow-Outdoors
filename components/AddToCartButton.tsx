@@ -6,6 +6,7 @@ import VariantSelector from './VariantSelector';
 import QuantitySelector from './QuantitySelector';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 export default function AddToCartButton({ product }: { product: any }) {
   const { addToCart, isLoading } = useCart();
@@ -62,6 +63,12 @@ export default function AddToCartButton({ product }: { product: any }) {
 
   const handleAddToCart = async () => {
     if (!selectedVariant) return;
+    trackEvent('add_to_cart', {
+      product_handle: product.handle,
+      product_title: product.title,
+      variant_id: selectedVariant.id,
+      quantity,
+    });
     await addToCart(selectedVariant.id, quantity);
   };
 

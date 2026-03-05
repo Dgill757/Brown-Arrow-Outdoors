@@ -4,7 +4,7 @@ import { COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
 import CollectionView from '@/components/CollectionView';
 import { buildMetadata } from '@/lib/seo';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export const metadata: Metadata = buildMetadata({
   title: 'Steel Archery Targets Built for Real Hunting Pressure | Broken Arrow Outdoors',
@@ -23,6 +23,8 @@ export default async function TargetsPage() {
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
       variables: { handle: 'targets', first: 12 },
+      cacheSeconds: 60,
+      tags: ['collection-targets'],
     });
     if (!data?.collection) {
       initialError = 'Shopify collection not found: targets';

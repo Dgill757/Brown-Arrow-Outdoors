@@ -7,9 +7,12 @@ import { formatMoney } from '@/lib/money';
 import { useEffect, useRef } from 'react';
 import CartLineItem from '@/components/CartLineItem';
 import CartToast from '@/components/CartToast';
+import CartUpsells from '@/components/CartUpsells';
+import { trackEvent } from '@/lib/analytics';
 
 export default function CartDrawer() {
-  const { cart, isOpen, closeCart, updateQuantity, removeFromCart, toastMessage } = useCart();
+  const { cart, isOpen, closeCart, updateQuantity, removeFromCart, toastMessage, lastAddedProductId, lastAddedProductHandle } =
+    useCart();
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
@@ -69,14 +72,17 @@ export default function CartDrawer() {
                     </button>
                   </div>
                 ) : (
-                  cart.lines.edges.map((line: any) => (
-                    <CartLineItem
-                      key={line.node.id}
-                      line={line}
-                      onRemove={removeFromCart}
-                      onUpdateQuantity={updateQuantity}
-                    />
-                  ))
+                  <>
+                    {cart.lines.edges.map((line: any) => (
+                      <CartLineItem
+                        key={line.node.id}
+                        line={line}
+                        onRemove={removeFromCart}
+                        onUpdateQuantity={updateQuantity}
+                      />
+                    ))}
+                    <CartUpsells productId={lastAddedProductId || undefined} excludeHandle={lastAddedProductHandle || undefined} />
+                  </>
                 )}
               </div>
 
@@ -91,6 +97,13 @@ export default function CartDrawer() {
                   <p className="text-xs text-white/50 mb-6 text-center">Shipping & taxes calculated at checkout.</p>
                   <a
                     href={cart.checkoutUrl}
+                    onClick={() =>
+                      trackEvent('checkout_start', {
+                        cart_id: cart.id,
+                        total_quantity: cart.totalQuantity,
+                        checkout_url: cart.checkoutUrl,
+                      })
+                    }
                     className="block w-full bg-brand-primary hover:bg-orange-600 text-white font-black uppercase italic tracking-wider text-center py-4 rounded-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
                     Checkout

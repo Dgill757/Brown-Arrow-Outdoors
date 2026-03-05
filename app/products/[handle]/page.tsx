@@ -1,5 +1,5 @@
-import { shopifyFetch } from '@/lib/shopify';
-import { PRODUCT_BY_HANDLE_QUERY, COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
+import { fetchShopifyRecommendations, shopifyFetch } from '@/lib/shopify';
+import { PRODUCT_BY_HANDLE_QUERY, COLLECTION_PRODUCT_HANDLES_QUERY, COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
 import { notFound } from 'next/navigation';
 import { formatMoney } from '@/lib/money';
 import AddToCartButton from '@/components/AddToCartButton';
@@ -7,8 +7,11 @@ import ProductGrid from '@/components/ProductGrid';
 import { Truck, RotateCcw, ShieldCheck } from 'lucide-react';
 import type { Metadata } from 'next';
 import ImageGallery from '@/components/ImageGallery';
+import ProductInfoAccordion from '@/components/ProductInfoAccordion';
+import ProductViewTracker from '@/components/ProductViewTracker';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
+export const dynamicParams = true;
 
 function sanitizeDescriptionHtml(html: string | null | undefined) {
   if (!html) return '';
@@ -29,19 +32,20 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
     const product = data?.product;
     if (!product) return { title: 'Product Not Found' };
     
+    const plainDescription = product.descriptionHtml?.replace(/<[^>]+>/g, '').trim() || 'Broken Arrow Outdoors product';
     return {
       title: `${product.title} | Broken Arrow Outdoors`,
-      description: product.descriptionHtml?.replace(/<[^>]+>/g, '').slice(0, 160) || 'Broken Arrow Outdoors product',
+      description: plainDescription.slice(0, 160),
       alternates: { canonical: `/products/${handle}` },
       openGraph: {
         title: `${product.title} | Broken Arrow Outdoors`,
-        description: product.descriptionHtml?.replace(/<[^>]+>/g, '').slice(0, 160) || 'Broken Arrow Outdoors product',
+        description: plainDescription.slice(0, 160),
         images: product.featuredImage ? [product.featuredImage.url] : [],
       },
       twitter: {
         card: 'summary_large_image',
         title: `${product.title} | Broken Arrow Outdoors`,
-        description: product.descriptionHtml?.replace(/<[^>]+>/g, '').slice(0, 160) || 'Broken Arrow Outdoors product',
+        description: plainDescription.slice(0, 160),
         images: product.featuredImage ? [product.featuredImage.url] : [],
       },
     };
@@ -50,28 +54,85 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
   }
 }
 
+export async function generateStaticParams() {
+  try {
+    const [targets, branded] = await Promise.all([
+      shopifyFetch<any>({
+        query: COLLECTION_PRODUCT_HANDLES_QUERY,
+        variables: { handle: 'targets', first: 50 },
+        cacheSeconds: 60,
+        tags: ['products-targets'],
+      }),
+      shopifyFetch<any>({
+        query: COLLECTION_PRODUCT_HANDLES_QUERY,
+        variables: { handle: 'branded', first: 50 },
+        cacheSeconds: 60,
+        tags: ['products-branded'],
+      }),
+    ]);
+
+    const handles = new Set<string>();
+    targets?.collection?.products?.edges?.forEach((edge: any) => handles.add(edge.node.handle));
+    branded?.collection?.products?.edges?.forEach((edge: any) => handles.add(edge.node.handle));
+
+    return Array.from(handles).map((handle) => ({ handle }));
+  } catch {
+    return [];
+  }
+}
+
 export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
   let product;
   let relatedProducts = [];
+  let recommendationProducts = [];
   let hasFetchError = false;
 
   try {
     const data = await shopifyFetch<any>({
       query: PRODUCT_BY_HANDLE_QUERY,
       variables: { handle },
+      cacheSeconds: 60,
+      tags: [`product-${handle}`],
     });
     product = data?.product;
 
-    // Fetch related products (just fetching targets for now as a simple recommendation engine)
-    const relatedData = await shopifyFetch<any>({
-      query: COLLECTION_PRODUCTS_QUERY,
-      variables: { handle: 'targets', first: 4 },
-    });
-    relatedProducts = relatedData?.collection?.products?.edges
-      .map((edge: any) => edge.node)
-      .filter((p: any) => p.handle !== handle) // Exclude current product
-      .slice(0, 4) || [];
+    if (product?.id) {
+      try {
+        const reco = await fetchShopifyRecommendations(product.id, 4);
+        recommendationProducts = reco
+          .map((item) => ({
+            id: `gid://shopify/Product/${item.id}`,
+            title: item.title,
+            handle: item.handle,
+            availableForSale: true,
+            images: {
+              edges: [{ node: { url: item.featured_image || item.images?.[0]?.src, altText: item.title } }],
+            },
+            priceRange: {
+              minVariantPrice: { amount: item.variants?.[0]?.price || '0.00', currencyCode: 'USD' },
+            },
+          }))
+          .filter((item) => item.handle !== handle && item.images.edges[0].node.url)
+          .slice(0, 4);
+      } catch {
+        recommendationProducts = [];
+      }
+    }
+
+    if (!recommendationProducts.length) {
+      const relatedData = await shopifyFetch<any>({
+        query: COLLECTION_PRODUCTS_QUERY,
+        variables: { handle: 'targets', first: 4 },
+        cacheSeconds: 60,
+        tags: ['related-products'],
+      });
+      relatedProducts =
+        relatedData?.collection?.products?.edges
+          ?.map((edge: any) => edge.node)
+          ?.filter((p: any) => p.handle !== handle)
+          ?.slice(0, 4) || [];
+    }
 
   } catch (error) {
     console.error('Error fetching product:', error);
@@ -98,9 +159,45 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   const { title, descriptionHtml, images, variants, featuredImage } = product;
   const firstVariant = variants.edges[0]?.node;
   const price = firstVariant?.price;
+  const recommendationsToRender = recommendationProducts.length ? recommendationProducts : relatedProducts;
+  const plainDescription = product.descriptionHtml?.replace(/<[^>]+>/g, '').trim() || '';
+  const schemaProduct = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: title,
+    image: images?.edges?.map((edge: any) => edge?.node?.url).filter(Boolean),
+    description: plainDescription,
+    sku: firstVariant?.id,
+    brand: { '@type': 'Brand', name: 'Broken Arrow Outdoors' },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: price?.currencyCode || 'USD',
+      price: price?.amount || '0.00',
+      availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      url: `https://brokenarrowoutdoors.com/products/${handle}`,
+    },
+    review: {
+      '@type': 'Review',
+      author: { '@type': 'Person', name: 'Broken Arrow Customer' },
+      reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+      reviewBody: 'Built tough and field tested. Exactly what we needed for pressure training.',
+    },
+  };
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://brokenarrowoutdoors.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: 'https://brokenarrowoutdoors.com/targets' },
+      { '@type': 'ListItem', position: 3, name: title, item: `https://brokenarrowoutdoors.com/products/${handle}` },
+    ],
+  };
 
   return (
     <div className="bg-brand-dark text-white min-h-screen">
+      <ProductViewTracker handle={handle} title={title} price={price?.amount} currency={price?.currencyCode} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaProduct) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-24">
           <ImageGallery featuredImage={featuredImage} imageEdges={images.edges} title={title} />
@@ -144,16 +241,37 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                 </div>
               </div>
             </div>
+
+            <ProductInfoAccordion
+              items={[
+                {
+                  title: 'Specifications',
+                  body: '11-gauge steel construction, powder-coated finish, field-ready hardware, and target geometry engineered for realistic bowhunting training reps.',
+                },
+                {
+                  title: 'Durability',
+                  body: 'Built to withstand repeated impacts in rugged weather conditions. This system is designed for hard seasons, heavy use, and repeatable performance.',
+                },
+                {
+                  title: 'Shipping',
+                  body: 'Orders typically ship within 24-48 hours from Texas. Tracking details are sent by email as soon as your package leaves the warehouse.',
+                },
+                {
+                  title: 'Setup Instructions',
+                  body: 'Choose a safe shooting lane, verify backstop clearance, and anchor target setup on level ground before use. Follow all local range and safety guidelines.',
+                },
+              ]}
+            />
           </div>
         </div>
 
         {/* Related Products */}
-        {relatedProducts.length > 0 && (
+        {recommendationsToRender.length > 0 && (
           <div className="border-t border-white/10 pt-16">
             <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-8">
-              You Might Also <span className="text-brand-primary">Like</span>
+              You May Also <span className="text-brand-primary">Like</span>
             </h2>
-            <ProductGrid products={relatedProducts} />
+            <ProductGrid products={recommendationsToRender} />
           </div>
         )}
       </div>

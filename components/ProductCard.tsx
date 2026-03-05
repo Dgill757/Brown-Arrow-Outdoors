@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatMoney } from '@/lib/money';
+import { IMAGE_BLUR_PLACEHOLDER } from '@/lib/image';
 
 type ProductCardProps = {
   product: any;
@@ -29,6 +30,10 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
             priority={priority}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loading={priority ? 'eager' : 'lazy'}
+            quality={80}
+            placeholder="blur"
+            blurDataURL={IMAGE_BLUR_PLACEHOLDER}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-white/5 text-white/20">No Image</div>

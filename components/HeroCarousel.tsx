@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 const slides = [
   {
@@ -145,18 +146,21 @@ export default function HeroCarousel() {
           <div className="mt-5 md:mt-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2.5 md:gap-3">
             <Link
               href="/targets"
+              onClick={() => trackEvent('hero_cta_click', { cta: 'shop_targets', location: 'hero' })}
               className="bg-brand-primary text-white px-5 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-all hover:-translate-y-0.5 text-sm md:text-base text-center"
             >
               Shop Targets
             </Link>
             <Link
               href="/branded"
+              onClick={() => trackEvent('hero_cta_click', { cta: 'shop_gear', location: 'hero' })}
               className="bg-white/10 border border-white/30 text-white px-5 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-white/20 transition-all text-sm md:text-base text-center"
             >
               Shop Gear
             </Link>
             <Link
               href="/our-story"
+              onClick={() => trackEvent('hero_cta_click', { cta: 'our_story', location: 'hero' })}
               className="text-white/85 hover:text-brand-primary transition-colors font-bold uppercase tracking-widest text-xs md:text-sm"
             >
               Our Story

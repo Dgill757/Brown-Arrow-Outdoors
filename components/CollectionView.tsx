@@ -6,6 +6,7 @@ import CollectionHeader from '@/components/CollectionHeader';
 import Toggle from '@/components/Toggle';
 import { ProductGridSkeleton } from '@/components/Skeletons';
 import { COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
+import { trackEvent } from '@/lib/analytics';
 
 type Product = {
   id: string;
@@ -88,7 +89,14 @@ export default function CollectionView({
         <CollectionHeader title={title} intro={intro} />
 
         <div className="mb-8 flex items-center justify-between gap-4 border border-white/10 rounded-lg p-4 bg-white/[0.03]">
-          <Toggle checked={hideSoldOut} onChange={setHideSoldOut} label="Hide Sold Out" />
+          <Toggle
+            checked={hideSoldOut}
+            onChange={(checked) => {
+              setHideSoldOut(checked);
+              trackEvent('collection_filter', { collection: handle, hide_sold_out: checked });
+            }}
+            label="Hide Sold Out"
+          />
           <p className="text-xs uppercase tracking-wider text-white/45">{visibleProducts.length} products</p>
         </div>
 

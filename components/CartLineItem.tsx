@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { formatMoney } from '@/lib/money';
+import { IMAGE_BLUR_PLACEHOLDER } from '@/lib/image';
 
 type CartLineItemProps = {
   line: any;
@@ -22,6 +23,11 @@ export default function CartLineItem({ line, onRemove, onUpdateQuantity }: CartL
             alt={node.merchandise.image.altText || node.merchandise.product.title}
             fill
             className="object-cover"
+            loading="lazy"
+            quality={70}
+            placeholder="blur"
+            blurDataURL={IMAGE_BLUR_PLACEHOLDER}
+            sizes="80px"
           />
         )}
       </div>

@@ -1,9 +1,26 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function ChallengeVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldLoadVideo(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '250px' }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const replay = () => {
     if (!videoRef.current) return;
@@ -12,7 +29,7 @@ export default function ChallengeVideo() {
   };
 
   return (
-    <div className="aspect-video max-w-4xl mx-auto rounded-lg overflow-hidden border border-white/20 shadow-2xl relative group bg-black">
+    <div ref={containerRef} className="aspect-video max-w-4xl mx-auto rounded-lg overflow-hidden border border-white/20 shadow-2xl relative group bg-black">
       <video
         ref={videoRef}
         className="h-full w-full object-cover"
@@ -20,10 +37,15 @@ export default function ChallengeVideo() {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload={shouldLoadVideo ? 'metadata' : 'none'}
         poster="/images/targets/IMG_7546.jpg"
       >
-        <source src="/images/videos/Broken-Arrow Website-video.mp4" type="video/mp4" />
+        {shouldLoadVideo ? (
+          <>
+            <source src="/images/videos/Broken-Arrow Website-video.mp4" media="(max-width: 767px)" type="video/mp4" />
+            <source src="/images/videos/Broken-Arrow Website-video.mp4" type="video/mp4" />
+          </>
+        ) : null}
       </video>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
       <button

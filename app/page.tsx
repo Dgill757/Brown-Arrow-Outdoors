@@ -1,15 +1,26 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
 import { shopifyFetch } from '@/lib/shopify';
 import { COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
 import ProductGrid from '@/components/ProductGrid';
-import ChallengeVideo from '@/components/ChallengeVideo';
 import HeroCarousel from '@/components/HeroCarousel';
+import BrandStorySection from '@/components/home/BrandStorySection';
 import { ArrowRight, Shield, Target, Truck, Zap } from 'lucide-react';
 import { buildMetadata } from '@/lib/seo';
 
-export const dynamic = 'force-dynamic';
+const HeroVideoSection = dynamic(() => import('@/components/home/HeroVideoSection'), {
+  loading: () => <div className="h-[520px] bg-white/[0.02] border-y border-white/10 animate-pulse" />,
+});
+const FieldTestGallerySection = dynamic(() => import('@/components/home/FieldTestGallerySection'), {
+  loading: () => <div className="container mx-auto px-4 h-[360px] bg-white/[0.02] rounded-xl animate-pulse" />,
+});
+const EmailCaptureSection = dynamic(() => import('@/components/home/EmailCaptureSection'), {
+  loading: () => <div className="container mx-auto px-4 h-[240px] bg-white/[0.02] rounded-xl animate-pulse" />,
+});
+
+export const revalidate = 60;
 export const metadata: Metadata = buildMetadata({
   title: 'Broken Arrow Outdoors | Train Like The Moment Matters',
   description: 'Steel archery targets and field-ready gear designed to build confidence under hunting pressure.',
@@ -24,6 +35,8 @@ export default async function Home() {
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
       variables: { handle: 'targets', first: 4 },
+      cacheSeconds: 60,
+      tags: ['home-targets'],
     });
     featuredTargets = data?.collection?.products?.edges.map((edge: any) => edge.node) || [];
   } catch (error) {
@@ -36,6 +49,8 @@ export default async function Home() {
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
       variables: { handle: 'branded', first: 4 },
+      cacheSeconds: 60,
+      tags: ['home-branded'],
     });
     featuredGear = data?.collection?.products?.edges.map((edge: any) => edge.node) || [];
   } catch (error) {
@@ -143,6 +158,8 @@ export default async function Home() {
         </div>
       </section>
 
+      <BrandStorySection />
+
       {/* 4. Featured Targets */}
       <section className="container mx-auto px-4">
         <div className="flex justify-between items-end mb-12">
@@ -233,28 +250,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 6. The Challenge */}
-      <section className="relative py-32 bg-white/5 border-y border-white/10 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-           <Image 
-              src="/images/targets/tmpralfzf0k.webp"
-              alt="Background"
-              fill
-              className="object-cover opacity-20"
-            />
-            <div className="absolute inset-0 bg-brand-dark/80" />
-        </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter mb-8">
-            Feel The <span className="text-brand-primary">Pressure</span> <br/>Before It Counts
-          </h2>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto mb-12">
-            Practice with pressure and precision. Build confidence. Train like it's real.
-            <br/>"You don't rise to the occasion, you fall to the level of your training."
-          </p>
-          <ChallengeVideo />
-        </div>
-      </section>
+      {/* 6. Hero Video */}
+      <HeroVideoSection />
 
       {/* 7. Testimonials Preview */}
       <section className="container mx-auto px-4">
@@ -288,55 +285,11 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 8. Gallery Preview */}
-      <section className="container mx-auto px-4">
-         <div className="flex justify-between items-end mb-12">
-          <div>
-            <h2 className="text-4xl font-black uppercase italic tracking-tighter mb-2">In The Field</h2>
-            <p className="text-white/60">See our targets in action.</p>
-          </div>
-          <Link href="/gallery" className="hidden md:flex items-center gap-2 text-brand-primary font-bold uppercase tracking-wider hover:text-white transition-colors">
-            View Gallery <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-96 md:h-80">
-          <div className="relative rounded-lg overflow-hidden col-span-2 row-span-2 md:col-span-2 md:row-span-1 h-full">
-             <Image src="/images/gallery/DSC09031 (1).jpg" alt="Gallery 1" fill className="object-cover hover:scale-105 transition-transform duration-500" />
-          </div>
-          <div className="relative rounded-lg overflow-hidden h-full">
-             <Image src="/images/gallery/IMG_6631.JPG" alt="Gallery 2" fill className="object-cover hover:scale-105 transition-transform duration-500" />
-          </div>
-          <div className="relative rounded-lg overflow-hidden h-full">
-             <Image src="/images/gallery/IMG_9319.JPG" alt="Gallery 3" fill className="object-cover hover:scale-105 transition-transform duration-500" />
-          </div>
-        </div>
-        <div className="mt-8 text-center md:hidden">
-          <Link href="/gallery" className="inline-flex items-center gap-2 text-brand-primary font-bold uppercase tracking-wider hover:text-white transition-colors">
-            View Gallery <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
+      {/* 8. Field Test Gallery */}
+      <FieldTestGallerySection />
 
       {/* 9. Email Capture */}
-      <section className="container mx-auto px-4 text-center">
-        <div className="max-w-3xl mx-auto bg-gradient-to-br from-brand-primary/20 to-brand-dark border border-brand-primary/20 p-12 rounded-2xl relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-primary to-transparent" />
-          <h2 className="text-4xl font-black uppercase italic tracking-tighter mb-4">Join The Crew</h2>
-          <p className="text-white/70 mb-8 max-w-lg mx-auto">
-            Sign up for drop alerts, exclusive discounts, training tips, and event invites.
-          </p>
-          <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input 
-              type="email" 
-              placeholder="YOUR EMAIL ADDRESS" 
-              className="flex-1 bg-black/50 border border-white/10 px-6 py-4 text-white placeholder:text-white/30 focus:outline-none focus:border-brand-primary transition-colors rounded-lg"
-            />
-            <button className="bg-brand-primary text-white px-8 py-4 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-colors rounded-lg shadow-lg shadow-brand-primary/20">
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </section>
+      <EmailCaptureSection />
     </div>
   );
 }

@@ -13,6 +13,8 @@ type CartContextType = {
   cart: any | null;
   isOpen: boolean;
   toastMessage: string | null;
+  lastAddedProductId: string | null;
+  lastAddedProductHandle: string | null;
   openCart: () => void;
   closeCart: () => void;
   addToCart: (variantId: string, quantity?: number) => Promise<void>;
@@ -50,6 +52,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [lastAddedProductId, setLastAddedProductId] = useState<string | null>(null);
+  const [lastAddedProductHandle, setLastAddedProductHandle] = useState<string | null>(null);
 
   // Load cart from local storage on mount
   useEffect(() => {
@@ -118,6 +122,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         newCart = data.cartLinesAdd.cart;
       }
       setCart(newCart);
+      const latestLine = newCart?.lines?.edges?.[newCart?.lines?.edges?.length - 1]?.node;
+      if (latestLine?.merchandise?.product?.id) {
+        setLastAddedProductId(latestLine.merchandise.product.id);
+        setLastAddedProductHandle(latestLine.merchandise.product.handle || null);
+      }
       openCart();
       showToast('Added to cart');
     } catch (error) {
@@ -180,6 +189,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         cart,
         isOpen,
         toastMessage,
+        lastAddedProductId,
+        lastAddedProductHandle,
         openCart,
         closeCart,
         addToCart,
