@@ -10,37 +10,37 @@ const slides = [
   {
     src: '/images/hero/hero-buck-head.png',
     objectPosition: 'center 40%',
-    mobileObjectPosition: '65% 40%',
+    mobileObjectPosition: '72% 34%',
     overlayBottom: { desktop: '5.5%', tablet: '3.5%', mobile: '2.5%' },
   },
   {
     src: '/images/hero/elk-hero.png',
     objectPosition: 'center 46%',
-    mobileObjectPosition: '70% 42%',
+    mobileObjectPosition: '74% 36%',
     overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
   },
   {
     src: '/images/hero/hero-sasquatc-head.png',
     objectPosition: 'center 38%',
-    mobileObjectPosition: '70% 38%',
+    mobileObjectPosition: '74% 40%',
     overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
   },
   {
     src: '/images/hero/boar-hero.png',
     objectPosition: 'center 45%',
-    mobileObjectPosition: '60% 45%',
+    mobileObjectPosition: '74% 42%',
     overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
   },
   {
     src: '/images/hero/hat-hero.png',
     objectPosition: 'center 44%',
-    mobileObjectPosition: '55% 45%',
+    mobileObjectPosition: '74% 42%',
     overlayBottom: { desktop: '4.5%', tablet: '2.75%', mobile: '2%' },
   },
   {
     src: '/images/hero/sweatshirt-hero.png',
     objectPosition: 'center 47%',
-    mobileObjectPosition: '55% 45%',
+    mobileObjectPosition: '80% 40%',
     overlayBottom: { desktop: '4.75%', tablet: '2.75%', mobile: '2%' },
   },
 ];
@@ -102,7 +102,7 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className="relative h-[78vh] md:h-[70vh] lg:h-[85vh] min-h-[520px] md:min-h-[620px] lg:min-h-[720px] w-full overflow-hidden bg-black"
+      className="relative h-[84vh] md:h-[70vh] lg:h-[85vh] min-h-[620px] md:min-h-[620px] lg:min-h-[720px] w-full overflow-hidden bg-black"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       aria-label="Broken Arrow hero carousel"
@@ -139,7 +139,7 @@ export default function HeroCarousel() {
         </div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
       <div
         className="absolute left-[4%] right-[4%] md:right-auto md:max-w-[620px] lg:max-w-[720px] z-20"
@@ -151,41 +151,41 @@ export default function HeroCarousel() {
             : dynamicBottom,
         }}
       >
-        <div className="rounded-2xl border border-white/10 bg-black/62 backdrop-blur-md p-4 sm:p-5 md:p-6 shadow-[0_18px_48px_rgba(0,0,0,0.4)]">
-          <h1 className="text-[30px] sm:text-[34px] md:text-[42px] lg:text-[56px] xl:text-[62px] font-black uppercase italic tracking-tighter leading-[0.9] text-white">
+        <div className="rounded-2xl border border-white/12 bg-black/60 backdrop-blur-md p-4 sm:p-5 md:p-6 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
+          <h1 className="text-[28px] sm:text-[34px] md:text-[42px] lg:text-[56px] xl:text-[62px] font-black uppercase italic tracking-tighter leading-[0.92] text-white">
             Train Like The <br />
             <span className="text-brand-primary">Moment Matters</span>
           </h1>
 
-          <p className="mt-3 md:mt-4 text-sm sm:text-base md:text-lg text-white/90 max-w-2xl">
+          <p className="mt-2.5 md:mt-4 text-sm sm:text-base md:text-lg text-white/90 max-w-2xl">
             Steel archery targets built to simulate real hunting pressure.
           </p>
 
-          {!isShortViewport && (
+          {!isMobile && !isShortViewport && (
             <p className="mt-3 text-[10px] sm:text-[11px] md:text-xs text-brand-primary font-bold tracking-[0.2em] uppercase">
               Firefighter Owned. Texas Made. Built for Bowhunters.
             </p>
           )}
 
-          <div className="mt-5 md:mt-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2.5 md:gap-3">
+          <div className="mt-4 md:mt-6 grid grid-cols-2 sm:flex sm:flex-wrap sm:items-center gap-2.5 md:gap-3">
             <Link
               href="/targets"
               onClick={() => trackEvent('hero_cta_click', { cta: 'shop_targets', location: 'hero' })}
-              className="bg-brand-primary text-white px-5 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-all hover:-translate-y-0.5 text-sm md:text-base text-center"
+              className="bg-brand-primary text-white px-4 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-all hover:-translate-y-0.5 text-sm md:text-base text-center sm:min-w-[170px]"
             >
               Shop Targets
             </Link>
             <Link
               href="/branded"
               onClick={() => trackEvent('hero_cta_click', { cta: 'shop_gear', location: 'hero' })}
-              className="bg-white/10 border border-white/30 text-white px-5 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-white/20 transition-all text-sm md:text-base text-center"
+              className="bg-white/10 border border-white/30 text-white px-4 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-white/20 transition-all text-sm md:text-base text-center sm:min-w-[170px]"
             >
               Shop Gear
             </Link>
             <Link
               href="/our-story"
               onClick={() => trackEvent('hero_cta_click', { cta: 'our_story', location: 'hero' })}
-              className="text-white/85 hover:text-brand-primary transition-colors font-bold uppercase tracking-widest text-xs md:text-sm"
+              className="col-span-2 text-white/85 hover:text-brand-primary transition-colors font-bold uppercase tracking-widest text-xs md:text-sm text-left sm:text-center"
             >
               Our Story
             </Link>
