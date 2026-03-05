@@ -7,12 +7,42 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const slides = [
-  { src: '/images/hero/buck-hero.png', objectPosition: 'center 42%', mobileObjectPosition: '62% 46%' },
-  { src: '/images/hero/elk-hero.png', objectPosition: 'center 46%', mobileObjectPosition: '62% 48%' },
-  { src: '/images/hero/sasquatch-hero.png', objectPosition: 'center 48%', mobileObjectPosition: '66% 52%' },
-  { src: '/images/hero/boar-hero.png', objectPosition: 'center 45%', mobileObjectPosition: '64% 50%' },
-  { src: '/images/hero/hat-hero.png', objectPosition: 'center 44%', mobileObjectPosition: '64% 44%' },
-  { src: '/images/hero/sweatshirt-hero.png', objectPosition: 'center 47%', mobileObjectPosition: '70% 50%' },
+  {
+    src: '/images/hero/buck-hero.png',
+    objectPosition: 'center 42%',
+    mobileObjectPosition: '62% 46%',
+    overlayBottom: { desktop: '5.5%', tablet: '3.5%', mobile: '2.5%' },
+  },
+  {
+    src: '/images/hero/elk-hero.png',
+    objectPosition: 'center 46%',
+    mobileObjectPosition: '62% 48%',
+    overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
+  },
+  {
+    src: '/images/hero/sasquatch-hero.png',
+    objectPosition: 'center 48%',
+    mobileObjectPosition: '66% 52%',
+    overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
+  },
+  {
+    src: '/images/hero/boar-hero.png',
+    objectPosition: 'center 45%',
+    mobileObjectPosition: '64% 50%',
+    overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
+  },
+  {
+    src: '/images/hero/hat-hero.png',
+    objectPosition: 'center 44%',
+    mobileObjectPosition: '64% 44%',
+    overlayBottom: { desktop: '4.5%', tablet: '2.75%', mobile: '2%' },
+  },
+  {
+    src: '/images/hero/sweatshirt-hero.png',
+    objectPosition: 'center 47%',
+    mobileObjectPosition: '70% 50%',
+    overlayBottom: { desktop: '4.75%', tablet: '2.75%', mobile: '2%' },
+  },
 ];
 
 const AUTO_ADVANCE_MS = 6000;
@@ -21,6 +51,8 @@ export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const [isShortViewport, setIsShortViewport] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -32,12 +64,31 @@ export default function HeroCarousel() {
   }, [isPaused, prefersReducedMotion]);
 
   useEffect(() => {
-    const media = window.matchMedia('(max-width: 767px)');
-    const update = () => setIsMobile(media.matches);
+    const mobileMedia = window.matchMedia('(max-width: 767px)');
+    const tabletMedia = window.matchMedia('(min-width: 768px) and (max-width: 1199px)');
+    const shortMedia = window.matchMedia('(max-height: 880px)');
+    const update = () => {
+      setIsMobile(mobileMedia.matches);
+      setIsTablet(tabletMedia.matches);
+      setIsShortViewport(shortMedia.matches);
+    };
     update();
-    media.addEventListener('change', update);
-    return () => media.removeEventListener('change', update);
+    mobileMedia.addEventListener('change', update);
+    tabletMedia.addEventListener('change', update);
+    shortMedia.addEventListener('change', update);
+    return () => {
+      mobileMedia.removeEventListener('change', update);
+      tabletMedia.removeEventListener('change', update);
+      shortMedia.removeEventListener('change', update);
+    };
   }, []);
+
+  const activeSlide = slides[currentIndex];
+  const dynamicBottom = isMobile
+    ? activeSlide.overlayBottom.mobile
+    : isTablet
+    ? activeSlide.overlayBottom.tablet
+    : activeSlide.overlayBottom.desktop;
 
   return (
     <section
@@ -63,9 +114,7 @@ export default function HeroCarousel() {
             sizes="100vw"
             className="object-cover"
             style={{
-              objectPosition: isMobile
-                ? slides[currentIndex].mobileObjectPosition
-                : slides[currentIndex].objectPosition,
+              objectPosition: isMobile ? activeSlide.mobileObjectPosition : activeSlide.objectPosition,
             }}
           />
         </motion.div>
@@ -73,8 +122,11 @@ export default function HeroCarousel() {
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
 
-      <div className="absolute left-[4%] right-[4%] md:right-auto md:max-w-[640px] lg:max-w-[760px] z-20 bottom-[2.5%] md:bottom-[4%] lg:bottom-[6%] [@media(max-height:900px)]:bottom-[1.5%] [@media(max-height:780px)]:bottom-[1%]">
-        <div className="rounded-2xl border border-white/10 bg-black/60 backdrop-blur-md p-4 sm:p-5 md:p-6 lg:p-7 shadow-[0_18px_48px_rgba(0,0,0,0.4)]">
+      <div
+        className="absolute left-[4%] right-[4%] md:right-auto md:max-w-[620px] lg:max-w-[720px] z-20"
+        style={{ bottom: isShortViewport ? '1%' : dynamicBottom }}
+      >
+        <div className="rounded-2xl border border-white/10 bg-black/62 backdrop-blur-md p-4 sm:p-5 md:p-6 shadow-[0_18px_48px_rgba(0,0,0,0.4)]">
           <h1 className="text-[30px] sm:text-[34px] md:text-[42px] lg:text-[56px] xl:text-[62px] font-black uppercase italic tracking-tighter leading-[0.9] text-white">
             Train Like The <br />
             <span className="text-brand-primary">Moment Matters</span>
@@ -84,9 +136,11 @@ export default function HeroCarousel() {
             Steel archery targets built to simulate real hunting pressure.
           </p>
 
-          <p className="mt-3 text-[10px] sm:text-[11px] md:text-xs text-brand-primary font-bold tracking-[0.2em] uppercase">
-            Firefighter Owned. Texas Made. Built for Bowhunters.
-          </p>
+          {!isShortViewport && (
+            <p className="mt-3 text-[10px] sm:text-[11px] md:text-xs text-brand-primary font-bold tracking-[0.2em] uppercase">
+              Firefighter Owned. Texas Made. Built for Bowhunters.
+            </p>
+          )}
 
           <div className="mt-5 md:mt-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2.5 md:gap-3">
             <Link
