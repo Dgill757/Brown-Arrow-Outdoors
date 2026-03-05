@@ -32,7 +32,7 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className="relative h-[92vh] min-h-[680px] w-full overflow-hidden bg-black"
+      className="relative h-[65vh] md:h-[70vh] lg:h-[85vh] min-h-[520px] md:min-h-[620px] lg:min-h-[720px] w-full overflow-hidden bg-black"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       aria-label="Broken Arrow hero carousel"
@@ -60,9 +60,9 @@ export default function HeroCarousel() {
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
 
-      <div className="absolute left-[5%] right-[5%] md:right-auto md:max-w-3xl z-20 top-[62%] md:top-[66%] -translate-y-1/2">
-        <div className="rounded-xl border border-white/10 bg-black/45 backdrop-blur-md p-6 md:p-8 shadow-2xl">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase italic tracking-tighter leading-[0.88] text-white">
+      <div className="absolute left-[5%] right-[5%] md:right-auto md:max-w-3xl z-20 bottom-[10%] md:bottom-[14%] lg:bottom-[18%]">
+        <div className="rounded-2xl border border-white/10 bg-black/55 backdrop-blur-md p-5 md:p-7 lg:p-8 shadow-[0_16px_44px_rgba(0,0,0,0.35)]">
+          <h1 className="text-[34px] md:text-[48px] lg:text-[64px] font-black uppercase italic tracking-tighter leading-[0.88] text-white">
             Train Like The <br />
             <span className="text-brand-primary">Moment Matters</span>
           </h1>
@@ -75,7 +75,7 @@ export default function HeroCarousel() {
             Firefighter Owned. Texas Made. Built for Bowhunters.
           </p>
 
-          <div className="mt-7 flex flex-wrap items-center gap-3 md:gap-4">
+          <div className="mt-7 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 md:gap-4">
             <Link
               href="/targets"
               className="bg-brand-primary text-white px-6 md:px-8 py-3 md:py-4 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-all hover:-translate-y-0.5"
