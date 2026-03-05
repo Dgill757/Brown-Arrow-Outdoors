@@ -10,41 +10,42 @@ const slides = [
   {
     src: '/images/hero/hero-buck-head.png',
     objectPosition: 'center 40%',
-    mobileObjectPosition: '54% 42%',
+    mobileObjectPosition: '65% 40%',
     overlayBottom: { desktop: '5.5%', tablet: '3.5%', mobile: '2.5%' },
   },
   {
     src: '/images/hero/elk-hero.png',
     objectPosition: 'center 46%',
-    mobileObjectPosition: '62% 48%',
+    mobileObjectPosition: '70% 42%',
     overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
   },
   {
     src: '/images/hero/hero-sasquatc-head.png',
     objectPosition: 'center 38%',
-    mobileObjectPosition: '52% 42%',
+    mobileObjectPosition: '70% 38%',
     overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
   },
   {
     src: '/images/hero/boar-hero.png',
     objectPosition: 'center 45%',
-    mobileObjectPosition: '64% 50%',
+    mobileObjectPosition: '60% 45%',
     overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
   },
   {
     src: '/images/hero/hat-hero.png',
     objectPosition: 'center 44%',
-    mobileObjectPosition: '64% 44%',
+    mobileObjectPosition: '55% 45%',
     overlayBottom: { desktop: '4.5%', tablet: '2.75%', mobile: '2%' },
   },
   {
     src: '/images/hero/sweatshirt-hero.png',
     objectPosition: 'center 47%',
-    mobileObjectPosition: '70% 50%',
+    mobileObjectPosition: '55% 45%',
     overlayBottom: { desktop: '4.75%', tablet: '2.75%', mobile: '2%' },
   },
 ];
 
+// Mobile/Desktop autoplay interval: 4000ms
 const AUTO_ADVANCE_MS = 4000;
 
 export default function HeroCarousel() {
@@ -101,7 +102,7 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className="relative h-[65vh] md:h-[70vh] lg:h-[85vh] min-h-[520px] md:min-h-[620px] lg:min-h-[720px] w-full overflow-hidden bg-black"
+      className="relative h-[78vh] md:h-[70vh] lg:h-[85vh] min-h-[520px] md:min-h-[620px] lg:min-h-[720px] w-full overflow-hidden bg-black"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       aria-label="Broken Arrow hero carousel"
@@ -142,7 +143,13 @@ export default function HeroCarousel() {
 
       <div
         className="absolute left-[4%] right-[4%] md:right-auto md:max-w-[620px] lg:max-w-[720px] z-20"
-        style={{ bottom: isShortViewport ? '1%' : dynamicBottom }}
+        style={{
+          bottom: isMobile
+            ? `calc(${isShortViewport ? '1%' : dynamicBottom} + env(safe-area-inset-bottom))`
+            : isShortViewport
+            ? '1%'
+            : dynamicBottom,
+        }}
       >
         <div className="rounded-2xl border border-white/10 bg-black/62 backdrop-blur-md p-4 sm:p-5 md:p-6 shadow-[0_18px_48px_rgba(0,0,0,0.4)]">
           <h1 className="text-[30px] sm:text-[34px] md:text-[42px] lg:text-[56px] xl:text-[62px] font-black uppercase italic tracking-tighter leading-[0.9] text-white">

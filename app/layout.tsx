@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnalyticsScripts from '@/components/AnalyticsScripts';
 import LazyCartDrawerMount from '@/components/LazyCartDrawerMount';
+import { getBaseUrl, toAbsoluteUrl } from '@/lib/site';
 
 const assistant = Assistant({
   subsets: ['latin'],
@@ -20,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://brokenarrowoutdoors.com'),
+  metadataBase: new URL(getBaseUrl()),
   title: 'Broken Arrow Outdoors | Train Like The Moment Matters',
   description: 'Premium steel archery targets built to simulate real hunting pressure. Firefighter owned. Texas made.',
   alternates: { canonical: '/' },
@@ -29,13 +30,13 @@ export const metadata: Metadata = {
     description: 'Premium steel archery targets built to simulate real hunting pressure. Firefighter owned. Texas made.',
     type: 'website',
     url: '/',
-    images: [{ url: '/images/hero/hero-1.png' }],
+    images: [{ url: toAbsoluteUrl('/images/hero/hero-buck-head.png') }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Broken Arrow Outdoors | Train Like The Moment Matters',
     description: 'Premium steel archery targets built to simulate real hunting pressure. Firefighter owned. Texas made.',
-    images: ['/images/hero/hero-1.png'],
+    images: [toAbsoluteUrl('/images/hero/hero-buck-head.png')],
   },
 };
 

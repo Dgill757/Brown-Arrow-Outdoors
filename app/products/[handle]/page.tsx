@@ -12,10 +12,12 @@ import Image from 'next/image';
 import PDPPurchasePanel from '@/components/PDPPurchasePanel';
 import PDPBundleModule from '@/components/PDPBundleModule';
 import UGCStrip from '@/components/UGCStrip';
-import { CURATED_BUNDLE_HANDLES } from '@/lib/commerceConfig';
+import { CURATED_BUNDLE_HANDLES, DEFAULT_SHIPPING_ESTIMATE, RETURNS_WARRANTY_COPY } from '@/lib/commerceConfig';
+import { getBaseUrl } from '@/lib/site';
 
 export const revalidate = 60;
 export const dynamicParams = true;
+const SITE_URL = getBaseUrl();
 
 function sanitizeDescriptionHtml(html: string | null | undefined) {
   if (!html) return '';
@@ -205,7 +207,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
       priceCurrency: price?.currencyCode || 'USD',
       price: price?.amount || '0.00',
       availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      url: `https://brokenarrowoutdoors.com/products/${handle}`,
+      url: `${SITE_URL}/products/${handle}`,
     },
     review: {
       '@type': 'Review',
@@ -218,9 +220,9 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://brokenarrowoutdoors.com/' },
-      { '@type': 'ListItem', position: 2, name: 'Products', item: 'https://brokenarrowoutdoors.com/targets' },
-      { '@type': 'ListItem', position: 3, name: title, item: `https://brokenarrowoutdoors.com/products/${handle}` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/targets` },
+      { '@type': 'ListItem', position: 3, name: title, item: `${SITE_URL}/products/${handle}` },
     ],
   };
 
@@ -286,7 +288,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                 <Truck className="w-6 h-6 text-brand-primary flex-shrink-0" />
                 <div>
                   <h4 className="font-bold uppercase text-sm mb-1">Standard Shipping</h4>
-                  <p className="text-xs text-white/60">Standard Shipping: Please allow up to 2 weeks for delivery. Many orders ship sooner, but we don’t want to overpromise.</p>
+                  <p className="text-xs text-white/60">{DEFAULT_SHIPPING_ESTIMATE}</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -300,7 +302,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                 <ShieldCheck className="w-6 h-6 text-brand-primary flex-shrink-0" />
                 <div>
                   <h4 className="font-bold uppercase text-sm mb-1">Lifetime Guarantee</h4>
-                  <p className="text-xs text-white/60">We stand behind our steel. If it breaks under normal use, we replace it.</p>
+                  <p className="text-xs text-white/60">{RETURNS_WARRANTY_COPY}</p>
                 </div>
               </div>
             </div>
@@ -317,7 +319,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                 },
                 {
                   title: 'Shipping',
-                  body: 'Standard Shipping: Please allow up to 2 weeks for delivery. Many orders ship sooner, but we don’t want to overpromise.',
+                  body: DEFAULT_SHIPPING_ESTIMATE,
                 },
                 {
                   title: 'Setup Instructions',
@@ -410,3 +412,4 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
     </div>
   );
 }
+

@@ -6,7 +6,11 @@ export async function POST(request: Request) {
   try {
     const webhook = process.env.GHL_NEWSLETTER_WEBHOOK;
     if (!webhook) {
-      return NextResponse.json({ error: 'Missing GHL_NEWSLETTER_WEBHOOK.' }, { status: 500 });
+      console.error('Newsletter form disabled: missing GHL_NEWSLETTER_WEBHOOK');
+      return NextResponse.json(
+        { error: 'Newsletter signups are temporarily unavailable. Please try again later.' },
+        { status: 503 }
+      );
     }
 
     const body = await request.json();
@@ -44,4 +48,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-

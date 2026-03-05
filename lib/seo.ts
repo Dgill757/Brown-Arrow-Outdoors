@@ -1,19 +1,21 @@
 import type { Metadata } from 'next';
+import { getBaseUrl, toAbsoluteUrl } from '@/lib/site';
 
-const baseUrl = 'https://brokenarrowoutdoors.com';
+const baseUrl = getBaseUrl();
 
 export function buildMetadata({
   title,
   description,
   path,
-  image = '/images/hero/hero-1.png',
+  image = '/images/hero/hero-buck-head.png',
 }: {
   title: string;
   description: string;
   path: string;
   image?: string;
 }): Metadata {
-  const url = `${baseUrl}${path}`;
+  const url = toAbsoluteUrl(path);
+  const imageUrl = toAbsoluteUrl(image);
   return {
     title,
     description,
@@ -24,13 +26,13 @@ export function buildMetadata({
       url,
       siteName: 'Broken Arrow Outdoors',
       type: 'website',
-      images: [{ url: image }],
+      images: [{ url: imageUrl }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [image],
+      images: [imageUrl],
     },
   };
 }

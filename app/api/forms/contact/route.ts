@@ -6,7 +6,11 @@ export async function POST(request: Request) {
   try {
     const webhook = process.env.GHL_CONTACT_WEBHOOK;
     if (!webhook) {
-      return NextResponse.json({ error: 'Missing GHL_CONTACT_WEBHOOK.' }, { status: 500 });
+      console.error('Contact form disabled: missing GHL_CONTACT_WEBHOOK');
+      return NextResponse.json(
+        { error: 'Contact submissions are temporarily unavailable. Please email support@brokenarrow-outdoors.com.' },
+        { status: 503 }
+      );
     }
 
     const body = await request.json();
@@ -44,4 +48,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-

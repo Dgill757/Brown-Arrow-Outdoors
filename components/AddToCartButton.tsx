@@ -7,6 +7,7 @@ import QuantitySelector from './QuantitySelector';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
+import { DEFAULT_SHIPPING_ESTIMATE } from '@/lib/commerceConfig';
 
 export default function AddToCartButton({ product }: { product: any }) {
   const { addToCart, isLoading } = useCart();
@@ -114,9 +115,8 @@ export default function AddToCartButton({ product }: { product: any }) {
         )}
       </button>
       
-      <p className="text-xs text-white/40 text-center uppercase tracking-widest">
-        Standard Shipping: Please allow up to 2 weeks for delivery. Many orders ship sooner, but we don’t want to overpromise.
-      </p>
+      <p className="text-xs text-white/40 text-center uppercase tracking-widest">{DEFAULT_SHIPPING_ESTIMATE}</p>
     </div>
   );
 }
+

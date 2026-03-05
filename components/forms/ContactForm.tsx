@@ -5,6 +5,7 @@ import { useState } from 'react';
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [website, setWebsite] = useState('');
+  const [feedback, setFeedback] = useState('');
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -14,6 +15,7 @@ export default function ContactForm() {
     const topic = String(formData.get('topic') || '').trim();
     const message = String(formData.get('message') || '').trim();
     setStatus('loading');
+    setFeedback('');
 
     try {
       const response = await fetch('/api/forms/contact', {
@@ -29,12 +31,16 @@ export default function ContactForm() {
         }),
       });
       if (!response.ok) {
-        throw new Error('contact request failed');
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload?.error || 'contact request failed');
       }
       setStatus('success');
+      setFeedback('We received it. Our team will respond within 24 hours.');
       event.currentTarget.reset();
       setWebsite('');
-    } catch {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to send right now. Please try again.';
+      setFeedback(message);
       setStatus('error');
     }
   };
@@ -88,12 +94,14 @@ export default function ContactForm() {
         aria-hidden="true"
       />
 
-      <button className="w-full bg-brand-primary text-white px-8 py-4 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-colors rounded-lg shadow-lg shadow-brand-primary/20 mt-4">
+      <button
+        disabled={status === 'loading'}
+        className="w-full bg-brand-primary text-white px-8 py-4 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-colors rounded-lg shadow-lg shadow-brand-primary/20 mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
+      >
         {status === 'loading' ? 'Sending...' : 'Send Message'}
       </button>
-      {status === 'success' ? <p className="text-xs text-brand-primary">Message sent. We will follow up shortly.</p> : null}
-      {status === 'error' ? <p className="text-xs text-red-300">Unable to send right now. Please try again.</p> : null}
+      {status === 'success' ? <p className="text-xs text-brand-primary">{feedback}</p> : null}
+      {status === 'error' ? <p className="text-xs text-red-300">{feedback}</p> : null}
     </form>
   );
 }
-
