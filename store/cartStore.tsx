@@ -1,13 +1,15 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import {
-  CART_CREATE_MUTATION,
-  CART_LINES_ADD_MUTATION,
-  CART_LINES_REMOVE_MUTATION,
-  CART_LINES_UPDATE_MUTATION,
-  GET_CART_QUERY,
-} from '@/lib/shopifyQueries';
+import { usePathname } from 'next/navigation';
+
+let queryCache: typeof import('@/lib/shopifyQueries') | null = null;
+
+async function getShopifyQueries() {
+  if (queryCache) return queryCache;
+  queryCache = await import('@/lib/shopifyQueries');
+  return queryCache;
+}
 
 type CartContextType = {
   cart: any | null;
@@ -52,36 +54,56 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<any | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasHydratedCart, setHasHydratedCart] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [lastAddedProductId, setLastAddedProductId] = useState<string | null>(null);
   const [lastAddedProductHandle, setLastAddedProductHandle] = useState<string | null>(null);
+  const pathname = usePathname();
+  const isCommerceRoute =
+    pathname === '/' ||
+    pathname === '/targets' ||
+    pathname === '/branded' ||
+    pathname === '/cart' ||
+    pathname.startsWith('/products');
+
+  const hydrateCartFromStorage = async () => {
+    const storedCartId = localStorage.getItem('broken_arrow_cart_id');
+    if (!storedCartId) {
+      setHasHydratedCart(true);
+      return;
+    }
+
+    try {
+      const { GET_CART_QUERY } = await getShopifyQueries();
+      const data = await shopifyClientFetch<any>({
+        query: GET_CART_QUERY,
+        variables: { cartId: storedCartId },
+      });
+      if (data.cart) {
+        setCart(data.cart);
+      } else {
+        localStorage.removeItem('broken_arrow_cart_id');
+      }
+    } catch (error) {
+      console.error('Failed to fetch cart:', error);
+      localStorage.removeItem('broken_arrow_cart_id');
+    } finally {
+      setHasHydratedCart(true);
+    }
+  };
 
   // Load cart from local storage on mount
   useEffect(() => {
-    const initializeCart = async () => {
-      const storedCartId = localStorage.getItem('broken_arrow_cart_id');
-      if (storedCartId) {
-        try {
-          const data = await shopifyClientFetch<any>({
-            query: GET_CART_QUERY,
-            variables: { cartId: storedCartId },
-          });
-          if (data.cart) {
-            setCart(data.cart);
-          } else {
-            localStorage.removeItem('broken_arrow_cart_id');
-          }
-        } catch (error) {
-          console.error('Failed to fetch cart:', error);
-          localStorage.removeItem('broken_arrow_cart_id');
-        }
-      }
-    };
+    if (!isCommerceRoute || hasHydratedCart) return;
+    void hydrateCartFromStorage();
+  }, [hasHydratedCart, isCommerceRoute]);
 
-    initializeCart();
-  }, []);
-
-  const openCart = () => setIsOpen(true);
+  const openCart = () => {
+    if (!hasHydratedCart) {
+      void hydrateCartFromStorage();
+    }
+    setIsOpen(true);
+  };
   const closeCart = () => setIsOpen(false);
   const showToast = (message: string) => {
     setToastMessage(message);
@@ -91,6 +113,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addToCart = async (variantId: string, quantity: number = 1) => {
     setIsLoading(true);
     try {
+      const { CART_CREATE_MUTATION, CART_LINES_ADD_MUTATION } = await getShopifyQueries();
       let newCart;
       if (!cart) {
         const data = await shopifyClientFetch<any>({
@@ -146,6 +169,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     setIsLoading(true);
     try {
+      const { CART_CREATE_MUTATION, CART_LINES_ADD_MUTATION } = await getShopifyQueries();
       let newCart;
       if (!cart) {
         const data = await shopifyClientFetch<any>({
@@ -192,6 +216,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!cart) return;
     setIsLoading(true);
     try {
+      const { CART_LINES_REMOVE_MUTATION } = await getShopifyQueries();
       const data = await shopifyClientFetch<any>({
         query: CART_LINES_REMOVE_MUTATION,
         variables: {
@@ -215,6 +240,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!cart) return;
     setIsLoading(true);
     try {
+      const { CART_LINES_UPDATE_MUTATION } = await getShopifyQueries();
       const data = await shopifyClientFetch<any>({
         query: CART_LINES_UPDATE_MUTATION,
         variables: {

@@ -130,6 +130,7 @@ export default function PartnershipsPage() {
               width={420}
               height={96}
               className="w-full max-w-[420px] h-auto"
+              sizes="(max-width: 768px) 80vw, 420px"
             />
           </div>
         </section>

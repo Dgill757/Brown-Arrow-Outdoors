@@ -23,6 +23,7 @@ export default function OurStoryPage() {
             alt="Bowhunter silhouette"
             fill
             className="object-cover opacity-40"
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/80 via-brand-dark/50 to-brand-dark z-10" />
         </div>
@@ -61,6 +62,7 @@ export default function OurStoryPage() {
               alt="Archery practice"
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
         </div>
@@ -192,6 +194,7 @@ export default function OurStoryPage() {
                 alt="Community"
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </div>

@@ -20,7 +20,14 @@ export default function BrandStorySection() {
           </Link>
         </div>
         <div className="relative h-[300px] md:h-[360px] rounded-xl overflow-hidden border border-white/10">
-          <Image src="/images/gallery/About-Us.webp" alt="Broken Arrow Outdoors team" fill className="object-cover" />
+          <Image
+            src="/images/gallery/About-Us.webp"
+            alt="Broken Arrow Outdoors team"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            loading="lazy"
+          />
         </div>
       </div>
     </section>

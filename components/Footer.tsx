@@ -14,6 +14,7 @@ export default function Footer() {
               alt="Broken Arrow Outdoors"
               fill
               className="object-contain object-left"
+              sizes="192px"
             />
           </Link>
           <p className="text-white/60 text-sm leading-relaxed max-w-xs">

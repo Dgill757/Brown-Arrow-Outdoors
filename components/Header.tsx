@@ -65,6 +65,7 @@ export default function Header() {
               alt="Broken Arrow Outdoors"
               fill
               className="object-contain"
+              sizes="(max-width: 1024px) 192px, 256px"
             />
           </Link>
 
@@ -139,6 +140,7 @@ export default function Header() {
                   alt="Broken Arrow Outdoors"
                   fill
                   className="object-contain"
+                  sizes="160px"
                 />
               </div>
               <button onClick={() => setMobileMenuOpen(false)} className="text-white hover:text-brand-primary transition-colors">

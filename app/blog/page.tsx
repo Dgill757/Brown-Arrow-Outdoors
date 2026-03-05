@@ -38,6 +38,7 @@ export default function BlogPage() {
                   alt={post.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm px-3 py-1 rounded text-xs font-bold uppercase tracking-wider text-brand-primary border border-brand-primary/20">
                   {post.category}
