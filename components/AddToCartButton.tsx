@@ -115,7 +115,7 @@ export default function AddToCartButton({ product }: { product: any }) {
       </button>
       
       <p className="text-xs text-white/40 text-center uppercase tracking-widest">
-        Free shipping on orders over $150
+        Standard Shipping: Please allow up to 2 weeks for delivery. Many orders ship sooner, but we don’t want to overpromise.
       </p>
     </div>
   );

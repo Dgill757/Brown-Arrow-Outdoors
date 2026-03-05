@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { formatMoney } from '@/lib/money';
 import { IMAGE_BLUR_PLACEHOLDER } from '@/lib/image';
+import { normalizeShopifyImage } from '@/lib/normalizeShopifyImage';
 
 type CartLineItemProps = {
   line: any;
@@ -19,7 +20,7 @@ export default function CartLineItem({ line, onRemove, onUpdateQuantity }: CartL
       <div className="relative w-20 h-20 bg-white/5 rounded-md overflow-hidden flex-shrink-0">
         {node.merchandise.image && (
           <Image
-            src={node.merchandise.image.url}
+            src={normalizeShopifyImage(node.merchandise.image.url)}
             alt={node.merchandise.image.altText || node.merchandise.product.title}
             fill
             className="object-cover"

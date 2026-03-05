@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { useCart } from '@/store/cartStore';
 import { formatMoney } from '@/lib/money';
 import { trackEvent } from '@/lib/analytics';
+import { normalizeShopifyImage } from '@/lib/normalizeShopifyImage';
 
 type BundleItem = {
   id: string;
@@ -79,7 +80,7 @@ export default function PDPBundleModule({
               disabled={!item.variantId}
             />
             <div className="relative h-14 w-14 rounded-md overflow-hidden bg-white/5 flex-shrink-0">
-              {item.image ? <Image src={item.image} alt={item.title} fill className="object-cover" sizes="56px" /> : null}
+              {item.image ? <Image src={normalizeShopifyImage(item.image)} alt={item.title} fill className="object-cover" sizes="56px" /> : null}
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold leading-tight">{item.title}</p>

@@ -15,6 +15,12 @@ export const COLLECTION_PRODUCTS_QUERY = `
             title
             handle
             availableForSale
+            featuredImage {
+              url
+              altText
+              width
+              height
+            }
             images(first: 1) {
               edges {
                 node {
@@ -51,6 +57,8 @@ export const PRODUCT_BY_HANDLE_QUERY = `
       featuredImage {
         url
         altText
+        width
+        height
       }
       images(first: 12) {
         edges {
@@ -73,6 +81,33 @@ export const PRODUCT_BY_HANDLE_QUERY = `
             selectedOptions {
               name
               value
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const RECOMMENDED_PRODUCTS_BY_QUERY = `
+  query RecommendedProductsByQuery($query: String!, $first: Int!) {
+    products(first: $first, query: $query) {
+      edges {
+        node {
+          id
+          handle
+          title
+          availableForSale
+          featuredImage {
+            url
+            altText
+            width
+            height
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
             }
           }
         }

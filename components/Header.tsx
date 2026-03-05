@@ -1,7 +1,7 @@
 'use client';
 
 import { useCart } from '@/store/cartStore';
-import { ShoppingBag, Menu, X, Search } from 'lucide-react';
+import { ShoppingBag, Menu, X, Search, Facebook, Instagram } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -92,6 +92,14 @@ export default function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-6">
+            <div className="hidden lg:flex items-center gap-3">
+              <a href="https://www.instagram.com/brokenarrow.outdoors/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-brand-primary transition-colors" aria-label="Broken Arrow Outdoors Instagram">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=61553849879488" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-brand-primary transition-colors" aria-label="Broken Arrow Outdoors Facebook">
+                <Facebook className="w-5 h-5" />
+              </a>
+            </div>
              {/* Hidden on mobile, visible on desktop */}
             <div className="hidden lg:flex items-center gap-6 uppercase font-bold text-xs tracking-wider text-white/70">
                {navLinks.slice(4).map((link) => (
@@ -170,7 +178,14 @@ export default function Header() {
             
             <div className="p-6 border-t border-white/10 bg-black/20">
               <p className="text-white/40 text-sm text-center uppercase tracking-widest mb-4">Follow Us</p>
-              {/* Social icons could go here */}
+              <div className="flex items-center justify-center gap-4">
+                <a href="https://www.instagram.com/brokenarrow.outdoors/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-brand-primary transition-colors" aria-label="Broken Arrow Outdoors Instagram">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61553849879488" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-brand-primary transition-colors" aria-label="Broken Arrow Outdoors Facebook">
+                  <Facebook className="w-5 h-5" />
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

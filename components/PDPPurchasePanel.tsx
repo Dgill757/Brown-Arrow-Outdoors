@@ -121,10 +121,10 @@ export default function PDPPurchasePanel({
             <p>Built in Texas</p>
             <p>11-gauge steel</p>
             <p>Weatherproof finish</p>
-            <p>Fast shipping</p>
+            <p>Reliable delivery</p>
             <p>Hunt-ready training</p>
           </div>
-          <p className="text-xs text-white/60 mt-4">Ships in {shippingEstimate || DEFAULT_SHIPPING_ESTIMATE}</p>
+          <p className="text-xs text-white/60 mt-4">{shippingEstimate || DEFAULT_SHIPPING_ESTIMATE}</p>
           <p className="text-xs text-white/50 mt-1">{RETURNS_WARRANTY_COPY}</p>
         </div>
 

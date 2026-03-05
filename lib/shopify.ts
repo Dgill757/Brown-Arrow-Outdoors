@@ -1,4 +1,25 @@
 import { getShopifyEnv } from '@/lib/env';
+import { RECOMMENDED_PRODUCTS_BY_QUERY } from '@/lib/shopifyQueries';
+import { normalizeShopifyImage } from '@/lib/normalizeShopifyImage';
+
+function normalizeShopifyPayload<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((entry) => normalizeShopifyPayload(entry)) as T;
+  }
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    const normalized: Record<string, unknown> = {};
+    for (const [key, entry] of Object.entries(record)) {
+      if (typeof entry === 'string' && key.toLowerCase() === 'url') {
+        normalized[key] = normalizeShopifyImage(entry);
+      } else {
+        normalized[key] = normalizeShopifyPayload(entry);
+      }
+    }
+    return normalized as T;
+  }
+  return value;
+}
 
 export async function shopifyFetch<T>({
   query,
@@ -55,7 +76,7 @@ export async function shopifyFetch<T>({
     }
   }
 
-  return body.data as T;
+  return normalizeShopifyPayload(body.data as T);
 }
 
 export async function fetchShopifyRecommendations(productGid: string, limit: number = 4) {
@@ -73,12 +94,22 @@ export async function fetchShopifyRecommendations(productGid: string, limit: num
   }
 
   const body = await result.json();
-  return (body?.products ?? []) as Array<{
-    id: number;
-    title: string;
-    handle: string;
-    featured_image?: string;
-    images?: Array<{ src?: string; url?: string; alt?: string }>;
-    variants?: Array<{ price: string }>;
-  }>;
+  const handles = (body?.products ?? [])
+    .map((product: any) => product?.handle)
+    .filter((handle: string | undefined): handle is string => Boolean(handle))
+    .slice(0, limit);
+
+  if (!handles.length) return [];
+
+  const query = handles.map((handle: string) => `handle:${handle}`).join(' OR ');
+  const data = await shopifyFetch<any>({
+    query: RECOMMENDED_PRODUCTS_BY_QUERY,
+    variables: { query, first: handles.length },
+    cacheSeconds: 60,
+    tags: [`shopify-reco-products-${numericProductId}`],
+  });
+
+  const products = data?.products?.edges?.map((edge: any) => edge.node) ?? [];
+  const order = new Map<string, number>(handles.map((handle: string, index: number) => [handle, index]));
+  return products.sort((a: any, b: any) => (order.get(a.handle) ?? 999) - (order.get(b.handle) ?? 999));
 }

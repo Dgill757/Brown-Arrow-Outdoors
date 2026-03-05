@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatMoney } from '@/lib/money';
 import { IMAGE_BLUR_PLACEHOLDER } from '@/lib/image';
+import { normalizeShopifyImage } from '@/lib/normalizeShopifyImage';
 
 type ProductCardProps = {
   product: any;
@@ -14,8 +15,8 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
   const resolvedImage =
     featuredImage || images?.edges?.[0]?.node || null;
   const amount = Number(price?.amount || 0);
-  const normalizedAmount = amount > 9999 ? amount / 100 : amount;
   const href = handle ? `/products/${handle}` : '/targets';
+  const imageUrl = resolvedImage?.url ? normalizeShopifyImage(resolvedImage.url) : '';
 
   return (
     <Link href={href} prefetch={false} className="group block relative">
@@ -25,9 +26,9 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
             Sold Out
           </div>
         )}
-        {resolvedImage ? (
+        {imageUrl ? (
           <Image
-            src={resolvedImage.url}
+            src={imageUrl}
             alt={resolvedImage.altText || title}
             fill
             priority={priority}
@@ -51,7 +52,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
 
       <div className="mt-4 space-y-1">
         <h3 className="font-bold text-lg leading-tight group-hover:text-brand-primary transition-colors">{title}</h3>
-        <p className="text-white/60 font-mono text-sm">{formatMoney(String(normalizedAmount), price?.currencyCode || 'USD')}</p>
+        <p className="text-white/60 font-mono text-sm">{formatMoney(String(amount), price?.currencyCode || 'USD')}</p>
       </div>
     </Link>
   );

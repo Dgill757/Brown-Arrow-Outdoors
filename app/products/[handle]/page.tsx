@@ -106,25 +106,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
       try {
         const reco = await fetchShopifyRecommendations(product.id, 4);
         recommendationProducts = reco
-          .map((item) => {
-            const imageUrl = item.featured_image || item.images?.[0]?.src || item.images?.[0]?.url;
-            const rawAmount = Number(item.variants?.[0]?.price || 0);
-            const normalizedAmount = rawAmount > 9999 ? rawAmount / 100 : rawAmount;
-            return {
-              id: `gid://shopify/Product/${item.id}`,
-              title: item.title,
-              handle: item.handle,
-              availableForSale: true,
-              featuredImage: imageUrl ? { url: imageUrl, altText: item.title } : null,
-              images: {
-                edges: imageUrl ? [{ node: { url: imageUrl, altText: item.title } }] : [],
-              },
-              priceRange: {
-                minVariantPrice: { amount: String(normalizedAmount || 0), currencyCode: 'USD' },
-              },
-            };
-          })
-          .filter((item) => item.handle !== handle && (item?.featuredImage?.url || item?.images?.edges?.[0]?.node?.url))
+          .filter((item: any) => item?.handle !== handle)
           .slice(0, 4);
       } catch {
         recommendationProducts = [];
@@ -291,7 +273,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                       id: item.id,
                       title: item.title,
                       handle: item.handle,
-                      image: item.images?.edges?.[0]?.node?.url,
+                      image: item.featuredImage?.url || item.images?.edges?.[0]?.node?.url,
                       price: item.priceRange?.minVariantPrice?.amount,
                       currencyCode: item.priceRange?.minVariantPrice?.currencyCode || 'USD',
                     }))
@@ -303,8 +285,8 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               <div className="flex items-start gap-4">
                 <Truck className="w-6 h-6 text-brand-primary flex-shrink-0" />
                 <div>
-                  <h4 className="font-bold uppercase text-sm mb-1">Fast Shipping</h4>
-                  <p className="text-xs text-white/60">Orders ship within 24-48 hours from our Texas warehouse.</p>
+                  <h4 className="font-bold uppercase text-sm mb-1">Standard Shipping</h4>
+                  <p className="text-xs text-white/60">Standard Shipping: Please allow up to 2 weeks for delivery. Many orders ship sooner, but we don’t want to overpromise.</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -335,7 +317,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                 },
                 {
                   title: 'Shipping',
-                  body: 'Orders typically ship within 24-48 hours from Texas. Tracking details are sent by email as soon as your package leaves the warehouse.',
+                  body: 'Standard Shipping: Please allow up to 2 weeks for delivery. Many orders ship sooner, but we don’t want to overpromise.',
                 },
                 {
                   title: 'Setup Instructions',

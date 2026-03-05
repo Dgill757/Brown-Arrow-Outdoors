@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { buildMetadata } from '@/lib/seo';
+import ContactForm from '@/components/forms/ContactForm';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Contact Us | Broken Arrow Outdoors',
@@ -62,48 +63,7 @@ export default function ContactPage() {
 
           {/* Form Side */}
           <div className="bg-white/5 border border-white/10 p-8 md:p-12 rounded-2xl">
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-white/60">First Name</label>
-                  <input type="text" className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-primary transition-colors" placeholder="JOHN" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-white/60">Last Name</label>
-                  <input type="text" className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-primary transition-colors" placeholder="DOE" />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-white/60">Email Address</label>
-                <input type="email" className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-primary transition-colors" placeholder="JOHN@EXAMPLE.COM" />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-white/60">Topic</label>
-                <div className="relative">
-                  <select className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-primary transition-colors appearance-none">
-                    <option>Order Inquiry</option>
-                    <option>Partnerships & Events</option>
-                    <option>Dealer / Retail</option>
-                    <option>Media</option>
-                    <option>Other</option>
-                  </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-white/60">Message</label>
-                <textarea rows={5} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-primary transition-colors" placeholder="HOW CAN WE HELP?"></textarea>
-              </div>
-
-              <button className="w-full bg-brand-primary text-white px-8 py-4 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-colors rounded-lg shadow-lg shadow-brand-primary/20 mt-4">
-                Send Message
-              </button>
-            </form>
+            <ContactForm />
           </div>
 
         </div>

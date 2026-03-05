@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { IMAGE_BLUR_PLACEHOLDER } from '@/lib/image';
+import { normalizeShopifyImage } from '@/lib/normalizeShopifyImage';
 
 type ImageNode = {
   url: string;
@@ -17,11 +18,18 @@ type ImageGalleryProps = {
 
 export default function ImageGallery({ featuredImage, imageEdges, title }: ImageGalleryProps) {
   const gallery = useMemo(() => {
-    const imageList = imageEdges.map((edge) => edge.node).filter((img) => img?.url);
-    if (featuredImage?.url && !imageList.some((img) => img.url === featuredImage.url)) {
-      return [featuredImage, ...imageList];
+    const imageList = imageEdges
+      .map((edge) => edge.node)
+      .filter((img) => img?.url)
+      .map((img) => ({ ...img, url: normalizeShopifyImage(img.url) }));
+    if (featuredImage?.url) {
+      const normalizedFeatured = { ...featuredImage, url: normalizeShopifyImage(featuredImage.url) };
+      if (!imageList.some((img) => img.url === normalizedFeatured.url)) {
+        return [normalizedFeatured, ...imageList];
+      }
+      return imageList;
     }
-    return imageList.length > 0 ? imageList : featuredImage ? [featuredImage] : [];
+    return imageList.length > 0 ? imageList : [];
   }, [featuredImage, imageEdges]);
 
   const [activeIndex, setActiveIndex] = useState(0);

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Facebook, Instagram, Youtube } from 'lucide-react';
+import EmailSignup from '@/components/EmailSignup';
 
 export default function Footer() {
   return (
@@ -20,8 +21,8 @@ export default function Footer() {
             Firefighter owned. Texas made. Built for bowhunters.
           </p>
           <div className="flex gap-4">
-            <a href="#" className="text-white/60 hover:text-brand-primary transition-colors"><Instagram className="w-5 h-5" /></a>
-            <a href="#" className="text-white/60 hover:text-brand-primary transition-colors"><Facebook className="w-5 h-5" /></a>
+            <a href="https://www.instagram.com/brokenarrow.outdoors/" target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-brand-primary transition-colors"><Instagram className="w-5 h-5" /></a>
+            <a href="https://www.facebook.com/profile.php?id=61553849879488" target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-brand-primary transition-colors"><Facebook className="w-5 h-5" /></a>
             <a href="#" className="text-white/60 hover:text-brand-primary transition-colors"><Youtube className="w-5 h-5" /></a>
           </div>
         </div>
@@ -51,16 +52,7 @@ export default function Footer() {
           <p className="text-white/60 text-sm mb-4">
             Get drop alerts, training tips, and early access to new gear.
           </p>
-          <form className="flex gap-2">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="bg-white/5 border border-white/10 px-4 py-2 text-sm w-full focus:outline-none focus:border-brand-primary transition-colors"
-            />
-            <button className="bg-brand-primary text-white px-4 py-2 font-bold uppercase text-sm hover:bg-orange-600 transition-colors">
-              Join
-            </button>
-          </form>
+          <EmailSignup />
         </div>
       </div>
       <div className="container mx-auto px-4 mt-16 pt-8 border-t border-white/10 text-center text-xs text-white/40">
