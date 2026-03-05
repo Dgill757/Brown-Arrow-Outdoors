@@ -30,9 +30,14 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default async function Home() {
+  const shopifyEnvReady = Boolean(
+    process.env.SHOPIFY_DOMAIN && process.env.SHOPIFY_API_VERSION && process.env.STOREFRONT_PUBLIC_TOKEN
+  );
+
   // Fetch featured products (targets)
   let featuredTargets = [];
   try {
+    if (!shopifyEnvReady) throw new Error('Shopify environment variables are missing.');
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
       variables: { handle: 'targets', first: 4 },
@@ -47,6 +52,7 @@ export default async function Home() {
   // Fetch featured gear (branded)
   let featuredGear = [];
   try {
+    if (!shopifyEnvReady) throw new Error('Shopify environment variables are missing.');
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
       variables: { handle: 'branded', first: 4 },
@@ -74,6 +80,14 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col gap-24 pb-24 bg-brand-dark text-white">
+      {!shopifyEnvReady ? (
+        <div className="container mx-auto px-4 pt-6">
+          <div className="rounded-xl border border-amber-400/30 bg-amber-500/10 p-4 text-amber-200 text-sm">
+            Shopify storefront is not configured yet. Add `SHOPIFY_DOMAIN`, `SHOPIFY_API_VERSION`, and `STOREFRONT_PUBLIC_TOKEN`
+            in environment variables to enable live catalog products.
+          </div>
+        </div>
+      ) : null}
       {/* 1. Hero Carousel */}
       <HeroCarousel />
 

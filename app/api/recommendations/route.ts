@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { fetchShopifyRecommendations } from '@/lib/shopify';
 
 export const revalidate = 60;
-export const runtime = 'edge';
 
 export async function GET(request: Request) {
   try {

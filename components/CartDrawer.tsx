@@ -9,6 +9,7 @@ import CartLineItem from '@/components/CartLineItem';
 import CartToast from '@/components/CartToast';
 import CartUpsells from '@/components/CartUpsells';
 import { trackEvent } from '@/lib/analytics';
+import FreeShippingProgress from '@/components/FreeShippingProgress';
 
 export default function CartDrawer() {
   const { cart, isOpen, closeCart, updateQuantity, removeFromCart, toastMessage, lastAddedProductId, lastAddedProductHandle } =
@@ -88,6 +89,10 @@ export default function CartDrawer() {
 
               {cart && cart.lines.edges.length > 0 && (
                 <div className="p-6 border-t border-white/10 bg-white/5">
+                  <FreeShippingProgress
+                    subtotalAmount={cart.cost.totalAmount.amount}
+                    currencyCode={cart.cost.totalAmount.currencyCode}
+                  />
                   <div className="flex justify-between items-center mb-4">
                     <span className="uppercase font-bold text-sm">Subtotal</span>
                     <span className="font-mono text-lg font-bold">

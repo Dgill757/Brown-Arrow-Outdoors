@@ -2,7 +2,7 @@
 
 import { Canvas } from '@react-three/fiber';
 import { Environment, OrbitControls } from '@react-three/drei';
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useMemo, useRef, useState } from 'react';
 
 function SteelTarget({ highlightKillZone }: { highlightKillZone: boolean }) {
   const steelColor = '#7A746A';
@@ -51,10 +51,25 @@ function Scene({ highlightKillZone }: { highlightKillZone: boolean }) {
 
 export default function Target3DViewer() {
   const [highlightKillZone, setHighlightKillZone] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const dpr = useMemo(() => [1, 1.75] as [number, number], []);
+
+  const playHitSound = async () => {
+    if (!soundEnabled || !audioRef.current) return;
+    try {
+      audioRef.current.currentTime = 0;
+      audioRef.current.muted = isMuted;
+      await audioRef.current.play();
+    } catch {
+      // Ignore blocked playback errors.
+    }
+  };
 
   return (
     <section className="container mx-auto px-4">
+      <audio ref={audioRef} preload="auto" src="/audio/arrow-hit.mp3" />
       <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-10">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6">
           <div>
@@ -64,21 +79,49 @@ export default function Target3DViewer() {
               Rotate, zoom, and inspect strike zone placement before you buy. This models field training geometry and kill-zone focus.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setHighlightKillZone((value) => !value)}
-            className="inline-flex items-center justify-center rounded-lg border border-white/20 px-5 py-2.5 text-sm uppercase tracking-wider font-bold hover:bg-white/10 transition-colors"
-          >
-            {highlightKillZone ? 'Hide Kill Zone Highlight' : 'Highlight Kill Zone'}
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={async () => {
+                setSoundEnabled(true);
+                await playHitSound();
+              }}
+              className="inline-flex items-center justify-center rounded-lg border border-white/20 px-4 py-2 text-xs uppercase tracking-wider font-bold hover:bg-white/10 transition-colors"
+            >
+              Enable Sound
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsMuted((v) => !v)}
+              className="inline-flex items-center justify-center rounded-lg border border-white/20 px-4 py-2 text-xs uppercase tracking-wider font-bold hover:bg-white/10 transition-colors"
+            >
+              {isMuted ? 'Unmute' : 'Mute'}
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                setHighlightKillZone((value) => !value);
+                await playHitSound();
+              }}
+              className="inline-flex items-center justify-center rounded-lg border border-white/20 px-5 py-2.5 text-sm uppercase tracking-wider font-bold hover:bg-white/10 transition-colors"
+            >
+              {highlightKillZone ? 'Hide Kill Zone Highlight' : 'Highlight Kill Zone'}
+            </button>
+          </div>
         </div>
-        <div className="relative h-[340px] md:h-[460px] overflow-hidden rounded-xl border border-white/10 bg-black">
+        <div
+          className="relative h-[340px] md:h-[460px] overflow-hidden rounded-xl border border-white/10 bg-black"
+          onPointerDown={() => {
+            void playHitSound();
+          }}
+        >
           <Canvas camera={{ position: [0, 2.2, 3.8], fov: 42 }} dpr={dpr} shadows>
             <Suspense fallback={null}>
               <Scene highlightKillZone={highlightKillZone} />
             </Suspense>
           </Canvas>
         </div>
+        <p className="mt-3 text-[11px] text-white/45 uppercase tracking-[0.16em]">Arrow hit audio path: /public/audio/arrow-hit.mp3</p>
       </div>
     </section>
   );
