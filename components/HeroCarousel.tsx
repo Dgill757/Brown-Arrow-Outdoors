@@ -8,9 +8,9 @@ import { trackEvent } from '@/lib/analytics';
 
 const slides = [
   {
-    src: '/images/hero/buck-hero.png',
-    objectPosition: 'center 42%',
-    mobileObjectPosition: '62% 46%',
+    src: '/images/hero/hero-buck-head.png',
+    objectPosition: 'center 40%',
+    mobileObjectPosition: '54% 42%',
     overlayBottom: { desktop: '5.5%', tablet: '3.5%', mobile: '2.5%' },
   },
   {
@@ -20,9 +20,9 @@ const slides = [
     overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
   },
   {
-    src: '/images/hero/sasquatch-hero.png',
-    objectPosition: 'center 48%',
-    mobileObjectPosition: '66% 52%',
+    src: '/images/hero/hero-sasquatc-head.png',
+    objectPosition: 'center 38%',
+    mobileObjectPosition: '52% 42%',
     overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
   },
   {

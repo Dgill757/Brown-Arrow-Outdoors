@@ -85,7 +85,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Link href="/targets" className="group relative h-[400px] overflow-hidden rounded-lg border border-white/10 shadow-2xl">
             <Image
-              src="/images/targets/IMG_7100.JPG"
+              src="/images/hero/shop-targets-image.png"
               alt="Shop Targets"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
