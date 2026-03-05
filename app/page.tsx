@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { shopifyFetch } from '@/lib/shopify';
 import { COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
 import ProductGrid from '@/components/ProductGrid';
+import ChallengeVideo from '@/components/ChallengeVideo';
 import HeroCarousel from '@/components/HeroCarousel';
 import { ArrowRight, Shield, Target, Truck, Zap } from 'lucide-react';
 import { buildMetadata } from '@/lib/seo';
@@ -13,7 +14,7 @@ export const metadata: Metadata = buildMetadata({
   title: 'Broken Arrow Outdoors | Train Like The Moment Matters',
   description: 'Steel archery targets and field-ready gear designed to build confidence under hunting pressure.',
   path: '/',
-  image: '/images/hero/hero-1.png',
+  image: '/images/hero/buck-hero.png',
 });
 
 export default async function Home() {
@@ -40,6 +41,20 @@ export default async function Home() {
   } catch (error) {
     console.error('Error fetching featured gear:', error);
   }
+
+  const featuredTargetCards = [
+    '/images/targets/IMG_7546.jpg',
+    '/images/targets/eZy Watermark_15-08-2024_09-59-43-9870 (1).JPG',
+    '/images/targets/DSC08979.jpg',
+    '/images/targets/c07e911a-2f17-4d85-87c6-1edb65cc8a93 (1).png',
+  ];
+
+  const featuredApparelCards = [
+    '/images/apparel/IMG_9326.JPG',
+    '/images/apparel/IMG_0495 (1).jpg',
+    '/images/apparel/bao-camo-hat.png',
+    '/images/apparel/IMG_0495 (1).jpg',
+  ];
 
   return (
     <div className="flex flex-col gap-24 pb-24 bg-brand-dark text-white">
@@ -149,14 +164,14 @@ export default async function Home() {
         )}
 
         <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {['elk-hero.png', 'sasquatch-hero.png', 'buck-hero.png', 'boar-hero.png'].map((image) => (
+          {featuredTargetCards.map((image, index) => (
             <Link
               key={image}
-              href="/targets"
-              className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-colors"
+              href={featuredTargets[index]?.handle ? `/products/${featuredTargets[index].handle}` : '/targets'}
+              className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-brand-primary/25"
             >
               <Image
-                src={`/images/hero/${image}`}
+                src={image}
                 alt="Featured target"
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -194,14 +209,14 @@ export default async function Home() {
         )}
 
         <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {['IMG_9326.JPG', 'IMG_9321.JPG', 'IMG_9317.JPG', 'IMG_9319.JPG'].map((image) => (
+          {featuredApparelCards.map((image, index) => (
             <Link
-              key={image}
-              href="/branded"
-              className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-all hover:-translate-y-0.5"
+              key={`${image}-${index}`}
+              href={featuredGear[index]?.handle ? `/products/${featuredGear[index].handle}` : '/branded'}
+              className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-brand-primary/25"
             >
               <Image
-                src={`/images/apparel/${image}`}
+                src={image}
                 alt="Featured branded gear"
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -237,19 +252,7 @@ export default async function Home() {
             Practice with pressure and precision. Build confidence. Train like it's real.
             <br/>"You don't rise to the occasion, you fall to the level of your training."
           </p>
-          <div className="aspect-video max-w-4xl mx-auto bg-black rounded-lg overflow-hidden border border-white/20 shadow-2xl relative group cursor-pointer">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-brand-primary/20">
-                <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[20px] border-l-white border-b-[10px] border-b-transparent ml-1" />
-              </div>
-            </div>
-            <Image 
-              src="/images/gallery/About-Us.webp"
-              alt="Video Thumbnail"
-              fill
-              className="object-cover opacity-60 group-hover:opacity-80 transition-opacity"
-            />
-          </div>
+          <ChallengeVideo />
         </div>
       </section>
 
