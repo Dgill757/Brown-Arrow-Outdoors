@@ -23,6 +23,14 @@ export default function ChallengeVideo() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = muted;
+    video.defaultMuted = muted;
+    video.volume = muted ? 0 : 1;
+  }, [muted]);
+
   const replay = () => {
     if (!videoRef.current) return;
     videoRef.current.currentTime = 0;
@@ -34,10 +42,12 @@ export default function ChallengeVideo() {
     if (!video) return;
 
     const nextMuted = !muted;
-    video.muted = nextMuted;
     video.defaultMuted = nextMuted;
+    video.muted = nextMuted;
     video.volume = nextMuted ? 0 : 1;
     if (!nextMuted) {
+      // Force audible playback after the user gesture across stricter mobile browsers.
+      video.currentTime = Math.max(0, video.currentTime);
       video.play().catch(() => undefined);
     }
 
@@ -58,8 +68,8 @@ export default function ChallengeVideo() {
       >
         {shouldLoadVideo ? (
           <>
-            <source src="/videos/BearTargetVibes.webm" type="video/webm" />
             <source src="/videos/BearTargetVibes.mp4" type="video/mp4" />
+            <source src="/videos/BearTargetVibes.webm" type="video/webm" />
           </>
         ) : null}
       </video>
