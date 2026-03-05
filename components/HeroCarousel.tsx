@@ -15,7 +15,7 @@ const slides = [
   { src: '/images/hero/sweatshirt-hero.png', objectPosition: 'center 47%' },
 ];
 
-const AUTO_ADVANCE_MS = 4500;
+const AUTO_ADVANCE_MS = 6000;
 
 export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -60,7 +60,7 @@ export default function HeroCarousel() {
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
 
-      <div className="absolute left-[5%] right-[5%] md:right-auto md:max-w-3xl z-20 bottom-[10%] md:bottom-[14%] lg:bottom-[18%]">
+      <div className="absolute left-[5%] right-[5%] md:right-auto md:max-w-3xl z-20 bottom-[4%] md:bottom-[6%] lg:bottom-[8%]">
         <div className="rounded-2xl border border-white/10 bg-black/55 backdrop-blur-md p-5 md:p-7 lg:p-8 shadow-[0_16px_44px_rgba(0,0,0,0.35)]">
           <h1 className="text-[34px] md:text-[48px] lg:text-[64px] font-black uppercase italic tracking-tighter leading-[0.88] text-white">
             Train Like The <br />
