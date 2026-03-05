@@ -30,13 +30,18 @@ export default function ChallengeVideo() {
   };
 
   const toggleMute = () => {
-    setMuted((previous) => {
-      const nextMuted = !previous;
-      if (!nextMuted) {
-        videoRef.current?.play().catch(() => undefined);
-      }
-      return nextMuted;
-    });
+    const video = videoRef.current;
+    if (!video) return;
+
+    const nextMuted = !muted;
+    video.muted = nextMuted;
+    video.defaultMuted = nextMuted;
+    video.volume = nextMuted ? 0 : 1;
+    if (!nextMuted) {
+      video.play().catch(() => undefined);
+    }
+
+    setMuted(nextMuted);
   };
 
   return (
