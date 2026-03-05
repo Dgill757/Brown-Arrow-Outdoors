@@ -30,13 +30,37 @@ export default function FieldTestGallerySection() {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-96 md:h-80">
         <div className="relative rounded-lg overflow-hidden col-span-2 row-span-2 md:col-span-2 md:row-span-1 h-full">
-          <Image src="/images/gallery/DSC09031 (1).jpg" alt="Field gallery hero" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+          <Image
+            src="/images/gallery/DSC09031 (1).jpg"
+            alt="Field gallery hero"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            loading="lazy"
+            quality={76}
+            className="object-cover hover:scale-105 transition-transform duration-500"
+          />
         </div>
         <div className="relative rounded-lg overflow-hidden h-full">
-          <Image src="/images/gallery/IMG_6631.JPG" alt="Field gallery 2" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+          <Image
+            src="/images/gallery/IMG_6631.JPG"
+            alt="Field gallery 2"
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            loading="lazy"
+            quality={76}
+            className="object-cover hover:scale-105 transition-transform duration-500"
+          />
         </div>
         <div className="relative rounded-lg overflow-hidden h-full">
-          <Image src="/images/gallery/IMG_9319.JPG" alt="Field gallery 3" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+          <Image
+            src="/images/gallery/IMG_9319.JPG"
+            alt="Field gallery 3"
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            loading="lazy"
+            quality={76}
+            className="object-cover hover:scale-105 transition-transform duration-500"
+          />
         </div>
       </div>
       <div className="mt-8 text-center md:hidden">

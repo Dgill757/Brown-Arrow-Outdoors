@@ -18,7 +18,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
   const href = handle ? `/products/${handle}` : '/targets';
 
   return (
-    <Link href={href} className="group block relative">
+    <Link href={href} prefetch={false} className="group block relative">
       <div className="relative aspect-square overflow-hidden bg-white/5 rounded-sm border border-white/5 transition-all duration-300 group-hover:border-brand-primary/50">
         {!availableForSale && (
           <div className="absolute top-2 right-2 z-10 bg-red-600 text-white text-[10px] font-bold uppercase px-2 py-1 tracking-wider">
