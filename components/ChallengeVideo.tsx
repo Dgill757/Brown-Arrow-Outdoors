@@ -51,10 +51,10 @@ export default function ChallengeVideo() {
       <button
         type="button"
         onClick={replay}
-        className="absolute bottom-4 right-4 h-12 w-12 rounded-full bg-black/60 border border-white/30 text-white transition-all hover:bg-brand-primary hover:border-brand-primary"
+        className="absolute bottom-4 right-4 h-12 rounded-full bg-black/60 border border-white/30 text-white transition-all hover:bg-brand-primary hover:border-brand-primary px-4"
         aria-label="Replay video"
       >
-        <span className="block text-xl leading-none">↻</span>
+        <span className="block text-[11px] leading-none font-bold uppercase tracking-wider">Replay</span>
       </button>
     </div>
   );

@@ -11,7 +11,7 @@ type Recommendation = {
   title: string;
   handle: string;
   featured_image?: string;
-  images?: Array<{ src: string; alt?: string }>;
+  images?: Array<{ src?: string; url?: string; alt?: string }>;
   variants?: Array<{ price: string }>;
 };
 
@@ -43,8 +43,9 @@ export default function CartUpsells({ productId, excludeHandle }: { productId?: 
       <h3 className="text-xs uppercase tracking-[0.18em] text-brand-primary font-bold mb-4">Recommended Add-ons</h3>
       <div className="space-y-3">
         {items.map((item) => {
-          const image = item.featured_image || item.images?.[0]?.src;
-          const price = item.variants?.[0]?.price;
+          const image = item.featured_image || item.images?.[0]?.src || item.images?.[0]?.url;
+          const rawPrice = Number(item.variants?.[0]?.price || 0);
+          const normalizedPrice = rawPrice > 9999 ? rawPrice / 100 : rawPrice;
           return (
             <Link
               key={item.id}
@@ -68,7 +69,7 @@ export default function CartUpsells({ productId, excludeHandle }: { productId?: 
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold leading-tight line-clamp-2">{item.title}</p>
-                {price ? <p className="text-xs text-white/65 mt-1">{formatMoney(price, 'USD')}</p> : null}
+                {normalizedPrice > 0 ? <p className="text-xs text-white/65 mt-1">{formatMoney(String(normalizedPrice), 'USD')}</p> : null}
               </div>
             </Link>
           );

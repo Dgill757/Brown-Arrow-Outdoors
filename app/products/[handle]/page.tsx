@@ -106,19 +106,25 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
       try {
         const reco = await fetchShopifyRecommendations(product.id, 4);
         recommendationProducts = reco
-          .map((item) => ({
-            id: `gid://shopify/Product/${item.id}`,
-            title: item.title,
-            handle: item.handle,
-            availableForSale: true,
-            images: {
-              edges: [{ node: { url: item.featured_image || item.images?.[0]?.src, altText: item.title } }],
-            },
-            priceRange: {
-              minVariantPrice: { amount: item.variants?.[0]?.price || '0.00', currencyCode: 'USD' },
-            },
-          }))
-          .filter((item) => item.handle !== handle && item.images.edges[0].node.url)
+          .map((item) => {
+            const imageUrl = item.featured_image || item.images?.[0]?.src || item.images?.[0]?.url;
+            const rawAmount = Number(item.variants?.[0]?.price || 0);
+            const normalizedAmount = rawAmount > 9999 ? rawAmount / 100 : rawAmount;
+            return {
+              id: `gid://shopify/Product/${item.id}`,
+              title: item.title,
+              handle: item.handle,
+              availableForSale: true,
+              featuredImage: imageUrl ? { url: imageUrl, altText: item.title } : null,
+              images: {
+                edges: imageUrl ? [{ node: { url: imageUrl, altText: item.title } }] : [],
+              },
+              priceRange: {
+                minVariantPrice: { amount: String(normalizedAmount || 0), currencyCode: 'USD' },
+              },
+            };
+          })
+          .filter((item) => item.handle !== handle && (item?.featuredImage?.url || item?.images?.edges?.[0]?.node?.url))
           .slice(0, 4);
       } catch {
         recommendationProducts = [];
@@ -141,6 +147,25 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
 
     bundleProducts = (
       await Promise.all(
+        recommendationProducts.slice(0, 2).map(async (item: any) => {
+          try {
+            const bundleData = await shopifyFetch<any>({
+              query: PRODUCT_BY_HANDLE_QUERY,
+              variables: { handle: item.handle },
+              cacheSeconds: 60,
+              tags: [`bundle-reco-${item.handle}`],
+            });
+            return bundleData?.product || null;
+          } catch {
+            return null;
+          }
+        })
+      )
+    ).filter(Boolean);
+
+    if (!bundleProducts.length) {
+      bundleProducts = (
+      await Promise.all(
         CURATED_BUNDLE_HANDLES.filter((bundleHandle) => bundleHandle !== handle).map(async (bundleHandle) => {
           try {
             const bundleData = await shopifyFetch<any>({
@@ -154,8 +179,9 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
             return null;
           }
         })
-      )
-    ).filter(Boolean);
+        )
+      ).filter(Boolean);
+    }
 
   } catch (error) {
     console.error('Error fetching product:', error);
@@ -222,7 +248,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaProduct) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 mb-14">
           <ImageGallery featuredImage={featuredImage} imageEdges={images.edges} title={title} />
 
           {/* Details */}
@@ -320,7 +346,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
           </div>
         </div>
 
-        <section className="mb-20 grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <section className="mb-14 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
             <h3 className="text-2xl font-black uppercase italic tracking-tight mb-3">Steel Durability</h3>
             <p className="text-white/70 leading-relaxed">
@@ -337,7 +363,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
           </div>
         </section>
 
-        <section className="mb-20">
+        <section className="mb-14">
           <h3 className="text-3xl font-black uppercase italic tracking-tight mb-6">Lifestyle Images</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative h-72 rounded-xl overflow-hidden border border-white/10">
@@ -352,7 +378,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
           </div>
         </section>
 
-        <section className="mb-20">
+        <section className="mb-14">
           <h3 className="text-3xl font-black uppercase italic tracking-tight mb-6">Customer Photos</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {['/images/gallery/IMG_6631.JPG', '/images/gallery/DSC09031 (1).jpg', '/images/gallery/IMG_9319.JPG', '/images/gallery/IMG_7652.JPG'].map((src) => (
@@ -363,7 +389,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
           </div>
         </section>
 
-        <section className="mb-20">
+        <section className="mb-14">
           <h3 className="text-3xl font-black uppercase italic tracking-tight mb-6">Reviews</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[

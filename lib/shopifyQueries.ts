@@ -104,6 +104,7 @@ export const CART_CREATE_MUTATION = `
                   id
                   title
                   product {
+                    id
                     title
                     handle
                   }
@@ -152,6 +153,7 @@ export const CART_LINES_ADD_MUTATION = `
                   id
                   title
                   product {
+                    id
                     title
                     handle
                   }
@@ -200,6 +202,7 @@ export const CART_LINES_UPDATE_MUTATION = `
                   id
                   title
                   product {
+                    id
                     title
                     handle
                   }
@@ -248,6 +251,7 @@ export const CART_LINES_REMOVE_MUTATION = `
                   id
                   title
                   product {
+                    id
                     title
                     handle
                   }
@@ -295,6 +299,7 @@ export const GET_CART_QUERY = `
                 id
                 title
                 product {
+                  id
                   title
                   handle
                 }

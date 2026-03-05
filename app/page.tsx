@@ -7,7 +7,6 @@ import { COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
 import ProductGrid from '@/components/ProductGrid';
 import HeroCarousel from '@/components/HeroCarousel';
 import BrandStorySection from '@/components/home/BrandStorySection';
-import Target3DViewerSlot from '@/components/home/Target3DViewerSlot';
 import { ArrowRight, Shield, Target, Truck, Zap } from 'lucide-react';
 import { buildMetadata } from '@/lib/seo';
 
@@ -64,19 +63,18 @@ export default async function Home() {
     console.error('Error fetching featured gear:', error);
   }
 
-  const featuredTargetCards = [
-    '/images/targets/IMG_7546.jpg',
-    '/images/targets/eZy Watermark_15-08-2024_09-59-43-9870 (1).JPG',
-    '/images/targets/DSC08979.jpg',
-    '/images/targets/c07e911a-2f17-4d85-87c6-1edb65cc8a93 (1).png',
-  ];
-
-  const featuredApparelCards = [
-    '/images/apparel/IMG_9326.JPG',
-    '/images/apparel/IMG_0495 (1).jpg',
-    '/images/apparel/bao-camo-hat.png',
-    '/images/apparel/IMG_0495 (1).jpg',
-  ];
+  const uniqueFeaturedTargetProducts = featuredTargets.reduce((acc: any[], product: any) => {
+    if (!acc.some((entry) => entry?.handle === product?.handle)) {
+      acc.push(product);
+    }
+    return acc;
+  }, []);
+  const uniqueFeaturedGearProducts = featuredGear.reduce((acc: any[], product: any) => {
+    if (!acc.some((entry) => entry?.handle === product?.handle)) {
+      acc.push(product);
+    }
+    return acc;
+  }, []);
 
   return (
     <div className="flex flex-col gap-24 pb-24 bg-brand-dark text-white">
@@ -99,6 +97,7 @@ export default async function Home() {
               src="/images/targets/IMG_7100.JPG"
               alt="Shop Targets"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-70"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
@@ -116,6 +115,7 @@ export default async function Home() {
               src="/images/apparel/IMG_9326.JPG"
               alt="Shop Gear"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-70"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
@@ -175,8 +175,6 @@ export default async function Home() {
 
       <BrandStorySection />
 
-      <Target3DViewerSlot />
-
       {/* 4. Featured Targets */}
       <section className="container mx-auto px-4">
         <div className="flex justify-between items-end mb-12">
@@ -189,8 +187,8 @@ export default async function Home() {
           </Link>
         </div>
         
-        {featuredTargets.length > 0 ? (
-          <ProductGrid products={featuredTargets} />
+        {uniqueFeaturedTargetProducts.length > 0 ? (
+          <ProductGrid products={uniqueFeaturedTargetProducts} />
         ) : (
           <div className="text-center py-20 bg-white/5 rounded-lg border border-white/10">
             <p className="text-white/40">No products found. Please configure your Shopify connection.</p>
@@ -198,21 +196,25 @@ export default async function Home() {
         )}
 
         <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {featuredTargetCards.map((image, index) => (
+          {uniqueFeaturedTargetProducts.slice(0, 4).map((product: any) => {
+            const image = product?.featuredImage?.url || product?.images?.edges?.[0]?.node?.url;
+            if (!image) return null;
+            return (
             <Link
-              key={image}
-              href={featuredTargets[index]?.handle ? `/products/${featuredTargets[index].handle}` : '/targets'}
+              key={product.id}
+              href={product?.handle ? `/products/${product.handle}` : '/targets'}
               className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-brand-primary/25"
             >
               <Image
                 src={image}
-                alt="Featured target"
+                alt={product?.title || 'Featured target'}
                 fill
+                sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
             </Link>
-          ))}
+          )})}
         </div>
         
         <div className="mt-12 text-center md:hidden">
@@ -234,8 +236,8 @@ export default async function Home() {
           </Link>
         </div>
         
-        {featuredGear.length > 0 ? (
-          <ProductGrid products={featuredGear} />
+        {uniqueFeaturedGearProducts.length > 0 ? (
+          <ProductGrid products={uniqueFeaturedGearProducts} />
         ) : (
           <div className="text-center py-20 bg-white/5 rounded-lg border border-white/10">
             <p className="text-white/40">No gear found. Check back soon.</p>
@@ -243,21 +245,25 @@ export default async function Home() {
         )}
 
         <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {featuredApparelCards.map((image, index) => (
+          {uniqueFeaturedGearProducts.slice(0, 4).map((product: any) => {
+            const image = product?.featuredImage?.url || product?.images?.edges?.[0]?.node?.url;
+            if (!image) return null;
+            return (
             <Link
-              key={`${image}-${index}`}
-              href={featuredGear[index]?.handle ? `/products/${featuredGear[index].handle}` : '/branded'}
+              key={product.id}
+              href={product?.handle ? `/products/${product.handle}` : '/branded'}
               className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-brand-primary/25"
             >
               <Image
                 src={image}
-                alt="Featured branded gear"
+                alt={product?.title || 'Featured branded gear'}
                 fill
+                sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
             </Link>
-          ))}
+          )})}
         </div>
 
         <div className="mt-12 text-center md:hidden">

@@ -78,7 +78,7 @@ export async function fetchShopifyRecommendations(productGid: string, limit: num
     title: string;
     handle: string;
     featured_image?: string;
-    images?: Array<{ src: string; alt?: string }>;
+    images?: Array<{ src?: string; url?: string; alt?: string }>;
     variants?: Array<{ price: string }>;
   }>;
 }
