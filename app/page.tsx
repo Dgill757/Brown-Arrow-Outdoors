@@ -39,7 +39,7 @@ export default async function Home() {
     if (!shopifyEnvReady) throw new Error('Shopify environment variables are missing.');
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
-      variables: { handle: 'targets', first: 4 },
+      variables: { handle: 'targets', first: 8 },
       cacheSeconds: 60,
       tags: ['home-targets'],
     });
@@ -54,7 +54,7 @@ export default async function Home() {
     if (!shopifyEnvReady) throw new Error('Shopify environment variables are missing.');
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
-      variables: { handle: 'branded', first: 4 },
+      variables: { handle: 'branded', first: 8 },
       cacheSeconds: 60,
       tags: ['home-branded'],
     });
@@ -188,35 +188,13 @@ export default async function Home() {
         </div>
         
         {uniqueFeaturedTargetProducts.length > 0 ? (
-          <ProductGrid products={uniqueFeaturedTargetProducts} />
+          <ProductGrid products={uniqueFeaturedTargetProducts.slice(0, 4)} />
         ) : (
           <div className="text-center py-20 bg-white/5 rounded-lg border border-white/10">
             <p className="text-white/40">No products found. Please configure your Shopify connection.</p>
           </div>
         )}
 
-        <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {uniqueFeaturedTargetProducts.slice(0, 4).map((product: any) => {
-            const image = product?.featuredImage?.url || product?.images?.edges?.[0]?.node?.url;
-            if (!image) return null;
-            return (
-            <Link
-              key={product.id}
-              href={product?.handle ? `/products/${product.handle}` : '/targets'}
-              className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-brand-primary/25"
-            >
-              <Image
-                src={image}
-                alt={product?.title || 'Featured target'}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-            </Link>
-          )})}
-        </div>
-        
         <div className="mt-12 text-center md:hidden">
           <Link href="/targets" className="inline-flex items-center gap-2 text-brand-primary font-bold uppercase tracking-wider hover:text-white transition-colors">
             View All <ArrowRight className="w-4 h-4" />
@@ -237,34 +215,12 @@ export default async function Home() {
         </div>
         
         {uniqueFeaturedGearProducts.length > 0 ? (
-          <ProductGrid products={uniqueFeaturedGearProducts} />
+          <ProductGrid products={uniqueFeaturedGearProducts.slice(0, 4)} />
         ) : (
           <div className="text-center py-20 bg-white/5 rounded-lg border border-white/10">
             <p className="text-white/40">No gear found. Check back soon.</p>
           </div>
         )}
-
-        <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {uniqueFeaturedGearProducts.slice(0, 4).map((product: any) => {
-            const image = product?.featuredImage?.url || product?.images?.edges?.[0]?.node?.url;
-            if (!image) return null;
-            return (
-            <Link
-              key={product.id}
-              href={product?.handle ? `/products/${product.handle}` : '/branded'}
-              className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 hover:border-brand-primary/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-brand-primary/25"
-            >
-              <Image
-                src={image}
-                alt={product?.title || 'Featured branded gear'}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
-            </Link>
-          )})}
-        </div>
 
         <div className="mt-12 text-center md:hidden">
           <Link href="/branded" className="inline-flex items-center gap-2 text-brand-primary font-bold uppercase tracking-wider hover:text-white transition-colors">
