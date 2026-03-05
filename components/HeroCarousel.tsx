@@ -38,7 +38,7 @@ const slides = [
     overlayBottom: { desktop: '4.5%', tablet: '2.75%', mobile: '2%' },
   },
   {
-    src: '/images/hero/sweatshirt-hero.png',
+    src: '/images/apparel/602d96ae-cf8b-492a-8bf8-2bfafca9a5d8.png',
     objectPosition: 'center 47%',
     mobileObjectPosition: '70% 50%',
     overlayBottom: { desktop: '4.75%', tablet: '2.75%', mobile: '2%' },

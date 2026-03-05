@@ -6,6 +6,7 @@ export default function ChallengeVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -28,13 +29,23 @@ export default function ChallengeVideo() {
     videoRef.current.play().catch(() => undefined);
   };
 
+  const toggleMute = () => {
+    setMuted((previous) => {
+      const nextMuted = !previous;
+      if (!nextMuted) {
+        videoRef.current?.play().catch(() => undefined);
+      }
+      return nextMuted;
+    });
+  };
+
   return (
     <div ref={containerRef} className="aspect-video max-w-4xl mx-auto rounded-lg overflow-hidden border border-white/20 shadow-2xl relative group bg-black">
       <video
         ref={videoRef}
         className="h-full w-full object-cover"
         autoPlay
-        muted
+        muted={muted}
         loop
         playsInline
         preload="none"
@@ -55,6 +66,16 @@ export default function ChallengeVideo() {
         aria-label="Replay video"
       >
         <span className="block text-[11px] leading-none font-bold uppercase tracking-wider">Replay</span>
+      </button>
+      <button
+        type="button"
+        onClick={toggleMute}
+        className="absolute bottom-4 right-[6.8rem] h-12 rounded-full bg-black/60 border border-white/30 text-white transition-all hover:bg-brand-primary hover:border-brand-primary px-4"
+        aria-label={muted ? 'Unmute video' : 'Mute video'}
+      >
+        <span className="block text-[11px] leading-none font-bold uppercase tracking-wider">
+          {muted ? 'Tap to unmute' : 'Mute'}
+        </span>
       </button>
     </div>
   );
