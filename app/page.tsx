@@ -9,6 +9,7 @@ import HeroCarousel from '@/components/HeroCarousel';
 import BrandStorySection from '@/components/home/BrandStorySection';
 import { ArrowRight, Shield, Target, Truck, Zap } from 'lucide-react';
 import { buildMetadata } from '@/lib/seo';
+import { pickFeaturedProducts } from '@/lib/featuredProducts';
 
 const HeroVideoSection = dynamic(() => import('@/components/home/HeroVideoSection'), {
   loading: () => <div className="h-[520px] bg-white/[0.02] border-y border-white/10 animate-pulse" />,
@@ -39,7 +40,7 @@ export default async function Home() {
     if (!shopifyEnvReady) throw new Error('Shopify environment variables are missing.');
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
-      variables: { handle: 'targets', first: 8 },
+      variables: { handle: 'targets', first: 12 },
       cacheSeconds: 60,
       tags: ['home-targets'],
     });
@@ -54,7 +55,7 @@ export default async function Home() {
     if (!shopifyEnvReady) throw new Error('Shopify environment variables are missing.');
     const data = await shopifyFetch<any>({
       query: COLLECTION_PRODUCTS_QUERY,
-      variables: { handle: 'branded', first: 8 },
+      variables: { handle: 'branded', first: 12 },
       cacheSeconds: 60,
       tags: ['home-branded'],
     });
@@ -63,18 +64,8 @@ export default async function Home() {
     console.error('Error fetching featured gear:', error);
   }
 
-  const uniqueFeaturedTargetProducts = featuredTargets.reduce((acc: any[], product: any) => {
-    if (!acc.some((entry) => entry?.handle === product?.handle)) {
-      acc.push(product);
-    }
-    return acc;
-  }, []);
-  const uniqueFeaturedGearProducts = featuredGear.reduce((acc: any[], product: any) => {
-    if (!acc.some((entry) => entry?.handle === product?.handle)) {
-      acc.push(product);
-    }
-    return acc;
-  }, []);
+  const uniqueFeaturedTargetProducts = pickFeaturedProducts(featuredTargets, 4);
+  const uniqueFeaturedGearProducts = pickFeaturedProducts(featuredGear, 4);
 
   return (
     <div className="flex flex-col gap-24 pb-24 bg-brand-dark text-white">
@@ -188,7 +179,7 @@ export default async function Home() {
         </div>
         
         {uniqueFeaturedTargetProducts.length > 0 ? (
-          <ProductGrid products={uniqueFeaturedTargetProducts.slice(0, 4)} />
+          <ProductGrid products={uniqueFeaturedTargetProducts} priorityCount={2} />
         ) : (
           <div className="text-center py-20 bg-white/5 rounded-lg border border-white/10">
             <p className="text-white/40">No products found. Please configure your Shopify connection.</p>
@@ -215,7 +206,7 @@ export default async function Home() {
         </div>
         
         {uniqueFeaturedGearProducts.length > 0 ? (
-          <ProductGrid products={uniqueFeaturedGearProducts.slice(0, 4)} />
+          <ProductGrid products={uniqueFeaturedGearProducts} />
         ) : (
           <div className="text-center py-20 bg-white/5 rounded-lg border border-white/10">
             <p className="text-white/40">No gear found. Check back soon.</p>

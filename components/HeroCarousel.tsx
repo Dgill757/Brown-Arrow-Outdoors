@@ -111,7 +111,9 @@ export default function HeroCarousel() {
             src={slides[currentIndex].src}
             alt="Broken Arrow Outdoors featured hero slide"
             fill
-            priority
+            priority={currentIndex === 0}
+            fetchPriority={currentIndex === 0 ? 'high' : 'auto'}
+            quality={82}
             sizes="100vw"
             className="object-cover"
             style={{

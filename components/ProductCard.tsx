@@ -15,7 +15,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
     featuredImage || images?.edges?.[0]?.node || null;
   const amount = Number(price?.amount || 0);
   const normalizedAmount = amount > 9999 ? amount / 100 : amount;
-  const href = handle ? `/products/${handle}` : '#';
+  const href = handle ? `/products/${handle}` : '/targets';
 
   return (
     <Link href={href} className="group block relative">
@@ -32,9 +32,9 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
             fill
             priority={priority}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             loading={priority ? 'eager' : 'lazy'}
-            quality={80}
+            quality={76}
             placeholder="blur"
             blurDataURL={IMAGE_BLUR_PLACEHOLDER}
           />

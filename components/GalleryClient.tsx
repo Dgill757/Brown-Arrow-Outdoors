@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Instagram, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -48,6 +48,17 @@ export default function GalleryClient() {
     if (activeIndex === null) return;
     setActiveIndex((activeIndex + 1) % filteredImages.length);
   };
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowLeft') prevImage();
+      if (event.key === 'ArrowRight') nextImage();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [activeIndex, filteredImages.length]);
 
   return (
     <>
