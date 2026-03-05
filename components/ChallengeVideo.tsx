@@ -42,7 +42,7 @@ export default function ChallengeVideo() {
       >
         {shouldLoadVideo ? (
           <>
-            <source src="/images/videos/Broken-Arrow Website-video.mp4" media="(max-width: 767px)" type="video/mp4" />
+            <source src="/images/videos/_scene__202508121024_m0vcv (1).mp4" media="(max-width: 767px)" type="video/mp4" />
             <source src="/images/videos/Broken-Arrow Website-video.mp4" type="video/mp4" />
           </>
         ) : null}

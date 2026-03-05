@@ -9,6 +9,7 @@ import type { Metadata } from 'next';
 import ImageGallery from '@/components/ImageGallery';
 import ProductInfoAccordion from '@/components/ProductInfoAccordion';
 import ProductViewTracker from '@/components/ProductViewTracker';
+import Image from 'next/image';
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -264,6 +265,65 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
             />
           </div>
         </div>
+
+        <section className="mb-20 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+            <h3 className="text-2xl font-black uppercase italic tracking-tight mb-3">Steel Durability</h3>
+            <p className="text-white/70 leading-relaxed">
+              Every Broken Arrow target is built from 11-gauge steel and finished for repeated field abuse. This lets you run
+              realistic shot sequences without worrying about premature wear or weak components.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+            <h3 className="text-2xl font-black uppercase italic tracking-tight mb-3">Replaceable Zone System</h3>
+            <p className="text-white/70 leading-relaxed">
+              Strike zones are designed for repeatable reps and modular replacement strategy, helping you keep your target setup
+              competition-ready and confidence-ready through full seasons.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-20">
+          <h3 className="text-3xl font-black uppercase italic tracking-tight mb-6">Lifestyle Images</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="relative h-72 rounded-xl overflow-hidden border border-white/10">
+              <Image src="/images/targets/IMG_7100.JPG" alt="Target setup in the field" fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+            </div>
+            <div className="relative h-72 rounded-xl overflow-hidden border border-white/10">
+              <Image src="/images/gallery/About-Us.webp" alt="Broken Arrow in action" fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+            </div>
+            <div className="relative h-72 rounded-xl overflow-hidden border border-white/10">
+              <Image src="/images/targets/IMG_7546.jpg" alt="Field testing steel target" fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-20">
+          <h3 className="text-3xl font-black uppercase italic tracking-tight mb-6">Customer Photos</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {['/images/gallery/IMG_6631.JPG', '/images/gallery/DSC09031 (1).jpg', '/images/gallery/IMG_9319.JPG', '/images/gallery/IMG_7652.JPG'].map((src) => (
+              <div key={src} className="relative aspect-square rounded-xl overflow-hidden border border-white/10">
+                <Image src={src} alt="Customer setup photo" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-20">
+          <h3 className="text-3xl font-black uppercase italic tracking-tight mb-6">Reviews</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              { quote: 'The most realistic target system I have trained on. Confidence improved in two weeks.', author: 'Jake M.' },
+              { quote: 'Rugged steel, clean feedback, and setup took less than ten minutes.', author: 'Chris T.' },
+              { quote: 'Exactly what I wanted for pre-season reps and ethical shot discipline.', author: 'Ryan B.' },
+            ].map((review) => (
+              <article key={review.author} className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+                <p className="text-white/75 italic">"{review.quote}"</p>
+                <p className="mt-4 text-sm font-bold uppercase tracking-wider text-brand-primary">{review.author}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         {/* Related Products */}
         {recommendationsToRender.length > 0 && (

@@ -7,6 +7,7 @@ import { COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
 import ProductGrid from '@/components/ProductGrid';
 import HeroCarousel from '@/components/HeroCarousel';
 import BrandStorySection from '@/components/home/BrandStorySection';
+import Target3DViewerSlot from '@/components/home/Target3DViewerSlot';
 import { ArrowRight, Shield, Target, Truck, Zap } from 'lucide-react';
 import { buildMetadata } from '@/lib/seo';
 
@@ -159,6 +160,8 @@ export default async function Home() {
       </section>
 
       <BrandStorySection />
+
+      <Target3DViewerSlot />
 
       {/* 4. Featured Targets */}
       <section className="container mx-auto px-4">
