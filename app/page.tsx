@@ -103,7 +103,7 @@ export default async function Home() {
           </Link>
           <Link href="/branded" className="group relative h-[400px] overflow-hidden rounded-lg border border-white/10 shadow-2xl">
             <Image
-              src="/images/apparel/IMG_9326.JPG"
+              src="/images/apparel/602d96ae-cf8b-492a-8bf8-2bfafca9a5d8.png"
               alt="Shop Gear"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
