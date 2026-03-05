@@ -32,6 +32,7 @@ export default function GalleryPage() {
   return (
     <div className="bg-brand-dark text-white min-h-screen">
       <div className="container mx-auto px-4 py-12">
+        <script src="https://static.elfsight.com/platform/platform.js" async />
         <div className="text-center mb-12">
           <h1 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter mb-4">
             In The <span className="text-brand-primary">Field</span>
@@ -84,6 +85,10 @@ export default function GalleryPage() {
             <Instagram className="w-6 h-6 group-hover:text-brand-primary transition-colors" />
             <span className="font-bold uppercase tracking-wider">Follow on Instagram</span>
           </a>
+        </div>
+
+        <div className="mx-auto mt-10 w-full max-w-6xl px-2">
+          <div className="elfsight-app-ed3d5f48-8c27-4cb9-bff9-d9c762b0d759" data-elfsight-app-lazy />
         </div>
       </div>
     </div>
