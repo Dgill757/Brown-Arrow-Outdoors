@@ -48,29 +48,29 @@ export default function Header() {
           isScrolled ? 'bg-brand-dark/96 backdrop-blur-xl shadow-xl' : 'bg-brand-dark/90 backdrop-blur-md'
         )}
       >
-        <div className="container mx-auto px-4">
-          <div className="grid min-h-[70px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center lg:hidden">
+        <div className="container mx-auto px-3 sm:px-4">
+          <div className="grid min-h-[68px] grid-cols-[84px_minmax(0,1fr)_84px] items-center sm:grid-cols-[92px_minmax(0,1fr)_92px] lg:hidden">
             <button
               className="justify-self-start text-white hover:text-brand-primary transition-colors p-1"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
             >
-              <Menu className="w-8 h-8" />
+              <Menu className="w-7 h-7 sm:w-8 sm:h-8" />
             </button>
 
-            <Link href="/" className="relative h-10 w-[clamp(10.8rem,43vw,13.4rem)]">
+            <Link href="/" className="relative mx-auto h-9 sm:h-10 w-[clamp(9.8rem,42vw,13rem)]">
               <Image
-                src="/images/logos/full-bao-logo.png"
+                src="/images/logos/New-logo.png"
                 alt="Broken Arrow Outdoors"
                 fill
                 className="object-contain"
-                sizes="(max-width: 1024px) 200px, 256px"
+                sizes="(max-width: 430px) 180px, (max-width: 767px) 208px, 256px"
               />
             </Link>
 
-            <div className="justify-self-end flex items-center gap-3">
+            <div className="justify-self-end flex items-center justify-end gap-2.5 sm:gap-3">
               <button className="text-white hover:text-brand-primary transition-colors p-1" aria-label="Search">
-                <Search className="w-7 h-7" />
+                <Search className="w-6 h-6 sm:w-7 sm:h-7" />
               </button>
 
               <button
@@ -79,7 +79,7 @@ export default function Header() {
                 aria-label="Open cart"
               >
                 <div className="relative">
-                  <ShoppingBag className="w-7 h-7 text-white group-hover:text-brand-primary transition-colors" />
+                  <ShoppingBag className="w-6 h-6 sm:w-7 sm:h-7 text-white group-hover:text-brand-primary transition-colors" />
                   {totalQuantity > 0 && (
                     <span className="absolute -top-2 -right-2 bg-brand-primary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-brand-dark">
                       {totalQuantity}
@@ -91,9 +91,9 @@ export default function Header() {
           </div>
 
           <div className="hidden lg:flex items-center min-h-[76px] justify-between">
-            <Link href="/" className="relative w-56 h-14 xl:w-64 xl:h-16 transition-transform hover:scale-105 flex items-center">
+            <Link href="/" className="relative w-60 h-14 xl:w-64 xl:h-16 transition-transform hover:scale-105 flex items-center">
               <Image
-                src="/images/logos/full-bao-logo.png"
+                src="/images/logos/New-logo.png"
                 alt="Broken Arrow Outdoors"
                 fill
                 className="object-contain"
@@ -166,9 +166,9 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-[60] bg-brand-dark/98 backdrop-blur-xl flex flex-col pt-[var(--safe-area-top)] pb-[var(--safe-area-bottom)]">
             <div className="flex justify-between items-center p-6 border-b border-white/10">
-              <div className="relative w-40 h-12">
+              <div className="relative w-44 h-12">
                  <Image
-                  src="/images/logos/full-bao-logo.png"
+                  src="/images/logos/New-logo.png"
                   alt="Broken Arrow Outdoors"
                   fill
                   className="object-contain"

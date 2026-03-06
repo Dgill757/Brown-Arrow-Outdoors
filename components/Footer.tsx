@@ -8,13 +8,13 @@ export default function Footer() {
     <footer className="bg-black text-white py-16 border-t border-white/10">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12">
         <div className="space-y-6">
-          <Link href="/" className="relative w-48 h-16 block transition-opacity hover:opacity-80">
+          <Link href="/" className="relative w-52 h-16 block transition-opacity hover:opacity-80">
             <Image
-              src="/images/logos/full-bao-logo.png"
+              src="/images/logos/New-logo.png"
               alt="Broken Arrow Outdoors"
               fill
               className="object-contain object-left"
-              sizes="192px"
+              sizes="208px"
             />
           </Link>
           <p className="text-white/60 text-sm leading-relaxed max-w-xs">
