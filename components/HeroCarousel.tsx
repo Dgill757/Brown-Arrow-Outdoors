@@ -23,9 +23,9 @@ type Slide = {
 const slides: Slide[] = [
   {
     src: '/images/hero/hero-buck-head.png',
-    desktopObjectPosition: '75% 62%',
-    mobileObjectPosition: '70% 60%',
-    tabletObjectPosition: '73% 61%',
+    desktopObjectPosition: '75% center',
+    mobileObjectPosition: '70% center',
+    tabletObjectPosition: '73% center',
     overlayBottom: { mobile: '1rem', tablet: '1.45rem', desktop: '5.5%' },
     mobileOverlayMaxWidth: '23.6rem',
     tabletOverlayMaxWidth: '27rem',
@@ -215,7 +215,7 @@ export default function HeroCarousel() {
             className="rounded-[1.2rem] border border-white/12 bg-black/66 backdrop-blur-md px-3 py-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
             style={{ maxWidth: overlayMaxWidth }}
           >
-            <h1 className="pr-4 md:pr-0 max-w-[90%] md:max-w-[60%] text-[clamp(1.2rem,4.45vw,1.52rem)] md:text-[1.85rem] lg:text-[2.4rem] xl:text-[2.9rem] font-black uppercase italic leading-tight tracking-tight text-white">
+            <h1 className="pr-4 md:pr-0 max-w-[90%] md:max-w-[60%] text-[clamp(1.2rem,4.45vw,1.52rem)] md:text-[2.2rem] lg:text-[3.1rem] xl:text-[3.7rem] font-black uppercase italic leading-tight tracking-tight text-white">
               Train Like The <br />
               <span className="text-brand-primary">Moment Matters</span>
             </h1>
