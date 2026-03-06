@@ -106,12 +106,12 @@ export default function HeroCarousel() {
     ? activeSlide.tabletObjectPosition
     : activeSlide.desktopObjectPosition;
 
-  const overlayBottom = isMobile ? '1.2rem' : isTablet ? '1.6rem' : '5.5%';
-  const overlayMaxWidth = isMobile ? '20rem' : isTablet ? '27rem' : '44rem';
+  const overlayBottom = isMobile ? '1rem' : isTablet ? '1.4rem' : '5.5%';
+  const overlayMaxWidth = isMobile ? '23.5rem' : isTablet ? '27rem' : '44rem';
 
   return (
     <section
-      className="relative min-h-[520px] h-[70vh] md:h-[80vh] lg:h-[92vh] max-h-[980px] w-full overflow-hidden bg-black"
+      className="relative min-h-[560px] h-[62vh] md:h-[78vh] lg:h-auto lg:aspect-[1.5] max-h-[960px] w-full overflow-hidden bg-black"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={(event) => {
@@ -162,7 +162,7 @@ export default function HeroCarousel() {
         )}
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/22 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/76 via-black/20 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/38 via-transparent to-black/14 md:hidden" />
 
       <div className="relative z-10 h-full pointer-events-none">
@@ -173,10 +173,10 @@ export default function HeroCarousel() {
           }}
         >
           <div
-            className="rounded-[1.2rem] border border-white/12 bg-black/66 backdrop-blur-md px-3 py-2 shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
+            className="rounded-[1.2rem] border border-white/12 bg-black/66 backdrop-blur-md px-3 py-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
             style={{ maxWidth: overlayMaxWidth }}
           >
-            <h1 className="pr-4 md:pr-0 max-w-[90%] md:max-w-[60%] text-[clamp(1.2rem,4.45vw,1.52rem)] md:text-[1.8rem] lg:text-[2.3rem] xl:text-[2.7rem] font-black uppercase italic leading-tight tracking-tight text-white">
+            <h1 className="pr-4 md:pr-0 max-w-[90%] md:max-w-[60%] text-[clamp(1.2rem,4.45vw,1.52rem)] md:text-[2.2rem] lg:text-[3.1rem] xl:text-[3.7rem] font-black uppercase italic leading-tight tracking-tight text-white">
               Train Like The <br />
               <span className="text-brand-primary">Moment Matters</span>
             </h1>
@@ -185,7 +185,11 @@ export default function HeroCarousel() {
               Steel archery targets built to simulate real hunting pressure.
             </p>
 
-            <div className="mt-2.5 grid grid-cols-3 md:flex gap-1.5 md:gap-3">
+            <p className="mt-1.5 text-[10px] md:text-xs text-brand-primary font-bold tracking-[0.2em] uppercase">
+              Firefighter Owned. Texas Made. Built for Bowhunters.
+            </p>
+
+            <div className="mt-2.5 grid grid-cols-2 md:flex gap-1.5 md:gap-3">
               <Link
                 href="/targets"
                 onClick={() => trackEvent('hero_cta_click', { cta: 'shop_targets', location: 'hero' })}
@@ -203,7 +207,7 @@ export default function HeroCarousel() {
               <Link
                 href="/our-story"
                 onClick={() => trackEvent('hero_cta_click', { cta: 'our_story', location: 'hero' })}
-                className="md:ml-1 text-white/84 hover:text-brand-primary transition-colors font-bold uppercase tracking-[0.14em] text-[0.69rem] md:text-xs self-center text-center"
+                className="md:ml-1 text-white/84 hover:text-brand-primary transition-colors font-bold uppercase tracking-[0.14em] text-[0.69rem] md:text-xs self-center"
               >
                 Our Story
               </Link>
@@ -214,7 +218,7 @@ export default function HeroCarousel() {
 
       <div
         className={`absolute left-0 right-0 z-30 flex justify-center gap-2 ${
-          isMobile ? 'bottom-[calc(1.4rem+var(--safe-area-bottom))]' : 'bottom-6'
+          isMobile ? 'bottom-[calc(0.6rem+var(--safe-area-bottom))]' : 'bottom-6'
         }`}
       >
         {slides.map((_, idx) => (
