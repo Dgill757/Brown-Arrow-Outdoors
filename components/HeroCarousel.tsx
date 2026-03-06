@@ -95,12 +95,13 @@ export default function HeroCarousel() {
               quality={82}
               sizes="100vw"
               /*
-               * object-contain — shows 100% of the image, no cropping.
-               * object-top    — aligns to top so the image starts at the section
-               *                 top edge; any letterbox space falls below the image
-               *                 where the dark CTA bar sits naturally.
+               * Mobile/tablet: object-contain + object-top — full image visible,
+               *   pinned to top, CTA sits in the dark bar below. No change here.
+               * Desktop (lg+): object-cover + object-center — fills edge-to-edge,
+               *   slight vertical center crop only (no horizontal crop since the
+               *   section is always wider than the image's native 3:2 ratio).
                */
-              className="object-contain object-top"
+              className="object-contain object-top lg:object-cover lg:object-center"
             />
           </div>
         ) : (
@@ -112,7 +113,7 @@ export default function HeroCarousel() {
             fetchPriority="high"
             quality={82}
             sizes="100vw"
-            className="object-contain object-top"
+            className="object-contain object-top lg:object-cover lg:object-center"
           />
         )}
       </div>
