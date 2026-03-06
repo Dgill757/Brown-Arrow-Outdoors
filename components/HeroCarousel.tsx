@@ -1,88 +1,112 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
 
-const slides = [
+type SlideConfig = {
+  src: string;
+  desktopObjectPosition: string;
+  tabletObjectPosition: string;
+  mobileBackdropPosition: string;
+  mobileContainPosition: string;
+  mobileContainPositionNarrow: string;
+  mobileContainPositionWide: string;
+  mobileCardMaxWidth: string;
+  mobileImageBottomInset: string;
+  mobileCardBottom: {
+    narrow: string;
+    standard: string;
+    wide: string;
+    landscape: string;
+  };
+};
+
+const slides: SlideConfig[] = [
   {
     src: '/images/hero/hero-buck-head.png',
     desktopObjectPosition: 'center 40%',
     tabletObjectPosition: '61% 40%',
-    mobileObjectPosition: '63% 35%',
-    mobileNarrowObjectPosition: '66% 35%',
-    mobileLargeObjectPosition: '61% 35%',
-    overlayBottom: { desktop: '5.5%', tablet: '4%', mobile: '7.5svh', mobileNarrow: '6.7svh', mobileLarge: '8svh', mobileLandscape: '4svh' },
-    mobileCardMaxWidth: '31rem',
+    mobileBackdropPosition: '63% 36%',
+    mobileContainPosition: '58% 34%',
+    mobileContainPositionNarrow: '60% 34%',
+    mobileContainPositionWide: '56% 34%',
+    mobileCardMaxWidth: '29.5rem',
+    mobileImageBottomInset: 'clamp(14.8rem, 32svh, 17.2rem)',
+    mobileCardBottom: { narrow: '1.05rem', standard: '1.2rem', wide: '1.45rem', landscape: '0.65rem' },
   },
   {
     src: '/images/hero/elk-hero.png',
     desktopObjectPosition: 'center 46%',
     tabletObjectPosition: '59% 45%',
-    mobileObjectPosition: '61% 42%',
-    mobileNarrowObjectPosition: '64% 42%',
-    mobileLargeObjectPosition: '59% 42%',
-    overlayBottom: { desktop: '5%', tablet: '3.75%', mobile: '7.4svh', mobileNarrow: '6.6svh', mobileLarge: '7.8svh', mobileLandscape: '4.2svh' },
-    mobileCardMaxWidth: '30.5rem',
+    mobileBackdropPosition: '62% 42%',
+    mobileContainPosition: '56% 42%',
+    mobileContainPositionNarrow: '58% 42%',
+    mobileContainPositionWide: '54% 42%',
+    mobileCardMaxWidth: '29.25rem',
+    mobileImageBottomInset: 'clamp(14.8rem, 31.5svh, 17rem)',
+    mobileCardBottom: { narrow: '1rem', standard: '1.15rem', wide: '1.35rem', landscape: '0.65rem' },
   },
   {
     src: '/images/hero/hero-sasquatc-head.png',
     desktopObjectPosition: 'center 38%',
     tabletObjectPosition: '58% 38%',
-    mobileObjectPosition: '59% 37%',
-    mobileNarrowObjectPosition: '62% 37%',
-    mobileLargeObjectPosition: '57% 37%',
-    overlayBottom: { desktop: '5%', tablet: '3.75%', mobile: '7.1svh', mobileNarrow: '6.4svh', mobileLarge: '7.6svh', mobileLandscape: '3.8svh' },
-    mobileCardMaxWidth: '30.25rem',
+    mobileBackdropPosition: '59% 37%',
+    mobileContainPosition: '54% 37%',
+    mobileContainPositionNarrow: '56% 37%',
+    mobileContainPositionWide: '52% 37%',
+    mobileCardMaxWidth: '29rem',
+    mobileImageBottomInset: 'clamp(14.8rem, 31svh, 16.8rem)',
+    mobileCardBottom: { narrow: '1rem', standard: '1.12rem', wide: '1.32rem', landscape: '0.62rem' },
   },
   {
     src: '/images/hero/boar-hero.png',
     desktopObjectPosition: 'center 45%',
     tabletObjectPosition: '60% 45%',
-    mobileObjectPosition: '62% 43%',
-    mobileNarrowObjectPosition: '65% 43%',
-    mobileLargeObjectPosition: '60% 43%',
-    overlayBottom: { desktop: '5%', tablet: '3.75%', mobile: '7.4svh', mobileNarrow: '6.6svh', mobileLarge: '8svh', mobileLandscape: '4.2svh' },
-    mobileCardMaxWidth: '30.6rem',
+    mobileBackdropPosition: '62% 43%',
+    mobileContainPosition: '56% 42%',
+    mobileContainPositionNarrow: '58% 42%',
+    mobileContainPositionWide: '54% 42%',
+    mobileCardMaxWidth: '29.35rem',
+    mobileImageBottomInset: 'clamp(14.8rem, 31.5svh, 17rem)',
+    mobileCardBottom: { narrow: '1rem', standard: '1.15rem', wide: '1.35rem', landscape: '0.65rem' },
   },
   {
     src: '/images/hero/hat-hero.png',
     desktopObjectPosition: 'center 44%',
     tabletObjectPosition: '59% 42%',
-    mobileObjectPosition: '60% 39%',
-    mobileNarrowObjectPosition: '62% 39%',
-    mobileLargeObjectPosition: '58% 39%',
-    overlayBottom: { desktop: '4.5%', tablet: '3.25%', mobile: '7.2svh', mobileNarrow: '6.4svh', mobileLarge: '7.7svh', mobileLandscape: '3.8svh' },
-    mobileCardMaxWidth: '29.8rem',
+    mobileBackdropPosition: '60% 39%',
+    mobileContainPosition: '54% 38%',
+    mobileContainPositionNarrow: '56% 38%',
+    mobileContainPositionWide: '52% 38%',
+    mobileCardMaxWidth: '28.8rem',
+    mobileImageBottomInset: 'clamp(14.8rem, 30.8svh, 16.8rem)',
+    mobileCardBottom: { narrow: '0.95rem', standard: '1.1rem', wide: '1.3rem', landscape: '0.6rem' },
   },
   {
     src: '/images/hero/sweatshirt-hero.png',
     desktopObjectPosition: 'center 47%',
     tabletObjectPosition: '60% 47%',
-    mobileObjectPosition: '63% 43%',
-    mobileNarrowObjectPosition: '66% 43%',
-    mobileLargeObjectPosition: '61% 43%',
-    overlayBottom: { desktop: '4.75%', tablet: '3.25%', mobile: '7.2svh', mobileNarrow: '6.4svh', mobileLarge: '7.8svh', mobileLandscape: '3.9svh' },
-    mobileCardMaxWidth: '30.2rem',
+    mobileBackdropPosition: '63% 43%',
+    mobileContainPosition: '57% 43%',
+    mobileContainPositionNarrow: '59% 43%',
+    mobileContainPositionWide: '55% 43%',
+    mobileCardMaxWidth: '29rem',
+    mobileImageBottomInset: 'clamp(14.8rem, 31svh, 16.9rem)',
+    mobileCardBottom: { narrow: '0.95rem', standard: '1.1rem', wide: '1.3rem', landscape: '0.62rem' },
   },
 ];
 
-// Mobile/Desktop autoplay interval: 4000ms
 const AUTO_ADVANCE_MS = 4000;
 
 export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
-  const [isNarrowMobile, setIsNarrowMobile] = useState(false);
-  const [isLargeMobile, setIsLargeMobile] = useState(false);
-  const [isLandscapePhone, setIsLandscapePhone] = useState(false);
-  const [isShortViewport, setIsShortViewport] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
@@ -98,72 +122,65 @@ export default function HeroCarousel() {
   }, [isHydrated, isPaused, prefersReducedMotion]);
 
   useEffect(() => {
-    const mobileMedia = window.matchMedia('(max-width: 767px)');
-    const tabletMedia = window.matchMedia('(min-width: 768px) and (max-width: 1199px)');
-    const narrowMobileMedia = window.matchMedia('(max-width: 360px)');
-    const largeMobileMedia = window.matchMedia('(min-width: 428px) and (max-width: 767px)');
-    const landscapePhoneMedia = window.matchMedia('(max-width: 932px) and (max-height: 500px)');
-    const shortMedia = window.matchMedia('(max-height: 880px)');
     const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => {
-      setIsMobile(mobileMedia.matches);
-      setIsTablet(tabletMedia.matches);
-      setIsNarrowMobile(narrowMobileMedia.matches);
-      setIsLargeMobile(largeMobileMedia.matches);
-      setIsLandscapePhone(landscapePhoneMedia.matches);
-      setIsShortViewport(shortMedia.matches);
-      setPrefersReducedMotion(reducedMotionMedia.matches);
+    const updateReducedMotion = () => setPrefersReducedMotion(reducedMotionMedia.matches);
+    updateReducedMotion();
+    reducedMotionMedia.addEventListener('change', updateReducedMotion);
+    return () => reducedMotionMedia.removeEventListener('change', updateReducedMotion);
+  }, []);
+
+  useEffect(() => {
+    const updateViewport = () => {
+      setViewport({ width: window.innerWidth, height: window.innerHeight });
     };
-    update();
-    mobileMedia.addEventListener('change', update);
-    tabletMedia.addEventListener('change', update);
-    narrowMobileMedia.addEventListener('change', update);
-    largeMobileMedia.addEventListener('change', update);
-    landscapePhoneMedia.addEventListener('change', update);
-    shortMedia.addEventListener('change', update);
-    reducedMotionMedia.addEventListener('change', update);
+    updateViewport();
+    window.addEventListener('resize', updateViewport);
+    window.addEventListener('orientationchange', updateViewport);
     return () => {
-      mobileMedia.removeEventListener('change', update);
-      tabletMedia.removeEventListener('change', update);
-      narrowMobileMedia.removeEventListener('change', update);
-      largeMobileMedia.removeEventListener('change', update);
-      landscapePhoneMedia.removeEventListener('change', update);
-      shortMedia.removeEventListener('change', update);
-      reducedMotionMedia.removeEventListener('change', update);
+      window.removeEventListener('resize', updateViewport);
+      window.removeEventListener('orientationchange', updateViewport);
     };
   }, []);
 
   const activeSlide = slides[currentIndex];
-  const dynamicBottom = isMobile
-    ? isLandscapePhone
-      ? activeSlide.overlayBottom.mobileLandscape
-      : isNarrowMobile
-      ? activeSlide.overlayBottom.mobileNarrow
-      : isLargeMobile
-      ? activeSlide.overlayBottom.mobileLarge
-      : activeSlide.overlayBottom.mobile
-    : isTablet
-      ? activeSlide.overlayBottom.tablet
-      : activeSlide.overlayBottom.desktop;
+  const isMobile = viewport.width > 0 && viewport.width < 768;
+  const isTablet = viewport.width >= 768 && viewport.width < 1200;
+  const isNarrowMobile = isMobile && viewport.width <= 360;
+  const isWideMobile = isMobile && viewport.width >= 414;
+  const isLandscapePhone = isMobile && viewport.width > viewport.height;
+  const isShortViewport = viewport.height > 0 && viewport.height <= 760;
 
-  const imageObjectPosition = isMobile
-    ? isNarrowMobile
-      ? activeSlide.mobileNarrowObjectPosition
-      : isLargeMobile
-      ? activeSlide.mobileLargeObjectPosition
-      : activeSlide.mobileObjectPosition
-    : isTablet
-      ? activeSlide.tabletObjectPosition
-      : activeSlide.desktopObjectPosition;
+  const heroHeight = useMemo(() => {
+    if (!isMobile) return undefined;
+    if (isLandscapePhone) return '100dvh';
+    if (isShortViewport) return '84svh';
+    if (viewport.height >= 900) return '90svh';
+    return '88svh';
+  }, [isLandscapePhone, isMobile, isShortViewport, viewport.height]);
+
+  const desktopTabletPosition = isTablet ? activeSlide.tabletObjectPosition : activeSlide.desktopObjectPosition;
+  const mobileContainPosition = isNarrowMobile
+    ? activeSlide.mobileContainPositionNarrow
+    : isWideMobile
+      ? activeSlide.mobileContainPositionWide
+      : activeSlide.mobileContainPosition;
+
+  const mobileCardBottom = isLandscapePhone
+    ? activeSlide.mobileCardBottom.landscape
+    : isNarrowMobile
+      ? activeSlide.mobileCardBottom.narrow
+      : isWideMobile
+        ? activeSlide.mobileCardBottom.wide
+        : activeSlide.mobileCardBottom.standard;
 
   return (
     <section
-      className="relative h-[88svh] md:h-[76svh] lg:h-[85vh] min-h-[34rem] md:min-h-[40rem] lg:min-h-[45rem] max-h-[58rem] w-full overflow-hidden bg-black"
+      className="relative h-[86svh] md:h-[75svh] lg:h-[85vh] min-h-[34rem] md:min-h-[40rem] lg:min-h-[45rem] max-h-[58rem] w-full overflow-hidden bg-black"
       style={
         isMobile
           ? {
-              height: isLandscapePhone ? '100dvh' : isShortViewport ? '90svh' : '88svh',
-              minHeight: isNarrowMobile ? '32rem' : '34rem',
+              height: heroHeight,
+              minHeight: isNarrowMobile ? '31rem' : '33rem',
             }
           : undefined
       }
@@ -189,17 +206,47 @@ export default function HeroCarousel() {
     >
       {isHydrated ? (
         <div key={currentIndex} className="absolute inset-0 transition-opacity duration-700 ease-out">
-          <Image
-            src={slides[currentIndex].src}
-            alt="Broken Arrow Outdoors featured hero slide"
-            fill
-            priority={currentIndex === 0}
-            fetchPriority={currentIndex === 0 ? 'high' : 'auto'}
-            quality={82}
-            sizes="100vw"
-            className="object-cover"
-            style={{ objectPosition: imageObjectPosition }}
-          />
+          {isMobile ? (
+            <>
+              <Image
+                src={activeSlide.src}
+                alt="Broken Arrow Outdoors featured hero slide"
+                fill
+                priority={currentIndex === 0}
+                fetchPriority={currentIndex === 0 ? 'high' : 'auto'}
+                quality={82}
+                sizes="100vw"
+                className="object-cover scale-[1.05] blur-[1.5px] brightness-[0.45]"
+                style={{ objectPosition: activeSlide.mobileBackdropPosition }}
+              />
+              <div
+                className="absolute inset-x-0 top-0"
+                style={{ bottom: activeSlide.mobileImageBottomInset }}
+              >
+                <Image
+                  src={activeSlide.src}
+                  alt="Broken Arrow Outdoors featured hero subject"
+                  fill
+                  quality={82}
+                  sizes="100vw"
+                  className="object-contain px-[3.5vw]"
+                  style={{ objectPosition: mobileContainPosition }}
+                />
+              </div>
+            </>
+          ) : (
+            <Image
+              src={activeSlide.src}
+              alt="Broken Arrow Outdoors featured hero slide"
+              fill
+              priority={currentIndex === 0}
+              fetchPriority={currentIndex === 0 ? 'high' : 'auto'}
+              quality={82}
+              sizes="100vw"
+              className="object-cover"
+              style={{ objectPosition: desktopTabletPosition }}
+            />
+          )}
         </div>
       ) : (
         <div className="absolute inset-0">
@@ -217,30 +264,30 @@ export default function HeroCarousel() {
         </div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/74 via-black/18 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/36 via-transparent to-black/18 md:hidden" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/24 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/15 md:hidden" />
 
       <div
         className="absolute left-[4%] right-[4%] md:right-auto md:max-w-[620px] lg:max-w-[720px] z-20"
         style={{
           bottom: isMobile
-            ? `calc(${dynamicBottom} + var(--safe-area-bottom))`
+            ? `calc(${mobileCardBottom} + var(--safe-area-bottom))`
             : isShortViewport
-            ? '1%'
-            : dynamicBottom,
+              ? '1%'
+              : '5%',
         }}
       >
         {isMobile ? (
           <div
-            className="mx-auto w-[min(90vw,30.5rem)] rounded-2xl border border-white/12 bg-black/64 backdrop-blur-md px-3.5 py-3 shadow-[0_18px_48px_rgba(0,0,0,0.45)]"
+            className="mx-auto w-[min(89vw,29rem)] rounded-2xl border border-white/12 bg-black/70 backdrop-blur-md px-3.5 py-3 shadow-[0_18px_48px_rgba(0,0,0,0.45)]"
             style={{ maxWidth: activeSlide.mobileCardMaxWidth }}
           >
-            <h1 className="text-[clamp(1.3rem,5.15vw,1.7rem)] font-black uppercase italic tracking-tight leading-[0.92] text-white">
+            <h1 className="text-[clamp(1.25rem,5vw,1.62rem)] font-black uppercase italic tracking-tight leading-[0.92] text-white">
               Train Like The <br />
               <span className="text-brand-primary">Moment Matters</span>
             </h1>
 
-            <p className="mt-1.5 text-[clamp(0.84rem,3.3vw,0.95rem)] leading-[1.2] text-white/86">
+            <p className="mt-1.5 text-[clamp(0.82rem,3.15vw,0.93rem)] leading-[1.2] text-white/86">
               Steel archery targets built to simulate real hunting pressure.
             </p>
 
@@ -248,14 +295,14 @@ export default function HeroCarousel() {
               <Link
                 href="/targets"
                 onClick={() => trackEvent('hero_cta_click', { cta: 'shop_targets', location: 'hero' })}
-                className="min-h-[2.75rem] bg-brand-primary text-white px-2.5 py-2.5 font-black uppercase italic tracking-wide text-[0.84rem] text-center rounded-[2px] flex items-center justify-center"
+                className="min-h-[2.75rem] bg-brand-primary text-white px-2.5 py-2.5 font-black uppercase italic tracking-wide text-[0.82rem] text-center rounded-[2px] flex items-center justify-center"
               >
                 Shop Targets
               </Link>
               <Link
                 href="/branded"
                 onClick={() => trackEvent('hero_cta_click', { cta: 'shop_gear', location: 'hero' })}
-                className="min-h-[2.75rem] bg-white/10 border border-white/30 text-white px-2.5 py-2.5 font-black uppercase italic tracking-wide text-[0.84rem] text-center rounded-[2px] flex items-center justify-center"
+                className="min-h-[2.75rem] bg-white/10 border border-white/30 text-white px-2.5 py-2.5 font-black uppercase italic tracking-wide text-[0.82rem] text-center rounded-[2px] flex items-center justify-center"
               >
                 Shop Gear
               </Link>
@@ -263,7 +310,7 @@ export default function HeroCarousel() {
             <Link
               href="/our-story"
               onClick={() => trackEvent('hero_cta_click', { cta: 'our_story', location: 'hero' })}
-              className="mt-2 inline-block text-white/88 hover:text-brand-primary transition-colors font-bold uppercase tracking-[0.13em] text-[0.74rem]"
+              className="mt-2 inline-block text-white/86 hover:text-brand-primary transition-colors font-bold uppercase tracking-[0.12em] text-[0.72rem]"
             >
               Our Story
             </Link>
@@ -314,7 +361,7 @@ export default function HeroCarousel() {
 
       <div
         className={`absolute left-0 right-0 z-30 flex justify-center gap-2 ${
-          isMobile ? 'bottom-[calc(0.7rem+var(--safe-area-bottom))]' : 'bottom-6'
+          isMobile ? 'bottom-[calc(0.65rem+var(--safe-area-bottom))]' : 'bottom-6'
         }`}
       >
         {slides.map((_, idx) => (
