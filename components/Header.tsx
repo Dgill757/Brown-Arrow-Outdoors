@@ -49,28 +49,28 @@ export default function Header() {
         )}
       >
         <div className="container mx-auto px-3 sm:px-4">
-          <div className="grid min-h-[68px] grid-cols-[84px_minmax(0,1fr)_84px] items-center sm:grid-cols-[92px_minmax(0,1fr)_92px] lg:hidden">
+          <div className="grid min-h-[66px] grid-cols-[78px_minmax(0,1fr)_78px] items-center sm:min-h-[68px] sm:grid-cols-[88px_minmax(0,1fr)_88px] lg:hidden">
             <button
               className="justify-self-start text-white hover:text-brand-primary transition-colors p-1"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
             >
-              <Menu className="w-7 h-7 sm:w-8 sm:h-8" />
+              <Menu className="w-[1.625rem] h-[1.625rem] sm:w-[1.875rem] sm:h-[1.875rem]" />
             </button>
 
-            <Link href="/" className="relative mx-auto h-9 sm:h-10 w-[clamp(9.8rem,42vw,13rem)]">
+            <Link href="/" className="relative mx-auto h-8.5 sm:h-9.5 w-[clamp(9.3rem,40vw,12.2rem)]">
               <Image
                 src="/images/logos/full-bao-logo.png"
                 alt="Broken Arrow Outdoors"
                 fill
                 className="object-contain"
-                sizes="(max-width: 430px) 180px, (max-width: 767px) 208px, 256px"
+                sizes="(max-width: 430px) 172px, (max-width: 767px) 196px, 256px"
               />
             </Link>
 
-            <div className="justify-self-end flex items-center justify-end gap-2.5 sm:gap-3">
+            <div className="justify-self-end flex items-center justify-end gap-2 sm:gap-2.5">
               <button className="text-white hover:text-brand-primary transition-colors p-1" aria-label="Search">
-                <Search className="w-6 h-6 sm:w-7 sm:h-7" />
+                <Search className="w-[1.375rem] h-[1.375rem] sm:w-[1.625rem] sm:h-[1.625rem]" />
               </button>
 
               <button
@@ -79,7 +79,7 @@ export default function Header() {
                 aria-label="Open cart"
               >
                 <div className="relative">
-                  <ShoppingBag className="w-6 h-6 sm:w-7 sm:h-7 text-white group-hover:text-brand-primary transition-colors" />
+                  <ShoppingBag className="w-[1.375rem] h-[1.375rem] sm:w-[1.625rem] sm:h-[1.625rem] text-white group-hover:text-brand-primary transition-colors" />
                   {totalQuantity > 0 && (
                     <span className="absolute -top-2 -right-2 bg-brand-primary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-brand-dark">
                       {totalQuantity}
