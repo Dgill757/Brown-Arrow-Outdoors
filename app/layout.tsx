@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import AnalyticsScripts from '@/components/AnalyticsScripts';
 import LazyCartDrawerMount from '@/components/LazyCartDrawerMount';
 import { getBaseUrl, toAbsoluteUrl } from '@/lib/site';
+import { Analytics } from '@vercel/analytics/next';
 
 const assistant = Assistant({
   subsets: ['latin'],
@@ -57,6 +58,7 @@ export default function RootLayout({
           </main>
           <Footer />
         </CartProvider>
+        <Analytics />
       </body>
     </html>
   );
