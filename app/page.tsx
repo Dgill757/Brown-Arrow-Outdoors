@@ -68,7 +68,7 @@ export default async function Home() {
   const uniqueFeaturedGearProducts = pickFeaturedProducts(featuredGear, 4);
 
   return (
-    <div className="flex flex-col gap-24 pb-24 bg-brand-dark text-white">
+    <div className="flex flex-col gap-16 md:gap-24 pb-20 md:pb-24 bg-brand-dark text-white">
       {!shopifyEnvReady ? (
         <div className="container mx-auto px-4 pt-6">
           <div className="rounded-xl border border-amber-400/30 bg-amber-500/10 p-4 text-amber-200 text-sm">
@@ -81,9 +81,9 @@ export default async function Home() {
       <HeroCarousel />
 
       {/* 2. Category Split */}
-      <section className="container mx-auto px-4 -mt-20 relative z-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Link href="/targets" className="group relative h-[400px] overflow-hidden rounded-lg border border-white/10 shadow-2xl">
+      <section className="container mx-auto px-4 -mt-12 md:-mt-20 relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+          <Link href="/targets" className="group relative h-[clamp(17rem,56vw,25rem)] overflow-hidden rounded-lg border border-white/10 shadow-2xl">
             <Image
               src="/images/hero/shop-targets-image.png"
               alt="Shop Targets"
@@ -92,8 +92,8 @@ export default async function Home() {
               className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-70"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-8">
-              <h3 className="text-4xl font-black uppercase italic tracking-tighter mb-2 text-white group-hover:text-brand-primary transition-colors">
+            <div className="absolute bottom-0 left-0 p-5 sm:p-6 md:p-8">
+              <h3 className="text-[clamp(1.8rem,8vw,2.5rem)] font-black uppercase italic tracking-tighter mb-2 text-white group-hover:text-brand-primary transition-colors">
                 Shop Targets
               </h3>
               <p className="text-white/80 font-medium flex items-center gap-2">
@@ -101,7 +101,7 @@ export default async function Home() {
               </p>
             </div>
           </Link>
-          <Link href="/branded" className="group relative h-[400px] overflow-hidden rounded-lg border border-white/10 shadow-2xl">
+          <Link href="/branded" className="group relative h-[clamp(17rem,56vw,25rem)] overflow-hidden rounded-lg border border-white/10 shadow-2xl">
             <Image
               src="/images/apparel/602d96ae-cf8b-492a-8bf8-2bfafca9a5d8.png"
               alt="Shop Gear"
@@ -110,8 +110,8 @@ export default async function Home() {
               className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-70"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-8">
-              <h3 className="text-4xl font-black uppercase italic tracking-tighter mb-2 text-white group-hover:text-brand-primary transition-colors">
+            <div className="absolute bottom-0 left-0 p-5 sm:p-6 md:p-8">
+              <h3 className="text-[clamp(1.8rem,8vw,2.5rem)] font-black uppercase italic tracking-tighter mb-2 text-white group-hover:text-brand-primary transition-colors">
                 Shop Gear
               </h3>
               <p className="text-white/80 font-medium flex items-center gap-2">
@@ -124,7 +124,7 @@ export default async function Home() {
 
       {/* 3. Why Broken Arrow */}
       <section className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter mb-4">
             Why <span className="text-brand-primary">Broken Arrow?</span>
           </h2>
@@ -168,9 +168,9 @@ export default async function Home() {
 
       {/* 4. Featured Targets */}
       <section className="container mx-auto px-4">
-        <div className="flex justify-between items-end mb-12">
+        <div className="flex justify-between items-end mb-8 md:mb-12">
           <div>
-            <h2 className="text-4xl font-black uppercase italic tracking-tighter mb-2">Featured Targets</h2>
+            <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter mb-2">Featured Targets</h2>
             <p className="text-white/60">Best sellers from the shop.</p>
           </div>
           <Link href="/targets" className="hidden md:flex items-center gap-2 text-brand-primary font-bold uppercase tracking-wider hover:text-white transition-colors">
@@ -195,9 +195,9 @@ export default async function Home() {
 
       {/* 5. Featured Gear */}
       <section className="container mx-auto px-4">
-        <div className="flex justify-between items-end mb-12">
+        <div className="flex justify-between items-end mb-8 md:mb-12">
           <div>
-            <h2 className="text-4xl font-black uppercase italic tracking-tighter mb-2">Branded Gear</h2>
+            <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter mb-2">Branded Gear</h2>
             <p className="text-white/60">Rep the crew in the field.</p>
           </div>
           <Link href="/branded" className="hidden md:flex items-center gap-2 text-brand-primary font-bold uppercase tracking-wider hover:text-white transition-colors">

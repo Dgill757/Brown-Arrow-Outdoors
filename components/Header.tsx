@@ -44,95 +44,127 @@ export default function Header() {
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent',
-          isScrolled ? 'bg-brand-dark/95 backdrop-blur-md border-white/10 py-2 shadow-xl' : 'bg-transparent py-4'
+          'fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300 pt-[var(--safe-area-top)]',
+          isScrolled ? 'bg-brand-dark/96 backdrop-blur-xl shadow-xl' : 'bg-brand-dark/90 backdrop-blur-md'
         )}
       >
-        <div className="container mx-auto px-4 flex items-center min-h-[72px] justify-between">
-          {/* Mobile Menu Toggle */}
-          <button
-            className="lg:hidden text-white hover:text-brand-primary transition-colors"
-            onClick={() => setMobileMenuOpen(true)}
-            aria-label="Open menu"
-          >
-            <Menu className="w-8 h-8" />
-          </button>
+        <div className="container mx-auto px-4">
+          <div className="grid min-h-[70px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center lg:hidden">
+            <button
+              className="justify-self-start text-white hover:text-brand-primary transition-colors p-1"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="w-8 h-8" />
+            </button>
 
-          {/* Logo */}
-          <Link href="/" className="relative w-48 h-14 lg:w-64 lg:h-16 transition-transform hover:scale-105 flex items-center">
-            <Image
-              src="/images/logos/full-bao-logo.png"
-              alt="Broken Arrow Outdoors"
-              fill
-              className="object-contain"
-              sizes="(max-width: 1024px) 192px, 256px"
-            />
-          </Link>
+            <Link href="/" className="relative h-10 w-[clamp(10.8rem,43vw,13.4rem)]">
+              <Image
+                src="/images/logos/full-bao-logo.png"
+                alt="Broken Arrow Outdoors"
+                fill
+                className="object-contain"
+                sizes="(max-width: 1024px) 200px, 256px"
+              />
+            </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-8 uppercase font-bold text-sm tracking-wider">
-            {navLinks.slice(0, 4).map((link) => (
-              <Link 
-                key={link.href} 
-                href={link.href} 
-                className={cn(
-                  "hover:text-brand-primary transition-colors relative group py-2",
-                  pathname === link.href ? "text-brand-primary" : "text-white"
-                )}
+            <div className="justify-self-end flex items-center gap-3">
+              <button className="text-white hover:text-brand-primary transition-colors p-1" aria-label="Search">
+                <Search className="w-7 h-7" />
+              </button>
+
+              <button
+                onClick={openCart}
+                className="relative group flex items-center p-1"
+                aria-label="Open cart"
               >
-                {link.label}
-                <span className={cn(
-                  "absolute bottom-0 left-0 w-full h-0.5 bg-brand-primary transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100",
-                  pathname === link.href ? "scale-x-100" : ""
-                )} />
-              </Link>
-            ))}
-          </nav>
-
-          {/* Actions */}
-          <div className="flex items-center gap-6">
-            <div className="hidden lg:flex items-center gap-3">
-              <a href="https://www.instagram.com/brokenarrow.outdoors/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-brand-primary transition-colors" aria-label="Broken Arrow Outdoors Instagram">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="https://www.facebook.com/profile.php?id=61553849879488" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-brand-primary transition-colors" aria-label="Broken Arrow Outdoors Facebook">
-                <Facebook className="w-5 h-5" />
-              </a>
+                <div className="relative">
+                  <ShoppingBag className="w-7 h-7 text-white group-hover:text-brand-primary transition-colors" />
+                  {totalQuantity > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-brand-primary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-brand-dark">
+                      {totalQuantity}
+                    </span>
+                  )}
+                </div>
+              </button>
             </div>
-             {/* Hidden on mobile, visible on desktop */}
-            <div className="hidden lg:flex items-center gap-6 uppercase font-bold text-xs tracking-wider text-white/70">
-               {navLinks.slice(4).map((link) => (
+          </div>
+
+          <div className="hidden lg:flex items-center min-h-[76px] justify-between">
+            <Link href="/" className="relative w-56 h-14 xl:w-64 xl:h-16 transition-transform hover:scale-105 flex items-center">
+              <Image
+                src="/images/logos/full-bao-logo.png"
+                alt="Broken Arrow Outdoors"
+                fill
+                className="object-contain"
+                sizes="(max-width: 1400px) 224px, 256px"
+              />
+            </Link>
+
+            <nav className="hidden lg:flex items-center gap-8 uppercase font-bold text-sm tracking-wider">
+              {navLinks.slice(0, 4).map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'hover:text-brand-primary transition-colors relative group py-2',
+                    pathname === link.href ? 'text-brand-primary' : 'text-white'
+                  )}
+                >
+                  {link.label}
+                  <span
+                    className={cn(
+                      'absolute bottom-0 left-0 w-full h-0.5 bg-brand-primary transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100',
+                      pathname === link.href ? 'scale-x-100' : ''
+                    )}
+                  />
+                </Link>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-6">
+              <div className="hidden lg:flex items-center gap-3">
+                <a href="https://www.instagram.com/brokenarrow.outdoors/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-brand-primary transition-colors" aria-label="Broken Arrow Outdoors Instagram">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61553849879488" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-brand-primary transition-colors" aria-label="Broken Arrow Outdoors Facebook">
+                  <Facebook className="w-5 h-5" />
+                </a>
+              </div>
+              <div className="hidden lg:flex items-center gap-6 uppercase font-bold text-xs tracking-wider text-white/70">
+                {navLinks.slice(4).map((link) => (
                   <Link key={link.href} href={link.href} className="hover:text-white transition-colors">
                     {link.label}
                   </Link>
-               ))}
-            </div>
-
-            <button className="text-white hover:text-brand-primary transition-colors" aria-label="Search">
-              <Search className="w-6 h-6" />
-            </button>
-
-            <button
-              onClick={openCart}
-              className="relative group flex items-center gap-2"
-              aria-label="Open cart"
-            >
-              <div className="relative">
-                <ShoppingBag className="w-6 h-6 text-white group-hover:text-brand-primary transition-colors" />
-                {totalQuantity > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-brand-primary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-brand-dark">
-                    {totalQuantity}
-                  </span>
-                )}
+                ))}
               </div>
-            </button>
+
+              <button className="text-white hover:text-brand-primary transition-colors" aria-label="Search">
+                <Search className="w-6 h-6" />
+              </button>
+
+              <button
+                onClick={openCart}
+                className="relative group flex items-center gap-2"
+                aria-label="Open cart"
+              >
+                <div className="relative">
+                  <ShoppingBag className="w-6 h-6 text-white group-hover:text-brand-primary transition-colors" />
+                  {totalQuantity > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-brand-primary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-brand-dark">
+                      {totalQuantity}
+                    </span>
+                  )}
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[60] bg-brand-dark/98 backdrop-blur-xl flex flex-col">
+        <div className="fixed inset-0 z-[60] bg-brand-dark/98 backdrop-blur-xl flex flex-col pt-[var(--safe-area-top)] pb-[var(--safe-area-bottom)]">
             <div className="flex justify-between items-center p-6 border-b border-white/10">
               <div className="relative w-40 h-12">
                  <Image

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -10,38 +10,44 @@ const slides = [
   {
     src: '/images/hero/hero-buck-head.png',
     objectPosition: 'center 40%',
-    mobileObjectPosition: '72% 34%',
-    overlayBottom: { desktop: '5.5%', tablet: '3.5%', mobile: '2.5%' },
+    tabletObjectPosition: '64% 40%',
+    mobileObjectPosition: '66% 37%',
+    overlayBottom: { desktop: '5.5%', tablet: '4.25%', mobile: '11svh' },
   },
   {
     src: '/images/hero/elk-hero.png',
     objectPosition: 'center 46%',
-    mobileObjectPosition: '74% 36%',
-    overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
+    tabletObjectPosition: '62% 46%',
+    mobileObjectPosition: '63% 43%',
+    overlayBottom: { desktop: '5%', tablet: '3.75%', mobile: '11svh' },
   },
   {
     src: '/images/hero/hero-sasquatc-head.png',
     objectPosition: 'center 38%',
-    mobileObjectPosition: '74% 40%',
-    overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
+    tabletObjectPosition: '62% 39%',
+    mobileObjectPosition: '63% 38%',
+    overlayBottom: { desktop: '5%', tablet: '3.75%', mobile: '11svh' },
   },
   {
     src: '/images/hero/boar-hero.png',
     objectPosition: 'center 45%',
-    mobileObjectPosition: '74% 42%',
-    overlayBottom: { desktop: '5%', tablet: '3%', mobile: '2%' },
+    tabletObjectPosition: '62% 46%',
+    mobileObjectPosition: '63% 43%',
+    overlayBottom: { desktop: '5%', tablet: '3.75%', mobile: '11svh' },
   },
   {
     src: '/images/hero/hat-hero.png',
     objectPosition: 'center 44%',
-    mobileObjectPosition: '74% 42%',
-    overlayBottom: { desktop: '4.5%', tablet: '2.75%', mobile: '2%' },
+    tabletObjectPosition: '61% 43%',
+    mobileObjectPosition: '62% 40%',
+    overlayBottom: { desktop: '4.5%', tablet: '3.25%', mobile: '11svh' },
   },
   {
     src: '/images/hero/sweatshirt-hero.png',
     objectPosition: 'center 47%',
-    mobileObjectPosition: '80% 40%',
-    overlayBottom: { desktop: '4.75%', tablet: '2.75%', mobile: '2%' },
+    tabletObjectPosition: '63% 47%',
+    mobileObjectPosition: '63% 43%',
+    overlayBottom: { desktop: '4.75%', tablet: '3.25%', mobile: '11svh' },
   },
 ];
 
@@ -56,6 +62,7 @@ export default function HeroCarousel() {
   const [isTablet, setIsTablet] = useState(false);
   const [isShortViewport, setIsShortViewport] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -100,11 +107,33 @@ export default function HeroCarousel() {
     ? activeSlide.overlayBottom.tablet
     : activeSlide.overlayBottom.desktop;
 
+  const imageObjectPosition = isMobile
+    ? activeSlide.mobileObjectPosition
+    : isTablet
+    ? activeSlide.tabletObjectPosition
+    : activeSlide.objectPosition;
+
   return (
     <section
-      className="relative h-[84vh] md:h-[70vh] lg:h-[85vh] min-h-[620px] md:min-h-[620px] lg:min-h-[720px] w-full overflow-hidden bg-black"
+      className="relative h-[86svh] md:h-[74svh] lg:h-[85vh] min-h-[34rem] md:min-h-[40rem] lg:min-h-[45rem] max-h-[58rem] w-full overflow-hidden bg-black"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={(event) => {
+        touchStartX.current = event.touches[0]?.clientX ?? null;
+      }}
+      onTouchEnd={(event) => {
+        if (touchStartX.current === null) return;
+        const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+        const delta = touchStartX.current - touchEndX;
+        if (Math.abs(delta) > 42) {
+          if (delta > 0) {
+            setCurrentIndex((prev) => (prev + 1) % slides.length);
+          } else {
+            setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
+          }
+        }
+        touchStartX.current = null;
+      }}
       aria-label="Broken Arrow hero carousel"
     >
       {isHydrated ? (
@@ -118,9 +147,7 @@ export default function HeroCarousel() {
             quality={82}
             sizes="100vw"
             className="object-cover"
-            style={{
-              objectPosition: isMobile ? activeSlide.mobileObjectPosition : activeSlide.objectPosition,
-            }}
+            style={{ objectPosition: imageObjectPosition }}
           />
         </div>
       ) : (
@@ -139,61 +166,103 @@ export default function HeroCarousel() {
         </div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/74 via-black/18 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/38 via-transparent to-black/16 md:hidden" />
 
       <div
         className="absolute left-[4%] right-[4%] md:right-auto md:max-w-[620px] lg:max-w-[720px] z-20"
         style={{
           bottom: isMobile
-            ? `calc(${isShortViewport ? '1%' : dynamicBottom} + env(safe-area-inset-bottom))`
+            ? `calc(${isShortViewport ? '10svh' : dynamicBottom} + var(--safe-area-bottom))`
             : isShortViewport
             ? '1%'
             : dynamicBottom,
         }}
       >
-        <div className="rounded-2xl border border-white/12 bg-black/60 backdrop-blur-md p-4 sm:p-5 md:p-6 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
-          <h1 className="text-[28px] sm:text-[34px] md:text-[42px] lg:text-[56px] xl:text-[62px] font-black uppercase italic tracking-tighter leading-[0.92] text-white">
-            Train Like The <br />
-            <span className="text-brand-primary">Moment Matters</span>
-          </h1>
+        {isMobile ? (
+          <div className="mx-auto w-[min(92vw,33rem)] rounded-2xl border border-white/12 bg-black/62 backdrop-blur-md px-4 py-3.5 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
+            <h1 className="text-[clamp(1.45rem,5.6vw,1.8rem)] font-black uppercase italic tracking-tight leading-[0.94] text-white">
+              Train Like The <br />
+              <span className="text-brand-primary">Moment Matters</span>
+            </h1>
 
-          <p className="mt-2.5 md:mt-4 text-sm sm:text-base md:text-lg text-white/90 max-w-2xl">
-            Steel archery targets built to simulate real hunting pressure.
-          </p>
-
-          {!isMobile && !isShortViewport && (
-            <p className="mt-3 text-[10px] sm:text-[11px] md:text-xs text-brand-primary font-bold tracking-[0.2em] uppercase">
-              Firefighter Owned. Texas Made. Built for Bowhunters.
+            <p className="mt-2 text-[clamp(0.93rem,3.65vw,1rem)] leading-[1.22] text-white/88">
+              Steel archery targets built to simulate real hunting pressure.
             </p>
-          )}
 
-          <div className="mt-4 md:mt-6 grid grid-cols-2 sm:flex sm:flex-wrap sm:items-center gap-2.5 md:gap-3">
-            <Link
-              href="/targets"
-              onClick={() => trackEvent('hero_cta_click', { cta: 'shop_targets', location: 'hero' })}
-              className="bg-brand-primary text-white px-4 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-all hover:-translate-y-0.5 text-sm md:text-base text-center sm:min-w-[170px]"
-            >
-              Shop Targets
-            </Link>
-            <Link
-              href="/branded"
-              onClick={() => trackEvent('hero_cta_click', { cta: 'shop_gear', location: 'hero' })}
-              className="bg-white/10 border border-white/30 text-white px-4 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-white/20 transition-all text-sm md:text-base text-center sm:min-w-[170px]"
-            >
-              Shop Gear
-            </Link>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <Link
+                href="/targets"
+                onClick={() => trackEvent('hero_cta_click', { cta: 'shop_targets', location: 'hero' })}
+                className="min-h-11 bg-brand-primary text-white px-3 py-2.5 font-black uppercase italic tracking-wide text-[0.9rem] text-center rounded-[2px] flex items-center justify-center"
+              >
+                Shop Targets
+              </Link>
+              <Link
+                href="/branded"
+                onClick={() => trackEvent('hero_cta_click', { cta: 'shop_gear', location: 'hero' })}
+                className="min-h-11 bg-white/10 border border-white/30 text-white px-3 py-2.5 font-black uppercase italic tracking-wide text-[0.9rem] text-center rounded-[2px] flex items-center justify-center"
+              >
+                Shop Gear
+              </Link>
+            </div>
             <Link
               href="/our-story"
               onClick={() => trackEvent('hero_cta_click', { cta: 'our_story', location: 'hero' })}
-              className="col-span-2 text-white/85 hover:text-brand-primary transition-colors font-bold uppercase tracking-widest text-xs md:text-sm text-left sm:text-center"
+              className="mt-2.5 inline-block text-white/88 hover:text-brand-primary transition-colors font-bold uppercase tracking-[0.14em] text-[0.82rem]"
             >
               Our Story
             </Link>
           </div>
-        </div>
+        ) : (
+          <div className="rounded-2xl border border-white/12 bg-black/60 backdrop-blur-md p-4 sm:p-5 md:p-6 shadow-[0_18px_48px_rgba(0,0,0,0.45)]">
+            <h1 className="text-[28px] sm:text-[34px] md:text-[42px] lg:text-[56px] xl:text-[62px] font-black uppercase italic tracking-tighter leading-[0.92] text-white">
+              Train Like The <br />
+              <span className="text-brand-primary">Moment Matters</span>
+            </h1>
+
+            <p className="mt-2.5 md:mt-4 text-sm sm:text-base md:text-lg text-white/90 max-w-2xl">
+              Steel archery targets built to simulate real hunting pressure.
+            </p>
+
+            {!isShortViewport && (
+              <p className="mt-3 text-[10px] sm:text-[11px] md:text-xs text-brand-primary font-bold tracking-[0.2em] uppercase">
+                Firefighter Owned. Texas Made. Built for Bowhunters.
+              </p>
+            )}
+
+            <div className="mt-4 md:mt-6 flex flex-wrap items-center gap-2.5 md:gap-3">
+              <Link
+                href="/targets"
+                onClick={() => trackEvent('hero_cta_click', { cta: 'shop_targets', location: 'hero' })}
+                className="bg-brand-primary text-white px-4 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-orange-600 transition-all hover:-translate-y-0.5 text-sm md:text-base text-center sm:min-w-[170px]"
+              >
+                Shop Targets
+              </Link>
+              <Link
+                href="/branded"
+                onClick={() => trackEvent('hero_cta_click', { cta: 'shop_gear', location: 'hero' })}
+                className="bg-white/10 border border-white/30 text-white px-4 md:px-7 py-2.5 md:py-3 font-black uppercase italic tracking-wider hover:bg-white/20 transition-all text-sm md:text-base text-center sm:min-w-[170px]"
+              >
+                Shop Gear
+              </Link>
+              <Link
+                href="/our-story"
+                onClick={() => trackEvent('hero_cta_click', { cta: 'our_story', location: 'hero' })}
+                className="text-white/85 hover:text-brand-primary transition-colors font-bold uppercase tracking-widest text-xs md:text-sm"
+              >
+                Our Story
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="absolute bottom-6 left-0 right-0 z-30 flex justify-center gap-2">
+      <div
+        className={`absolute left-0 right-0 z-30 flex justify-center gap-2 ${
+          isMobile ? 'bottom-[calc(1.05rem+var(--safe-area-bottom))]' : 'bottom-6'
+        }`}
+      >
         {slides.map((_, idx) => (
           <button
             key={idx}

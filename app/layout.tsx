@@ -52,7 +52,7 @@ export default function RootLayout({
         <CartProvider>
           <Header />
           <LazyCartDrawerMount />
-          <main className="min-h-screen pt-[80px]">
+          <main className="min-h-screen pt-[calc(70px+var(--safe-area-top))] lg:pt-[92px]">
             {children}
           </main>
           <Footer />
