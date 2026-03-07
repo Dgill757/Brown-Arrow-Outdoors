@@ -60,7 +60,7 @@ export default function Header() {
 
             <Link href="/" className="relative mx-auto h-8.5 sm:h-9.5 w-[clamp(9.3rem,40vw,12.2rem)]">
               <Image
-                src="/images/logos/full-bao-logo.png"
+                src="/images/logos/Broken-Arrow-full-logo.png"
                 alt="Broken Arrow Outdoors"
                 fill
                 className="object-contain"
@@ -93,7 +93,7 @@ export default function Header() {
           <div className="hidden lg:flex items-center min-h-[76px] justify-between">
             <Link href="/" className="relative w-60 h-14 xl:w-64 xl:h-16 transition-transform hover:scale-105 flex items-center">
               <Image
-                src="/images/logos/full-bao-logo.png"
+                src="/images/logos/Broken-Arrow-full-logo.png"
                 alt="Broken Arrow Outdoors"
                 fill
                 className="object-contain"
@@ -168,7 +168,7 @@ export default function Header() {
             <div className="flex justify-between items-center p-6 border-b border-white/10">
               <div className="relative w-44 h-12">
                  <Image
-                  src="/images/logos/full-bao-logo.png"
+                  src="/images/logos/Broken-Arrow-full-logo.png"
                   alt="Broken Arrow Outdoors"
                   fill
                   className="object-contain"
