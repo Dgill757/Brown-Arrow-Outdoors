@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
 
 const slides = [
-  { src: '/images/hero/hero-buck-head.png', objectPos: 'center top' },
+  { src: '/images/hero/hero-buck-head.png', objectPos: '50% 20%' },
   { src: '/images/hero/hero-sasquatc-head.png' },
   { src: '/images/hero/boar-hero.png' },
   { src: '/images/hero/hat-hero.png' },
