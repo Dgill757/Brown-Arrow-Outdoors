@@ -7,12 +7,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
 
 const slides = [
-  '/images/hero/hero-buck-head.png',
-  '/images/hero/hero-sasquatc-head.png',
-  '/images/hero/boar-hero.png',
-  '/images/hero/hat-hero.png',
-  '/images/hero/sweatshirt-hero.png',
-  '/images/hero/elk-hero.png',
+  { src: '/images/hero/hero-buck-head.png', objectPos: 'center top' },
+  { src: '/images/hero/hero-sasquatc-head.png' },
+  { src: '/images/hero/boar-hero.png' },
+  { src: '/images/hero/hat-hero.png' },
+  { src: '/images/hero/sweatshirt-hero.png' },
+  { src: '/images/hero/elk-hero.png' },
 ];
 
 const AUTO_ADVANCE_MS = 4000;
@@ -87,26 +87,20 @@ export default function HeroCarousel() {
             className="absolute inset-0 animate-fadeIn"
           >
             <Image
-              src={slides[currentIndex]}
+              src={slides[currentIndex].src}
               alt="Broken Arrow Outdoors featured hero slide"
               fill
               priority={currentIndex === 0}
               fetchPriority={currentIndex === 0 ? 'high' : 'auto'}
               quality={82}
               sizes="100vw"
-              /*
-               * Mobile/tablet: object-contain + object-top — full image visible,
-               *   pinned to top, CTA sits in the dark bar below. No change here.
-               * Desktop (lg+): object-cover + object-center — fills edge-to-edge,
-               *   slight vertical center crop only (no horizontal crop since the
-               *   section is always wider than the image's native 3:2 ratio).
-               */
               className="object-contain object-top lg:object-cover lg:object-center"
+              style={slides[currentIndex].objectPos ? { objectPosition: slides[currentIndex].objectPos } : undefined}
             />
           </div>
         ) : (
           <Image
-            src={slides[0]}
+            src={slides[0].src}
             alt="Broken Arrow Outdoors featured hero slide"
             fill
             priority
@@ -114,6 +108,7 @@ export default function HeroCarousel() {
             quality={82}
             sizes="100vw"
             className="object-contain object-top lg:object-cover lg:object-center"
+            style={slides[0].objectPos ? { objectPosition: slides[0].objectPos } : undefined}
           />
         )}
       </div>
