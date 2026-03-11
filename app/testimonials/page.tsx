@@ -3,6 +3,7 @@ import { Star } from 'lucide-react';
 import { buildMetadata } from '@/lib/seo';
 import { googleReviews } from '@/lib/googleReviews';
 import VideosSection from '@/components/VideosSection';
+import ReviewWidgetSection from '@/components/ReviewWidgetSection';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Testimonials | Broken Arrow Outdoors',
@@ -53,6 +54,7 @@ export default function TestimonialsPage() {
         </div>
 
         <VideosSection className="mt-20" />
+        <ReviewWidgetSection className="mt-20 pb-6" />
       </div>
     </div>
   );
