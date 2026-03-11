@@ -24,7 +24,7 @@ export default function ReviewWidgetSection({ className = '' }: ReviewWidgetSect
           src="https://reputationhub.site/reputation/widgets/review_widget/abKkT0fMkyol5jy5hUjr?widgetId=69b1b54994203d468153cb8f"
           frameBorder={0}
           scrolling="no"
-          style={{ minWidth: '100%', width: '100%', minHeight: '620px' }}
+          style={{ minWidth: '100%', width: '100%' }}
           title="Broken Arrow Outdoors review widget"
         />
       </div>
