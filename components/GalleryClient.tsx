@@ -4,35 +4,10 @@ import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Instagram, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import VideosSection from '@/components/VideosSection';
-
-type Category = 'Events' | 'Customer Setups' | 'Range' | 'Behind The Scenes';
-
-type GalleryItem = {
-  id: number;
-  src: string;
-  alt: string;
-  category: Category;
-};
-
-const categories: Array<'All' | Category> = ['All', 'Events', 'Customer Setups', 'Range', 'Behind The Scenes'];
-
-const galleryImages: GalleryItem[] = [
-  { id: 1, src: '/images/gallery/DSC06839.JPG', category: 'Range', alt: 'Target setup on range' },
-  { id: 2, src: '/images/gallery/DSC06842.JPG', category: 'Events', alt: 'Event target lineup' },
-  { id: 3, src: '/images/gallery/IMG_6631.JPG', category: 'Customer Setups', alt: 'Customer setup in field' },
-  { id: 4, src: '/images/gallery/About-Us.webp', category: 'Behind The Scenes', alt: 'Behind the scenes training' },
-  { id: 5, src: '/images/gallery/eZy Watermark_11-10-2023_21-16-38.JPG', category: 'Range', alt: 'Bowhunting range practice' },
-  { id: 6, src: '/images/gallery/IMG_8229.JPG', category: 'Events', alt: 'Archery event photo' },
-  { id: 7, src: '/images/gallery/DSC08963.jpg', category: 'Customer Setups', alt: 'Customer target setup' },
-  { id: 8, src: '/images/gallery/IMG_9319.JPG', category: 'Behind The Scenes', alt: 'Production and prep' },
-  { id: 9, src: '/images/gallery/DSC09031 (1).jpg', category: 'Range', alt: 'Range session at dusk' },
-  { id: 10, src: '/images/gallery/IMG_7652.JPG', category: 'Events', alt: 'Outdoor target event' },
-  { id: 11, src: '/images/gallery/IMG_9827 (1).JPG', category: 'Customer Setups', alt: 'Customer field setup detail' },
-  { id: 12, src: '/images/gallery/DSC08979.jpg', category: 'Behind The Scenes', alt: 'Team field test prep' },
-];
+import { galleryCategories, galleryImages, type GalleryCategory } from '@/lib/galleryImages';
 
 export default function GalleryClient() {
-  const [activeCategory, setActiveCategory] = useState<'All' | Category>('All');
+  const [activeCategory, setActiveCategory] = useState<'All' | GalleryCategory>('All');
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const filteredImages = useMemo(
     () => (activeCategory === 'All' ? galleryImages : galleryImages.filter((item) => item.category === activeCategory)),
@@ -73,7 +48,7 @@ export default function GalleryClient() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-4 mb-12">
-        {categories.map((cat) => (
+        {galleryCategories.map((cat) => (
           <button
             key={cat}
             type="button"
