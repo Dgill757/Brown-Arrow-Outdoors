@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Instagram, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import VideosSection from '@/components/VideosSection';
 
 type Category = 'Events' | 'Customer Setups' | 'Range' | 'Behind The Scenes';
 
@@ -11,12 +12,6 @@ type GalleryItem = {
   src: string;
   alt: string;
   category: Category;
-};
-
-type GalleryVideo = {
-  id: string;
-  title: string;
-  url: string;
 };
 
 const categories: Array<'All' | Category> = ['All', 'Events', 'Customer Setups', 'Range', 'Behind The Scenes'];
@@ -34,14 +29,6 @@ const galleryImages: GalleryItem[] = [
   { id: 10, src: '/images/gallery/IMG_7652.JPG', category: 'Events', alt: 'Outdoor target event' },
   { id: 11, src: '/images/gallery/IMG_9827 (1).JPG', category: 'Customer Setups', alt: 'Customer field setup detail' },
   { id: 12, src: '/images/gallery/DSC08979.jpg', category: 'Behind The Scenes', alt: 'Team field test prep' },
-];
-
-const galleryVideos: GalleryVideo[] = [
-  { id: 'KQgMSmBACm4', title: 'Bear Target Vibes Short', url: 'https://www.youtube.com/shorts/KQgMSmBACm4' },
-  { id: 'G9UuFkyIcgQ', title: 'Field Test Video', url: 'https://www.youtube.com/watch?v=G9UuFkyIcgQ&t=312s' },
-  { id: '4fzunjvso4A', title: 'Training Short', url: 'https://www.youtube.com/shorts/4fzunjvso4A' },
-  { id: 's7XvEdQtV6I', title: 'Target Demo', url: 'https://www.youtube.com/watch?v=s7XvEdQtV6I' },
-  { id: 'tfKm2_b_0J8', title: 'Range Session', url: 'https://www.youtube.com/watch?v=tfKm2_b_0J8' },
 ];
 
 export default function GalleryClient() {
@@ -140,36 +127,7 @@ export default function GalleryClient() {
         <div className="elfsight-app-ed3d5f48-8c27-4cb9-bff9-d9c762b0d759" data-elfsight-app-lazy />
       </div>
 
-      <section className="mt-16">
-        <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter mb-6">Videos</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {galleryVideos.map((video) => (
-            <a
-              key={video.id}
-              href={video.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group rounded-xl overflow-hidden border border-white/10 bg-white/[0.03] hover:border-brand-primary/50 transition-colors"
-            >
-              <div className="relative aspect-video">
-                <Image
-                  src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
-                  alt={video.title}
-                  fill
-                  className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  loading="lazy"
-                  quality={70}
-                />
-              </div>
-              <div className="p-3">
-                <p className="text-sm font-semibold">{video.title}</p>
-                <p className="text-xs text-white/55 mt-1">Open on YouTube</p>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
+      <VideosSection className="mt-16" />
 
       {activeImage ? (
         <div className="fixed inset-0 z-[120] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4">

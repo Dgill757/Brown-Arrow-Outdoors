@@ -7,9 +7,11 @@ import { COLLECTION_PRODUCTS_QUERY } from '@/lib/shopifyQueries';
 import ProductGrid from '@/components/ProductGrid';
 import HeroCarousel from '@/components/HeroCarousel';
 import BrandStorySection from '@/components/home/BrandStorySection';
+import VideosSection from '@/components/VideosSection';
 import { ArrowRight, Shield, Target, Truck, Zap } from 'lucide-react';
 import { buildMetadata } from '@/lib/seo';
 import { pickFeaturedProducts } from '@/lib/featuredProducts';
+import { googleReviews } from '@/lib/googleReviews';
 
 const HeroVideoSection = dynamic(() => import('@/components/home/HeroVideoSection'), {
   loading: () => <div className="h-[520px] bg-white/[0.02] border-y border-white/10 animate-pulse" />,
@@ -66,6 +68,7 @@ export default async function Home() {
 
   const uniqueFeaturedTargetProducts = pickFeaturedProducts(featuredTargets, 4);
   const uniqueFeaturedGearProducts = pickFeaturedProducts(featuredGear, 4);
+  const homeFeaturedReviews = googleReviews.filter((review) => Boolean(review.quote)).slice(0, 3);
 
   return (
     <div className="flex flex-col gap-16 md:gap-24 pb-20 md:pb-24 bg-brand-dark text-white">
@@ -231,19 +234,15 @@ export default async function Home() {
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { quote: "Best targets I've ever shot. The feedback is instant and the durability is unmatched.", author: "Mike T.", role: "Bowhunter" },
-            { quote: "Finally a target that simulates real hunting scenarios. My confidence has skyrocketed.", author: "Sarah J.", role: "Competition Shooter" },
-            { quote: "Built like a tank. I've put thousands of arrows into mine and it's still going strong.", author: "David R.", role: "Firefighter" },
-          ].map((testimonial, i) => (
+          {homeFeaturedReviews.map((testimonial, i) => (
             <div key={i} className="bg-white/5 p-8 rounded-xl border border-white/5 relative">
               <div className="text-brand-primary text-6xl font-serif absolute top-4 left-4 opacity-20">"</div>
               <p className="text-white/80 italic mb-6 relative z-10 leading-relaxed">
                 {testimonial.quote}
               </p>
               <div>
-                <p className="font-bold uppercase tracking-wider text-white">{testimonial.author}</p>
-                <p className="text-brand-primary text-xs uppercase tracking-widest">{testimonial.role}</p>
+                <p className="font-bold uppercase tracking-wider text-white">{testimonial.reviewer}</p>
+                <p className="text-brand-primary text-xs uppercase tracking-widest">Google Review • {testimonial.date}</p>
               </div>
             </div>
           ))}
@@ -258,7 +257,12 @@ export default async function Home() {
       {/* 8. Field Test Gallery */}
       <FieldTestGallerySection />
 
-      {/* 9. Email Capture */}
+      {/* 9. Videos */}
+      <section className="container mx-auto px-4">
+        <VideosSection />
+      </section>
+
+      {/* 10. Email Capture */}
       <EmailCaptureSection />
     </div>
   );
