@@ -68,8 +68,7 @@ export default function ChallengeVideo() {
       >
         {shouldLoadVideo ? (
           <>
-            <source src="/videos/BearTargetVibes.mp4" type="video/mp4" />
-            <source src="/videos/BearTargetVibes.webm" type="video/webm" />
+            <source src="/videos/15BEF524-A9D1-4E45-AE92-B443C34D68FF.MOV" type="video/quicktime" />
           </>
         ) : null}
       </video>
