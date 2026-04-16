@@ -365,7 +365,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
         <section className="mb-14">
           <h3 className="text-3xl font-black uppercase italic tracking-tight mb-6">Customer Photos</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {['/images/gallery/IMG_6631.JPG', '/images/gallery/DSC09031 (1).jpg', '/images/gallery/IMG_9319.JPG', '/images/gallery/IMG_7652.JPG'].map((src) => (
+            {['/images/gallery/DSC08979.jpg', '/images/gallery/DSC09031 (1).jpg', '/images/gallery/IMG_9319.JPG', '/images/gallery/DSC09023.jpg'].map((src) => (
               <div key={src} className="relative aspect-square rounded-xl overflow-hidden border border-white/10">
                 <Image src={src} alt="Customer setup photo" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
               </div>
@@ -392,7 +392,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
         <UGCStrip
           title="In The Field"
           images={[
-            { src: '/images/gallery/IMG_6631.JPG', alt: 'Customer field setup 1' },
+            { src: '/images/gallery/DSC08979.jpg', alt: 'Customer field setup 1' },
             { src: '/images/gallery/DSC09031 (1).jpg', alt: 'Customer field setup 2' },
             { src: '/images/gallery/IMG_9319.JPG', alt: 'Customer field setup 3' },
             { src: '/images/targets/IMG_7546.jpg', alt: 'Customer field setup 4' },

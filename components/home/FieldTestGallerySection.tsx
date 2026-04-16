@@ -8,9 +8,9 @@ import UGCStrip from '@/components/UGCStrip';
 export default function FieldTestGallerySection() {
   const images = [
     { src: '/images/gallery/DSC09031 (1).jpg', alt: 'Field gallery hero' },
-    { src: '/images/gallery/IMG_6631.JPG', alt: 'Field gallery 2' },
+    { src: '/images/gallery/DSC08979.jpg', alt: 'Field gallery 2' },
     { src: '/images/gallery/IMG_9319.JPG', alt: 'Field gallery 3' },
-    { src: '/images/gallery/IMG_7652.JPG', alt: 'Field gallery 4' },
+    { src: '/images/gallery/DSC09023.jpg', alt: 'Field gallery 4' },
     { src: '/images/targets/IMG_7546.jpg', alt: 'Field gallery 5' },
   ];
 
@@ -42,7 +42,7 @@ export default function FieldTestGallerySection() {
         </div>
         <div className="relative rounded-lg overflow-hidden h-full">
           <Image
-            src="/images/gallery/IMG_6631.JPG"
+            src="/images/gallery/DSC08979.jpg"
             alt="Field gallery 2"
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
